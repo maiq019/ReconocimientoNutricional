@@ -15,7 +15,7 @@ MonoBehaviour:
   EnableToolbarButtons: 1
   EnableSaveButton: 1
   EnableProjectFolderButton: 0
-  EnablePackageManagerButton: 0
+  EnablePackageManagerButton: 1
   EnableProjectSettingsButton: 0
   EnableBuildButton: 1
   EnablePlayButton: 1
