@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec9a6a76befa494a96f9e5fdab5c9f69, type: 3}
+  m_Name: LoggerConfiguration
+  m_EditorClassIdentifier: 
+  DefaultConfig: {fileID: 11400000, guid: 3820e652ec60daf4d88747c34d6e6e68, type: 2}
+  AlwaysOverride: 1
