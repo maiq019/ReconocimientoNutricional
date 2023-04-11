@@ -1,0 +1,18 @@
+{
+    "name": "ITCL.VisionNutricional.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ed8b64f314bc6ca478e1df735ff57046",
+        "GUID:6f75e3e9b2be11e40a79ad3ceec60e41",
+        "GUID:dcd1c851940864d4a942993d10fb4b57"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
