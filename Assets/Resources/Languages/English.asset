@@ -36,5 +36,13 @@ MonoBehaviour:
       Value: English
     - Key: Common/Config/Language/Spanish
       Value: Spanish
+    - Key: Common/Menu/IdentifyButton
+      Value: Identify food
+    - Key: Common/Menu/Record
+      Value: Record
+    - Key: Common/Menu/Version
+      Value: version
+    - Key: Common/Menu/Help
+      Value: Help
     - Key: Debug/Loading
       Value: Loading...

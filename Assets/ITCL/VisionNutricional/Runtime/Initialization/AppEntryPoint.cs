@@ -9,6 +9,9 @@ using Zenject;
 
 namespace ITCL.VisionNutricional.Runtime.Initialization
 {
+    /// <summary>
+    /// Class that initializes the game.
+    /// </summary>
     public class AppEntryPoint : WhateverBehaviour<AppEntryPoint>
     {
         /// <summary>
