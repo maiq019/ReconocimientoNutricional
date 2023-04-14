@@ -46,3 +46,5 @@ MonoBehaviour:
       Value: Ayuda
     - Key: Debug/Loading
       Value: Cargando...
+    - Key: Debug/LoadingCamera
+      Value: "Cargando c\xE1mara..."

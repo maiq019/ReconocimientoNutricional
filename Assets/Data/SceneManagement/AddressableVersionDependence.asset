@@ -17,7 +17,8 @@ MonoBehaviour:
   GroupsToIgnore:
   - Built In Data
   - Default
+  - Default Local Group
   InitialManifestVersion: 0.0.1
-  AppVersion: {fileID: 0}
+  AppVersion: {fileID: 11400000, guid: 54f0d17330a21534c9851f322a265b31, type: 2}
   Dependencies:
     SerializedList: []

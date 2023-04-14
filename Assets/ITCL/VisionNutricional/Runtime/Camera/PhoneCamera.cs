@@ -1,4 +1,3 @@
-using System;
 using ModestTree;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,24 +5,20 @@ using WhateverDevs.Core.Behaviours;
 
 namespace ITCL.VisionNutricional.Runtime.Camera
 {
+    [RequireComponent(typeof(RawImage))]
     public class PhoneCamera : WhateverBehaviour<PhoneCamera>
     {
         private bool camAvailable;
 
         private WebCamTexture backCam;
 
-        private Texture defaultBackground;
+        [HideInInspector]
+        public RawImage Background;
 
-        [SerializeField]
-        private RawImage Background;
-
-        private AspectRatioFitter fit;
-
-        private void OnEnable()
+        private void Awake()
         {
-            fit = Background.GetComponent<AspectRatioFitter>();
-            
-            defaultBackground = Background.texture;
+            Background = GetComponent<RawImage>();
+
             WebCamDevice[] devices = WebCamTexture.devices;
 
             //Check for some camera detected
@@ -37,6 +32,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //Check for back camera
             foreach (WebCamDevice cam in devices)
             {
+                Logger.Debug("Found camera " + cam.name + !cam.isFrontFacing);
                 if (!cam.isFrontFacing) backCam = new WebCamTexture(cam.name, Screen.width, Screen.height);
             }
 
@@ -46,24 +42,54 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 return;
             }
             
-            camAvailable = true;
+            StartCamera();
             
-            //Play the camera image on the scene background
-            backCam.Play();
-            Background.texture = backCam;
+            camAvailable = true;
         }
 
         private void Update()
         {
             if (!camAvailable) return;
 
-            float ratio = (float)backCam.width / (float)backCam.height;
-            fit.aspectRatio = ratio;
+            //float ratio = (float)backCam.width / backCam.height;
+            //fit.aspectRatio = ratio;
 
             float scaleY = backCam.videoVerticallyMirrored ? -1 : 1;
             Background.rectTransform.localScale = new Vector3(1, scaleY, 1);
 
+            switch (backCam.videoRotationAngle)
+            {
+                case 90:
+                case -90:
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+                    break;
+                case 180:
+                case -180:
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+                    /*fit.aspectMode = AspectRatioFitter.AspectMode.None;
+                    Background.rectTransform.offsetMax = new Vector2(0, 0);
+                    Background.rectTransform.offsetMin = new Vector2(0, 0);*/
+                    break;
+                default:
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+                    //fit.aspectMode = fit.aspectMode;
+                    break;
+            }
+
             Background.rectTransform.localEulerAngles = new Vector3(0, 0, -backCam.videoRotationAngle);
+            
+        }
+
+        public void StartCamera()
+        {
+            //Play the camera image on the scene background
+            backCam.Play();
+            Background.texture = backCam;
+        }
+
+        public void StopCamera()
+        {
+            backCam.Stop();
         }
     }
 }

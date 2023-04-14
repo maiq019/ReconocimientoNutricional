@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9d8efa0267562f42a910be51ddccf55, type: 3}
-  m_Name: Version
+  m_Script: {fileID: 11500000, guid: 5834b5087d578d24c926ce20cd31e6d6, type: 3}
+  m_Name: Default Local Group_ContentUpdateGroupSchema
   m_EditorClassIdentifier: 
-  GameVersion: 0
-  MayorVersion: 0
-  MinorVersion: 1
-  Date: 20230413115152
-  Stability: 0
+  m_Group: {fileID: 11400000, guid: 5c70adbb6b8d14a4d9e7145e4c36708d, type: 2}
+  m_StaticContent: 0

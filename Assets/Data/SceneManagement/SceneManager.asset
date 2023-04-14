@@ -15,8 +15,9 @@ MonoBehaviour:
   NonAddressableScenes:
   - Assets/Scenes/InitSceen.unity
   - Assets/Scenes/MainMenu.unity
+  - Assets/Scenes/Camera.unity
   AddressableScenes: []
   SceneNameGuidDictionary:
     SerializedList: []
   loadedScenes:
-  - InitSceen
+  - MainMenu

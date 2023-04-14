@@ -41,8 +41,10 @@ MonoBehaviour:
     - Key: Common/Menu/Record
       Value: Record
     - Key: Common/Menu/Version
-      Value: version
+      Value: 'version:'
     - Key: Common/Menu/Help
       Value: Help
     - Key: Debug/Loading
       Value: Loading...
+    - Key: Debug/LoadingCamera
+      Value: Loading camera...
