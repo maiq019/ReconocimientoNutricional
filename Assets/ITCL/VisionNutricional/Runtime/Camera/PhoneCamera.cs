@@ -46,6 +46,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private RawImage Background;
 
         /// <summary>
+        /// Indicator whether the camera is vertical or horizontal.
+        /// </summary>
+        private bool CameraVertical;
+
+        /// <summary>
         /// Hidable for all the UI components.
         /// </summary>
         [SerializeField] private HidableUiElement UIHide;
@@ -60,6 +65,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         [SerializeField] private HidableUiElement ScreenshotButtonHorizontal;
 
+        [SerializeField] private Button BackButtonVertical;
+
+        private HidableUiElement BackButtonVerticalHid;
+
+        private EasySubscribableButton BackButtonVerticalSus;
+
         /// <summary>
         /// Reference to the touch manager input.
         /// </summary>
@@ -71,13 +82,22 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private IEnumerator MainMenuLoader;
 
         /// <summary>
+        /// Flag to not load the menu twice.
+        /// </summary>
+        private bool IsMenuLoading;
+
+        /// <summary>
         /// Sets the references and gets the camera.
         /// </summary>
         private void Awake()
         {
             MainMenuLoader = Loader.LoadSceneCoroutine(
                 sceneManager, MainMenuScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]);
+            IsMenuLoading = false;
             Background = GetComponent<RawImage>();
+
+            BackButtonVerticalHid = BackButtonVertical.GetComponent<HidableUiElement>();
+            BackButtonVerticalSus = BackButtonVertical.GetComponent<EasySubscribableButton>();
 
             //Gets the existing cameras.
             WebCamDevice[] devices = WebCamTexture.devices;
@@ -112,6 +132,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             TouchManager.OnStartZoom += StartZoom;
             TouchManager.OnStopZoom += StopZoom;
+
+            BackButtonVerticalSus += BackToCam;
+        }
+
+        private void OnDisable()
+        {
+            BackCam.Stop();
         }
 
         /// <summary>
@@ -122,7 +149,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             if (!CamAvailable) return;
 
             //Checks and fixes if the device is upside-down.
-            float scaleY = BackCam.videoVerticallyMirrored ? -1 : 1;
+            float scaleY = IsCameraVerticallyMirrored() ? -1 : 1;
             Background.rectTransform.localScale = new Vector3(1, scaleY, 1);
 
             //Checks and adjust if the device is vertical or horizontal.
@@ -130,11 +157,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             {
                 case 90:
                 case -90:
-                    StartCoroutine(CameraRotation(true));
+                    CameraVertical = true;
+                    StartCoroutine(CameraRotation());
                     break;
                 case 180:
                 case -180:
-                    StartCoroutine(CameraRotation(false));
+                    CameraVertical = false;
+                    StartCoroutine(CameraRotation());
                     break;
                 default:
                     Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
@@ -143,8 +172,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             }
 
             //Loads the main menu with the android back button.
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape) && !IsMenuLoading)
             {
+                IsMenuLoading = true;
                 Logger.Debug("Back button pressed");
                 CoroutineRunner.RunRoutine(MainMenuLoader);
             }
@@ -153,11 +183,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Adjust the display from the camera on the canvas texture.
         /// </summary>
-        /// <param name="vertical">Bool whether the camera is vertical or horizontal.</param>
         /// <returns></returns>
-        private IEnumerator CameraRotation(bool vertical)
+        private IEnumerator CameraRotation()
         {
-            if (vertical) //Hide horizontal button, rotate screen, show vertical button
+            if (CameraVertical) //Hide horizontal button, rotate screen, show vertical button
             {
                 ScreenshotButtonHorizontal.Show(false);
                 yield return WaitAFrame;
@@ -178,14 +207,40 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         }
 
         /// <summary>
-        /// Starts the camera recording and display its images on the canvas' background texture.
+        /// Consult warp for the mirrored indicator from the camera.
+        /// </summary>
+        public bool IsCameraVerticallyMirrored()
+        {
+            return BackCam.videoVerticallyMirrored;
+        }
+
+        /// <summary>
+        /// Consult warp for the vertical indicator of the camera.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsCameraVertical()
+        {
+            return CameraVertical;
+        }
+
+        /// <summary>
+        /// Starts the camera recording and its necessaries coroutines.
         /// </summary>
         private void StartCamera()
         {
             //Play the camera image on the scene background
             BackCam.Play();
+            ShowCamera();
+        }
+
+        /// <summary>
+        /// Display the camera images on the canvas' background texture
+        /// </summary>
+        private void ShowCamera()
+        {
             Background.texture = BackCam;
             UIHide.Show();
+            BackButtonVerticalHid.Show(false);
         }
 
         /// <summary>
@@ -194,8 +249,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <param name="capture"></param>
         public void StopCamera(Texture2D capture)
         {
-            BackCam.Stop();
             Background.texture = capture;
+            BackButtonVerticalHid.Show();
         }
 
         private void StartZoom(Vector2 primaryPosition, Vector2 secondaryPosition)
@@ -241,6 +296,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             BackCam.requestedHeight /= 10;
             BackCam.requestedWidth *= 9;
             BackCam.requestedWidth /= 10;
+        }
+
+        private void BackToCam()
+        {
+            ShowCamera();
         }
     }
 }

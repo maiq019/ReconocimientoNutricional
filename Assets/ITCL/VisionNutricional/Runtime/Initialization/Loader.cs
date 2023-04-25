@@ -23,6 +23,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// <returns></returns>
         public static IEnumerator LoadSceneCoroutine(ISceneManager sceneManager, SceneReference scene, string titleText, string debugText, float wait = 0)
         {
+            StaticLogger.Debug("Started loading scene");
             yield return LoadingScreen.FadeIn();
             
             string currentScene = sceneManager.GetActiveSceneName();

@@ -36,6 +36,8 @@ MonoBehaviour:
       Value: "Ingl\xE9s"
     - Key: Common/Config/Language/Spanish
       Value: "Espa\xF1ol"
+    - Key: Common/Config/Logout
+      Value: "Cerrar sesi\xF3n"
     - Key: Common/Menu/IdentifyButton
       Value: Identificar comida
     - Key: Common/Menu/Record
@@ -44,6 +46,8 @@ MonoBehaviour:
       Value: "versi\xF3n:"
     - Key: Common/Menu/Help
       Value: Ayuda
+    - Key: Common/Menu/Logout
+      Value: "Cerrando sesi\xF3n..."
     - Key: Common/Login
       Value: Login
     - Key: Common/Login/Email

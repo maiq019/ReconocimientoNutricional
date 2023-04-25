@@ -38,6 +38,13 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// Config ok button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton ConfigOkButtonSus;
+        
+        /// <summary>
+        /// Logout button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton LogoutButtonSus;
+
+        [SerializeField] private SceneReference LoginScene;
 
         /// <summary>
         /// Scan for food button subscribable.
@@ -57,8 +64,16 @@ namespace ITCL.VisionNutricional.Runtime.UI
             HideConfigScreen();
             ConfigButtonSus += ShowConfigScreen;
             ConfigOkButtonSus += HideConfigScreen;
-
+            
+            LogoutButtonSus += Logout;
             ScanButtonSus += LoadCameraScene;
+        }
+
+        private void Logout()
+        {
+            LogoutButtonSus -= Logout;
+            CoroutineRunner.RunRoutine(
+                Loader.LoadSceneCoroutine(sceneManager, LoginScene, localizer["Common/title"], localizer["Common/Menu/Logout"]));
         }
 
         /// <summary>

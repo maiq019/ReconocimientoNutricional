@@ -21,12 +21,16 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// <summary>
         /// Reference to the next scene to load.
         /// </summary>
-        [SerializeField] private SceneReference NextScene;
+        [SerializeField] private SceneReference MainMenuScene;
 
         /// <summary>
         /// Reference to the localizer.
         /// </summary>
         [Inject] private ILocalizer localizer;
+
+        private string Email;
+
+        private string Passwd;
 
         /// <summary>
         /// Subscribable to the accept button
@@ -45,7 +49,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         {
             EnterSus -= LoadMainMenu;
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
-                sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]));
+                sceneManager, MainMenuScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]));
         }
     }
 }
