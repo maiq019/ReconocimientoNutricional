@@ -15,32 +15,32 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
     public class AppEntryPoint : WhateverBehaviour<AppEntryPoint>
     {
         /// <summary>
-        /// Reference to the next scene to load.
-        /// </summary>
-        [SerializeField]
-        private SceneReference NextScene;
-
-        /// <summary>
         /// Reference to the scene manager.
         /// </summary>
-        [Inject]
-        private ISceneManager sceneManager;
-        
+        [Inject] private ISceneManager sceneManager;
+
+        /// <summary>
+        /// Reference to the next scene to load.
+        /// </summary>
+        [SerializeField] private SceneReference NextScene;
+
         /// <summary>
         /// Reference to the localizer.
         /// </summary>
-        [Inject]
-        private ILocalizer localizer;
+        [Inject] private ILocalizer localizer;
 
         /// <summary>
         /// Call game initialization.
         /// </summary>
-        private void OnEnable() => CoroutineRunner.RunRoutine(Initialize());
-        
+        private void OnEnable() =>
+            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
+                sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 2));
+        //CoroutineRunner.RunRoutine(Initialize());
+
         private IEnumerator Initialize()
         {
             yield return LoadingScreen.FadeIn();
-            
+
             string currentScene = sceneManager.GetActiveSceneName();
 
             LoadingScreen.SetTitleText(localizer["Common/Title"]);
@@ -49,9 +49,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             bool loaded = false;
 
             sceneManager.LoadScene(NextScene,
-                _ =>
-                {
-                },
+                _ => { },
                 success =>
                 {
                     if (!success)
@@ -63,11 +61,9 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             yield return new WaitUntil(() => loaded);
 
             loaded = false;
-            
+
             sceneManager.UnloadScene(currentScene,
-                _ =>
-                {
-                },
+                _ => { },
                 success =>
                 {
                     if (!success)
@@ -79,7 +75,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             yield return new WaitUntil(() => loaded);
 
             yield return new WaitForSeconds(2);
-            
+
             yield return LoadingScreen.FadeOut();
         }
     }

@@ -46,5 +46,7 @@ MonoBehaviour:
       Value: Help
     - Key: Debug/Loading
       Value: Loading...
+    - Key: Debug/LoadingMainMenu
+      Value: 
     - Key: Debug/LoadingCamera
       Value: Loading camera...

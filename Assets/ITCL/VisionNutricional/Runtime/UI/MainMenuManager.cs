@@ -1,6 +1,8 @@
 using System.Collections;
+using ITCL.VisionNutricional.Runtime.Initialization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Build;
 using WhateverDevs.Core.Runtime.Common;
@@ -20,21 +22,18 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// <summary>
         /// Reference to the scene manager.
         /// </summary>
-        [Inject]
-        private ISceneManager sceneManager;
-        
+        [Inject] private ISceneManager sceneManager;
+
         /// <summary>
         /// Reference to the localizer.
         /// </summary>
-        [Inject]
-        private ILocalizer localizer;
-        
+        [Inject] private ILocalizer localizer;
+
         /// <summary>
         /// Config popup window
         /// </summary>
-        [SerializeField] 
-        private HidableUiElement ConfigScreenHide;
-        
+        [SerializeField] private HidableUiElement ConfigScreenHide;
+
         /// <summary>
         /// Config button subscribable.
         /// </summary>
@@ -44,23 +43,22 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// Config ok button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton ConfigOkButtonSus;
-        
+
         /// <summary>
         /// Scan for food button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton ScanButtonSus;
-        
+
         /// <summary>
-        /// Reference to the scan for images scene to load.
+        /// Reference to the camera scene to load.
         /// </summary>
-        [SerializeField]
-        private SceneReference ScanScene;
+        [SerializeField] private SceneReference CameraScene;
 
         /// <summary>
         /// Reference to the version control scriptable.
         /// </summary>
         [SerializeField] private Version Version;
-        
+
         /// <summary>
         /// Version text on the bottom of the main menu window.
         /// </summary>
@@ -79,7 +77,7 @@ namespace ITCL.VisionNutricional.Runtime.UI
 
             VersionText.text += Version.ToString(VersionDisplayMode.Short);
         }
-        
+
         /// <summary>
         /// Shows the config popup window.
         /// </summary>
@@ -92,51 +90,9 @@ namespace ITCL.VisionNutricional.Runtime.UI
 
         private void LoadCameraScene()
         {
-            CoroutineRunner.RunRoutine(LoadCameraSceneCoroutine());
-        }
-
-        private IEnumerator LoadCameraSceneCoroutine()
-        {
-            yield return LoadingScreen.FadeIn();
-            
-            string currentScene = sceneManager.GetActiveSceneName();
-
-            LoadingScreen.SetTitleText(localizer["Common/Title"]);
-            LoadingScreen.SetDebugText(localizer["Debug/LoadingCamera"]);
-            
-            bool loaded = false;
-
-            sceneManager.LoadScene(ScanScene,
-                _ =>
-                {
-                },
-                success =>
-                {
-                    if (!success)
-                        Logger.Error("There was an error loading the next scene.");
-                    else
-                        loaded = true;
-                });
-
-            yield return new WaitUntil(() => loaded);
-
-            loaded = false;
-            
-            sceneManager.UnloadScene(currentScene,
-                _ =>
-                {
-                },
-                success =>
-                {
-                    if (!success)
-                        Logger.Error("There was an error unloading the main menu scene.");
-                    else
-                        loaded = true;
-                });
-
-            //yield return new WaitUntil(() => loaded);
-
-            yield return LoadingScreen.FadeOut();
+            ScanButtonSus -= LoadCameraScene;
+            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
+                sceneManager, CameraScene, localizer["Common/Title"], localizer["Debug/LoadingCamera"]));
         }
     }
 }

@@ -39,7 +39,7 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TouchPress"",
+                    ""name"": ""PrimaryTouchPress"",
                     ""type"": ""Button"",
                     ""id"": ""1ee6973b-4427-4ea5-a7cd-bac89b569f6e"",
                     ""expectedControlType"": ""Button"",
@@ -48,9 +48,27 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""TouchPosition"",
+                    ""name"": ""SecondTouchPress"",
+                    ""type"": ""Button"",
+                    ""id"": ""2761af45-1188-4984-a06c-4741583c86c0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PrimaryPosition"",
                     ""type"": ""PassThrough"",
                     ""id"": ""ad7417d8-294e-4421-8f5c-54408182fc6c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondPosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""7c365878-5619-455e-94b4-b9b5427e69d3"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -76,7 +94,7 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""TouchPosition"",
+                    ""action"": ""PrimaryPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -87,7 +105,29 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
                     ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""TouchPress"",
+                    ""action"": ""PrimaryTouchPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fec797e1-f005-4b0f-9cf8-c599d4072b69"",
+                    ""path"": ""<Touchscreen>/touch1/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""549465a5-689b-4fd9-b60c-d0f8e0856545"",
+                    ""path"": ""<Touchscreen>/touch1/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondTouchPress"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -99,8 +139,10 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
             // Touch
             m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
             m_Touch_TouchInput = m_Touch.FindAction("TouchInput", throwIfNotFound: true);
-            m_Touch_TouchPress = m_Touch.FindAction("TouchPress", throwIfNotFound: true);
-            m_Touch_TouchPosition = m_Touch.FindAction("TouchPosition", throwIfNotFound: true);
+            m_Touch_PrimaryTouchPress = m_Touch.FindAction("PrimaryTouchPress", throwIfNotFound: true);
+            m_Touch_SecondTouchPress = m_Touch.FindAction("SecondTouchPress", throwIfNotFound: true);
+            m_Touch_PrimaryPosition = m_Touch.FindAction("PrimaryPosition", throwIfNotFound: true);
+            m_Touch_SecondPosition = m_Touch.FindAction("SecondPosition", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -161,15 +203,19 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
         private readonly InputActionMap m_Touch;
         private ITouchActions m_TouchActionsCallbackInterface;
         private readonly InputAction m_Touch_TouchInput;
-        private readonly InputAction m_Touch_TouchPress;
-        private readonly InputAction m_Touch_TouchPosition;
+        private readonly InputAction m_Touch_PrimaryTouchPress;
+        private readonly InputAction m_Touch_SecondTouchPress;
+        private readonly InputAction m_Touch_PrimaryPosition;
+        private readonly InputAction m_Touch_SecondPosition;
         public struct TouchActions
         {
             private @TouchControls m_Wrapper;
             public TouchActions(@TouchControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @TouchInput => m_Wrapper.m_Touch_TouchInput;
-            public InputAction @TouchPress => m_Wrapper.m_Touch_TouchPress;
-            public InputAction @TouchPosition => m_Wrapper.m_Touch_TouchPosition;
+            public InputAction @PrimaryTouchPress => m_Wrapper.m_Touch_PrimaryTouchPress;
+            public InputAction @SecondTouchPress => m_Wrapper.m_Touch_SecondTouchPress;
+            public InputAction @PrimaryPosition => m_Wrapper.m_Touch_PrimaryPosition;
+            public InputAction @SecondPosition => m_Wrapper.m_Touch_SecondPosition;
             public InputActionMap Get() { return m_Wrapper.m_Touch; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -182,12 +228,18 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
                     @TouchInput.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchInput;
                     @TouchInput.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchInput;
                     @TouchInput.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchInput;
-                    @TouchPress.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPress;
-                    @TouchPress.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPress;
-                    @TouchPress.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPress;
-                    @TouchPosition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPosition;
-                    @TouchPosition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPosition;
-                    @TouchPosition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouchPosition;
+                    @PrimaryTouchPress.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryTouchPress;
+                    @PrimaryTouchPress.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryTouchPress;
+                    @PrimaryTouchPress.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryTouchPress;
+                    @SecondTouchPress.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondTouchPress;
+                    @SecondTouchPress.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondTouchPress;
+                    @SecondTouchPress.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondTouchPress;
+                    @PrimaryPosition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryPosition;
+                    @PrimaryPosition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryPosition;
+                    @PrimaryPosition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryPosition;
+                    @SecondPosition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondPosition;
+                    @SecondPosition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondPosition;
+                    @SecondPosition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondPosition;
                 }
                 m_Wrapper.m_TouchActionsCallbackInterface = instance;
                 if (instance != null)
@@ -195,12 +247,18 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
                     @TouchInput.started += instance.OnTouchInput;
                     @TouchInput.performed += instance.OnTouchInput;
                     @TouchInput.canceled += instance.OnTouchInput;
-                    @TouchPress.started += instance.OnTouchPress;
-                    @TouchPress.performed += instance.OnTouchPress;
-                    @TouchPress.canceled += instance.OnTouchPress;
-                    @TouchPosition.started += instance.OnTouchPosition;
-                    @TouchPosition.performed += instance.OnTouchPosition;
-                    @TouchPosition.canceled += instance.OnTouchPosition;
+                    @PrimaryTouchPress.started += instance.OnPrimaryTouchPress;
+                    @PrimaryTouchPress.performed += instance.OnPrimaryTouchPress;
+                    @PrimaryTouchPress.canceled += instance.OnPrimaryTouchPress;
+                    @SecondTouchPress.started += instance.OnSecondTouchPress;
+                    @SecondTouchPress.performed += instance.OnSecondTouchPress;
+                    @SecondTouchPress.canceled += instance.OnSecondTouchPress;
+                    @PrimaryPosition.started += instance.OnPrimaryPosition;
+                    @PrimaryPosition.performed += instance.OnPrimaryPosition;
+                    @PrimaryPosition.canceled += instance.OnPrimaryPosition;
+                    @SecondPosition.started += instance.OnSecondPosition;
+                    @SecondPosition.performed += instance.OnSecondPosition;
+                    @SecondPosition.canceled += instance.OnSecondPosition;
                 }
             }
         }
@@ -208,8 +266,10 @@ namespace ITCL.VisionNutricional.Runtime.TouchScreen
         public interface ITouchActions
         {
             void OnTouchInput(InputAction.CallbackContext context);
-            void OnTouchPress(InputAction.CallbackContext context);
-            void OnTouchPosition(InputAction.CallbackContext context);
+            void OnPrimaryTouchPress(InputAction.CallbackContext context);
+            void OnSecondTouchPress(InputAction.CallbackContext context);
+            void OnPrimaryPosition(InputAction.CallbackContext context);
+            void OnSecondPosition(InputAction.CallbackContext context);
         }
     }
 }

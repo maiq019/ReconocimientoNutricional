@@ -15,7 +15,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TouchPress",
+                    "name": "PrimaryTouchPress",
                     "type": "Button",
                     "id": "1ee6973b-4427-4ea5-a7cd-bac89b569f6e",
                     "expectedControlType": "Button",
@@ -24,9 +24,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "TouchPosition",
+                    "name": "SecondTouchPress",
+                    "type": "Button",
+                    "id": "2761af45-1188-4984-a06c-4741583c86c0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PrimaryPosition",
                     "type": "PassThrough",
                     "id": "ad7417d8-294e-4421-8f5c-54408182fc6c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondPosition",
+                    "type": "PassThrough",
+                    "id": "7c365878-5619-455e-94b4-b9b5427e69d3",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -52,7 +70,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "TouchPosition",
+                    "action": "PrimaryPosition",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -63,7 +81,29 @@
                     "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
-                    "action": "TouchPress",
+                    "action": "PrimaryTouchPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fec797e1-f005-4b0f-9cf8-c599d4072b69",
+                    "path": "<Touchscreen>/touch1/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "549465a5-689b-4fd9-b60c-d0f8e0856545",
+                    "path": "<Touchscreen>/touch1/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondTouchPress",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
