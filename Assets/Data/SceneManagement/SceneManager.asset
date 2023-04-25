@@ -16,6 +16,7 @@ MonoBehaviour:
   - Assets/Scenes/InitSceen.unity
   - Assets/Scenes/MainMenu.unity
   - Assets/Scenes/Camera.unity
+  - Assets/Scenes/Login.unity
   AddressableScenes: []
   SceneNameGuidDictionary:
     SerializedList: []

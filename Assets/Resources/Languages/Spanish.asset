@@ -44,9 +44,15 @@ MonoBehaviour:
       Value: "versi\xF3n:"
     - Key: Common/Menu/Help
       Value: Ayuda
+    - Key: Common/Login
+      Value: Login
+    - Key: Common/Login/Email
+      Value: Correo
+    - Key: Common/Login/Passwd
+      Value: "Contrase\xF1a"
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu
-      Value: 
+      Value: "Cargando men\xFA..."
     - Key: Debug/LoadingCamera
       Value: "Cargando c\xE1mara..."

@@ -4,12 +4,23 @@ using ModestTree;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
-using Zenject;
 
 namespace ITCL.VisionNutricional.Runtime.Initialization
 {
+    /// <summary>
+    /// Static method for loading scenes with the loading screen.
+    /// </summary>
     public class Loader : WhateverBehaviour<Loader>
     {
+        /// <summary>
+        /// Coroutine that manages the loading and unloading of the scenes and the loading screen.
+        /// </summary>
+        /// <param name="sceneManager">Reference to the scene manager.</param>
+        /// <param name="scene">Scene to load next.</param>
+        /// <param name="titleText">Title to appear on the loading screen.</param>
+        /// <param name="debugText">Subtitle or extra info to appear on the loading screen.</param>
+        /// <param name="wait">Seconds of waiting before the unloading of the loading screen after the next scene is loaded.</param>
+        /// <returns></returns>
         public static IEnumerator LoadSceneCoroutine(ISceneManager sceneManager, SceneReference scene, string titleText, string debugText, float wait = 0)
         {
             yield return LoadingScreen.FadeIn();

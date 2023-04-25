@@ -30,7 +30,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         [Inject] private ILocalizer localizer;
 
         /// <summary>
-        /// Call game initialization.
+        /// Loads the selected first scene, the login.
         /// </summary>
         private void OnEnable() =>
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(

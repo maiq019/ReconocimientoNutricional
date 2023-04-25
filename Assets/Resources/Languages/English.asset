@@ -44,6 +44,12 @@ MonoBehaviour:
       Value: 'version:'
     - Key: Common/Menu/Help
       Value: Help
+    - Key: Common/Login
+      Value: Login
+    - Key: Common/Login/Email
+      Value: Email
+    - Key: Common/Login/Passwd
+      Value: Password
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu

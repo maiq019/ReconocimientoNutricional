@@ -1,16 +1,11 @@
-using System.Collections;
 using ITCL.VisionNutricional.Runtime.Initialization;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
-using WhateverDevs.Core.Runtime.Build;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 using Zenject;
-using Version = WhateverDevs.Core.Runtime.Build.Version;
 
 namespace ITCL.VisionNutricional.Runtime.UI
 {
@@ -55,16 +50,6 @@ namespace ITCL.VisionNutricional.Runtime.UI
         [SerializeField] private SceneReference CameraScene;
 
         /// <summary>
-        /// Reference to the version control scriptable.
-        /// </summary>
-        [SerializeField] private Version Version;
-
-        /// <summary>
-        /// Version text on the bottom of the main menu window.
-        /// </summary>
-        [SerializeField] private TMP_Text VersionText;
-
-        /// <summary>
         /// Subscribes to the OnButtonClicked of the corresponding button.
         /// </summary>
         private void OnEnable()
@@ -74,8 +59,6 @@ namespace ITCL.VisionNutricional.Runtime.UI
             ConfigOkButtonSus += HideConfigScreen;
 
             ScanButtonSus += LoadCameraScene;
-
-            VersionText.text += Version.ToString(VersionDisplayMode.Short);
         }
 
         /// <summary>
@@ -88,6 +71,9 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// </summary>
         private void HideConfigScreen() => ConfigScreenHide.Show(false);
 
+        /// <summary>
+        /// Loads the camera scene.
+        /// </summary>
         private void LoadCameraScene()
         {
             ScanButtonSus -= LoadCameraScene;
