@@ -91,11 +91,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private EasySubscribableButton BackButtonVerticalSus;
 
         /// <summary>
-        /// Reference to the touch manager input.
-        /// </summary>
-        private TouchManager TouchManager;
-
-        /// <summary>
         /// Reference to the coroutine to load the main menu scene.
         /// </summary>
         private IEnumerator MainMenuLoader;
@@ -151,8 +146,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         private void OnEnable()
         {
-            TouchManager.OnStartZoom += StartZoom;
-            TouchManager.OnStopZoom += StopZoom;
+            //TouchManager.OnStartZoom += StartZoom;
+            //TouchManager.OnStopZoom += StopZoom;
 
             BackButtonVerticalSus += StartCamera;
         }
@@ -174,7 +169,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 Logger.Debug("Back button pressed");
                 CoroutineRunner.RunRoutine(MainMenuLoader);
             }
-
+            
             //Checks if there is a camera, if it is playing and if there is not a screenshot being taken.
             if (!CamAvailable || !BackCam.isPlaying || TakingScreenshot) return;
 
@@ -283,6 +278,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             BackButtonVerticalHid.Show(show);
         }
 
+        /*
         private void StartZoom(Vector2 primaryPosition, Vector2 secondaryPosition)
         {
             Logger.Debug("PhoneCamera zoom started");
@@ -327,5 +323,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             BackCam.requestedWidth *= 9;
             BackCam.requestedWidth /= 10;
         }
+        */
     }
 }
