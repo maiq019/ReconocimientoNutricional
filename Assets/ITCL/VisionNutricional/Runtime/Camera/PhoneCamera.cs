@@ -51,6 +51,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private bool CameraVertical;
 
         /// <summary>
+        /// Indicator whether the camera view is inverted or not.
+        /// </summary>
+        private bool CameraInverted;
+
+        /// <summary>
         /// Hidable for all the UI components.
         /// </summary>
         [SerializeField] private HidableUiElement UIHide;
@@ -64,7 +69,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Hidable for the horizontal screenshot button.
         /// </summary>
         [SerializeField] private HidableUiElement ScreenshotButtonHorizontal;
-        
+
         /// <summary>
         /// Flag to know when a screenshot is being captured.
         /// </summary>
@@ -78,12 +83,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Hidable for the back button.
         /// </summary>
-        [SerializeField] private HidableUiElement BackButtonVerticalHid;
+        private HidableUiElement BackButtonVerticalHid;
 
         /// <summary>
         /// Subscribable for the back button.
         /// </summary>
-        [SerializeField] private EasySubscribableButton BackButtonVerticalSus;
+        private EasySubscribableButton BackButtonVerticalSus;
 
         /// <summary>
         /// Reference to the touch manager input.
@@ -107,12 +112,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             MainMenuLoader = Loader.LoadSceneCoroutine(
                 sceneManager, MainMenuScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]);
-            
+
             IsMenuLoading = false;
-            
+
             Background = GetComponent<RawImage>();
-            //BackButtonVerticalHid = BackButtonVertical.GetComponent<HidableUiElement>();
-            //BackButtonVerticalSus = BackButtonVertical.GetComponent<EasySubscribableButton>();
+            BackButtonVerticalHid = BackButtonVertical.GetComponent<HidableUiElement>();
+            BackButtonVerticalSus = BackButtonVertical.GetComponent<EasySubscribableButton>();
 
             //Gets the existing cameras.
             WebCamDevice[] devices = WebCamTexture.devices;
@@ -137,6 +142,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 Logger.Error("Unable to find back camera");
                 return;
             }
+
             //Starts the back camera found.
             StartCamera();
             //Camera flag changed.
@@ -161,38 +167,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         private void Update()
         {
-            if (!CamAvailable) return;
-
-            //Checks and fixes if the device is upside-down.
-            float scaleY = IsCameraVerticallyMirrored() ? -1 : 1;
-            Background.rectTransform.localScale = new Vector3(1, scaleY, 1);
-
-            if (BackCam.isPlaying && !TakingScreenshot)
-            {
-                //Checks and adjust if the device is vertical or horizontal.
-                switch (BackCam.videoRotationAngle)
-                {
-                    case 90:
-                    case -90:
-                        CameraVertical = true;
-                        ShowScreenshotButtonVertical();
-                        Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
-                        break;
-                    case 0:
-                    case 180:
-                    case -180:
-                        CameraVertical = false;
-                        ShowScreenshotButtonHorizontal();
-                        Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
-                        break;
-                    default:
-                        Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
-                        break;
-                }
-            
-                Background.rectTransform.localEulerAngles = new Vector3(0, 0, -BackCam.videoRotationAngle);
-            }
-
             //Loads the main menu with the android back button.
             if (Input.GetKeyDown(KeyCode.Escape) && !IsMenuLoading)
             {
@@ -200,6 +174,43 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 Logger.Debug("Back button pressed");
                 CoroutineRunner.RunRoutine(MainMenuLoader);
             }
+
+            //Checks if there is a camera, if it is playing and if there is not a screenshot being taken.
+            if (!CamAvailable || !BackCam.isPlaying || TakingScreenshot) return;
+
+            //Checks and fixes if the device is upside-down.
+            CameraInverted = BackCam.videoVerticallyMirrored;
+            Background.rectTransform.localScale = IsCameraVerticallyMirrored()
+                ? new Vector3(1, -1, 1)
+                : new Vector3(1, 1, 1);
+
+            //Checks and adjust if the device is vertical or horizontal.
+            switch (BackCam.videoRotationAngle)
+            {
+                case 90:
+                case -90:
+                    CameraVertical = true;
+                    ShowScreenshotButtonVertical();
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+                    break;
+                case 0:
+                    CameraVertical = false;
+                    ShowScreenshotButtonHorizontal();
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+                    break;
+                case 180:
+                case -180:
+                    CameraVertical = false;
+                    CameraInverted = true;
+                    ShowScreenshotButtonHorizontal();
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+                    break;
+                default:
+                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+                    break;
+            }
+
+            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -BackCam.videoRotationAngle);
         }
 
         /// <summary>
@@ -207,14 +218,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         private bool IsCameraVerticallyMirrored()
         {
-            return BackCam.videoVerticallyMirrored;
+            return CameraInverted;
         }
 
         /// <summary>
         /// Consult warp for the vertical indicator of the camera.
         /// </summary>
         /// <returns></returns>
-        public bool IsCameraVertical()
+        private bool IsCameraVertical()
         {
             return CameraVertical;
         }
@@ -236,6 +247,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         public void StopCamera(Texture2D capture)
         {
             BackCam.Stop();
+            if (IsCameraVerticallyMirrored())
+                Background.rectTransform.localScale = IsCameraVertical() ? new Vector3(1, -1, 1) : new Vector3(-1, -1, 1);
+            else Background.rectTransform.localScale = new Vector3(1, 1, 1);
+
+            Background.rectTransform.localEulerAngles = IsCameraVertical()
+                ? new Vector3(0, 0, -BackCam.videoRotationAngle + 90)
+                : new Vector3(0, 0, -BackCam.videoRotationAngle);
+            Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
             Background.texture = capture;
             ShowBackButton();
         }
