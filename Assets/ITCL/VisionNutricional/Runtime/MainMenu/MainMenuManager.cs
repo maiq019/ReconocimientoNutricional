@@ -7,7 +7,7 @@ using WhateverDevs.Localization.Runtime;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 using Zenject;
 
-namespace ITCL.VisionNutricional.Runtime.UI
+namespace ITCL.VisionNutricional.Runtime.MainMenu
 {
     /// <summary>
     /// Window popup manager for Main Menu.

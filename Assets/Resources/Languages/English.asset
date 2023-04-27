@@ -54,6 +54,12 @@ MonoBehaviour:
       Value: Email
     - Key: Common/Login/Passwd
       Value: Password
+    - Key: Common/Login/EmailError
+      Value: Invalid user
+    - Key: Common/Login/PasswdError
+      Value: Wrong password
+    - Key: Common/Login/ConnectError
+      Value: Connection error
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu

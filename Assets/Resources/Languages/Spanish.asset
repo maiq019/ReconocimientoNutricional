@@ -54,6 +54,12 @@ MonoBehaviour:
       Value: Correo
     - Key: Common/Login/Passwd
       Value: "Contrase\xF1a"
+    - Key: Common/Login/EmailError
+      Value: "Usuario inv\xE1lido"
+    - Key: Common/Login/PasswdError
+      Value: "Contrase\xF1a incorrecta"
+    - Key: Common/Login/ConnectError
+      Value: "Error de conexi\xF3n"
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu
