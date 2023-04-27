@@ -78,17 +78,22 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the back button.
         /// </summary>
-        [SerializeField] private Button BackButtonVertical;
+        [SerializeField] private Button BackButton;
 
         /// <summary>
         /// Hidable for the back button.
         /// </summary>
-        private HidableUiElement BackButtonVerticalHid;
+        private HidableUiElement BackButtonHid;
 
         /// <summary>
         /// Subscribable for the back button.
         /// </summary>
-        private EasySubscribableButton BackButtonVerticalSus;
+        private EasySubscribableButton BackButtonSus;
+        
+        /// <summary>
+        /// Hidable for the send button.
+        /// </summary>
+        [SerializeField] private HidableUiElement SendButtonHid;
 
         /// <summary>
         /// Reference to the coroutine to load the main menu scene.
@@ -111,8 +116,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             IsMenuLoading = false;
 
             Background = GetComponent<RawImage>();
-            BackButtonVerticalHid = BackButtonVertical.GetComponent<HidableUiElement>();
-            BackButtonVerticalSus = BackButtonVertical.GetComponent<EasySubscribableButton>();
+            BackButtonHid = BackButton.GetComponent<HidableUiElement>();
+            BackButtonSus = BackButton.GetComponent<EasySubscribableButton>();
 
             //Gets the existing cameras.
             WebCamDevice[] devices = WebCamTexture.devices;
@@ -149,7 +154,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //TouchManager.OnStartZoom += StartZoom;
             //TouchManager.OnStopZoom += StopZoom;
 
-            BackButtonVerticalSus += StartCamera;
+            BackButtonSus += StartCamera;
         }
 
         private void OnDisable()
@@ -251,7 +256,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 : new Vector3(0, 0, -BackCam.videoRotationAngle);
             Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
             Background.texture = capture;
-            ShowBackButton();
+            ShowBackAndSendButton();
         }
 
         private void ShowScreenshotButtonHorizontal(bool show = true)
@@ -259,7 +264,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             UIHide.Show();
             ScreenshotButtonVertical.Show(!show);
             ScreenshotButtonHorizontal.Show(show);
-            BackButtonVerticalHid.Show(!show);
+            BackButtonHid.Show(!show);
+            SendButtonHid.Show(!show);
         }
 
         private void ShowScreenshotButtonVertical(bool show = true)
@@ -267,15 +273,17 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             UIHide.Show();
             ScreenshotButtonVertical.Show(show);
             ScreenshotButtonHorizontal.Show(!show);
-            BackButtonVerticalHid.Show(!show);
+            BackButtonHid.Show(!show);
+            SendButtonHid.Show(!show);
         }
 
-        private void ShowBackButton(bool show = true)
+        private void ShowBackAndSendButton(bool show = true)
         {
             UIHide.Show();
             ScreenshotButtonVertical.Show(!show);
             ScreenshotButtonHorizontal.Show(!show);
-            BackButtonVerticalHid.Show(show);
+            BackButtonHid.Show(show);
+            SendButtonHid.Show(show);
         }
 
         /*
