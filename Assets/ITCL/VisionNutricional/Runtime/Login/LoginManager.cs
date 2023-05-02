@@ -33,22 +33,43 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// </summary>
         [Inject] private ILocalizer localizer;
 
+        /// <summary>
+        /// Email from the user account.
+        /// </summary>
         private string Email;
 
+        /// <summary>
+        /// Reference to the input text box for the email.
+        /// </summary>
         [SerializeField] private TMP_Text EmailInput;
 
+        /// <summary>
+        /// Reference to the hidable for the email error.
+        /// </summary>
         [SerializeField] private HidableUiElement EmailErrorHid;
         
+        /// <summary>
+        /// Password from the user account
+        /// </summary>
         private string Passwd;
         
+        /// <summary>
+        /// Reference to the input text box for the password.
+        /// </summary>
         [SerializeField] private TMP_Text PasswdInput;
 
+        /// <summary>
+        /// Reference to the hidable for the password error.
+        /// </summary>
         [SerializeField] private HidableUiElement PasswdErrorHid;
         
+        /// <summary>
+        /// Reference to the hidable for the connection error.
+        /// </summary>
         [SerializeField] private HidableUiElement ConnectErrorHid;
 
         /// <summary>
-        /// Subscribable to the accept button
+        /// Subscribable to the accept button.
         /// </summary>
         [SerializeField] private EasySubscribableButton EnterSus;
 
@@ -64,14 +85,15 @@ namespace ITCL.VisionNutricional.Runtime.Login
             EnterSus += LoadMainMenu;
         }
 
+        /// <summary>
+        /// Checks and asks for storage permission.
+        /// </summary>
         private void Start()
         {
-            if (Application.platform == RuntimePlatform.Android)
+            if (Application.platform != RuntimePlatform.Android) return;
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
             {
-                if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
-                {
-                    Permission.RequestUserPermission(Permission.ExternalStorageWrite);
-                }
+                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
             }
         }
 
@@ -83,6 +105,9 @@ namespace ITCL.VisionNutricional.Runtime.Login
             if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
         }
 
+        /// <summary>
+        /// Reads the inputs for the user account and starts the login.
+        /// </summary>
         private void Login()
         {
             Email = EmailInput.text;
@@ -96,6 +121,10 @@ namespace ITCL.VisionNutricional.Runtime.Login
             }
         }
 
+        /// <summary>
+        /// Connects to the database to check the user account and log in to it.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator ConnectToLogInCoroutine()
         {
             WWWForm form = new WWWForm();
@@ -106,7 +135,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
             form.AddField("password", trimPasswd);
             
             using (UnityWebRequest www =
-            UnityWebRequest.Post("http://syltec.dyndns-remote.com:6022/get-session-permission/", form))
+            UnityWebRequest.Post("	http://visionnutricion.260mb.net", form))
             {
                 yield return www.SendWebRequest();
                 if (www.result != UnityWebRequest.Result.Success)
@@ -127,11 +156,9 @@ namespace ITCL.VisionNutricional.Runtime.Login
                             Session.Email = trimEmail;
                             Session.Passwd = trimPasswd;
 
-                            PlayerPrefs.SetString("Email", trimEmail);
-                            PlayerPrefs.SetString("Password", trimPasswd);
-                        
-                            //PlayerPrefs.SetString("NextScene", "TIA_Menu");
-                            //SceneManager.LoadSceneAsync("TIA_Loading");
+                            PlayerPrefs.SetString("email", trimEmail);
+                            PlayerPrefs.SetString("password", trimPasswd);
+                            LoadMainMenu();
                             break;
                         case 0:
                             EmailErrorHid.Show();
@@ -144,7 +171,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
             }
         }
 
-            /// <summary>
+        /// <summary>
         /// Loads the scene selected as main menu.
         /// </summary>
         private void LoadMainMenu()

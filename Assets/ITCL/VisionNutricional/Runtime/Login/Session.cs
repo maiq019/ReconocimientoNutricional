@@ -18,7 +18,6 @@ namespace ITCL.VisionNutricional.Runtime.Login
         {
             [FormerlySerializedAs("check")] public int Check=-1;
             [FormerlySerializedAs("session_code")] public string SessionCode;
-        
         }
     }
 }

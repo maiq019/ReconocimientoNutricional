@@ -18,6 +18,7 @@
     "precompiledReferences": [
         "DOTween.dll",
         "log4net.dll",
+        "Mono.Data.Sqlite.dll",
         "Sirenix.OdinInspector.Attributes.dll",
         "Zenject-usage.dll"
     ],

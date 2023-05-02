@@ -3,6 +3,7 @@ using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
+using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 
 namespace ITCL.VisionNutricional.Runtime.Initialization
@@ -10,7 +11,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
     /// <summary>
     /// Static method for loading scenes with the loading screen.
     /// </summary>
-    public class Loader : WhateverBehaviour<Loader>
+    public class Loader :Loggable<Loader>
     {
         /// <summary>
         /// Coroutine that manages the loading and unloading of the scenes and the loading screen.

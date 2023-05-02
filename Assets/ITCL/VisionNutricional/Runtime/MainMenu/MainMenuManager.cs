@@ -69,6 +69,9 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
             ScanButtonSus += LoadCameraScene;
         }
 
+        /// <summary>
+        /// Logs out from the user account and returns to the login screen.
+        /// </summary>
         private void Logout()
         {
             LogoutButtonSus -= Logout;
