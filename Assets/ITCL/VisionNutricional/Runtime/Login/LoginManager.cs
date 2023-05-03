@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using TMPro;
 using UnityEngine;
@@ -113,7 +115,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
             Email = EmailInput.text;
             Passwd = PasswdInput.text;
             
-            if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Passwd)) StartCoroutine(ConnectToLogInCoroutine());
+            if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Passwd)) ConnectToLogIn();
             else
             {
                 if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
@@ -125,50 +127,30 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// Connects to the database to check the user account and log in to it.
         /// </summary>
         /// <returns></returns>
-        private IEnumerator ConnectToLogInCoroutine()
+        private void ConnectToLogIn()
         {
-            WWWForm form = new WWWForm();
+            bool incorrectEmail = true;
 
-            string trimEmail = Email.Trim();
-            string trimPasswd = Passwd.Trim();
-            form.AddField("email", trimEmail);
-            form.AddField("password", trimPasswd);
+            List<DB.User> users = DB.SelectAllUsers();
             
-            using (UnityWebRequest www =
-            UnityWebRequest.Post("	http://visionnutricion.260mb.net", form))
+            foreach (DB.User user in users)
             {
-                yield return www.SendWebRequest();
-                if (www.result != UnityWebRequest.Result.Success)
+                if (Email.Equals(user.email) && Passwd.Equals(user.password))
                 {
-                    Logger.Debug("CONNECTION ERROR " + www.error);
-                    ConnectErrorHid.Show();
+                    Session.Instance.Email = user.email;
+                    Session.Instance.userName = user.userName;
+                    Session.Instance.Passwd = user.password;
+                    LoadMainMenu();
+                    break;
                 }
-                else
-                {
-                    Logger.Debug("Form upload complete!" + www.downloadHandler.text);
-                    Session.CurrentSession = JsonUtility.FromJson<Session.User>(www.downloadHandler.text);
-                    Logger.Debug("SessionCode" + Session.CurrentSession.SessionCode);
-                    Logger.Debug("Check" + Session.CurrentSession.Check);
 
-                    switch (Session.CurrentSession.Check)
-                    {
-                        case 1:
-                            Session.Email = trimEmail;
-                            Session.Passwd = trimPasswd;
-
-                            PlayerPrefs.SetString("email", trimEmail);
-                            PlayerPrefs.SetString("password", trimPasswd);
-                            LoadMainMenu();
-                            break;
-                        case 0:
-                            EmailErrorHid.Show();
-                            break;
-                        case 3:
-                            PasswdErrorHid.Show();
-                            break;
-                    }
-                }
+                if (!Email.Equals(user.email)) continue;
+                incorrectEmail = false;
+                break;
             }
+
+            if (incorrectEmail) EmailErrorHid.Show();
+            else PasswdErrorHid.Show();
         }
 
         /// <summary>

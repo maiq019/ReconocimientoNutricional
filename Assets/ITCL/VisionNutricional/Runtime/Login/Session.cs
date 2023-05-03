@@ -9,9 +9,11 @@ namespace ITCL.VisionNutricional.Runtime.Login
     {
         public static User CurrentSession;
         
-        public static string Email;
+        public string Email;
+
+        public string userName;
         
-        public static string Passwd;
+        public string Passwd;
         
         [Serializable]
         public class User

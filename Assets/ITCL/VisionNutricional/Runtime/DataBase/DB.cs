@@ -88,7 +88,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <param name="userName">User name in the app.</param>
         /// <param name="password">User password.</param>
         /// <returns>Inserted user.</returns>
-        public User InsertUser(string email, string userName, string password)
+        public static User InsertUser(string email, string userName, string password)
         {
             User user = new User();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -130,7 +130,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <param name="email">Email of the user, primary key.</param>
         /// <param name="password">User password.</param>
         /// <returns>Deleted user.</returns>
-        public User DeleteUser(string email, string password)
+        public static User DeleteUser(string email, string password)
         {
             User user = new User();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -165,7 +165,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// Return all users in database.
         /// </summary>
         /// <returns>List of users.</returns>
-        public List<User> SelectAllUsers()
+        public static List<User> SelectAllUsers()
         {
             List<User> usersInDB = new List<User>();
 
@@ -200,7 +200,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="email">email from the user in the database.</param>
         /// <returns>User with that email.</returns>
-        public User SelectUserByEmail(string email)
+        public static User SelectUserByEmail(string email)
         {
             User user = new User();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -230,7 +230,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="user">userName from the user in the app.</param>
         /// <returns>List of the users in the database with that userName.</returns>
-        public List<User> SelectUserByName(string user)
+        public static List<User> SelectUserByName(string user)
         {
             List<User> usersInDB = new List<User>();
 
@@ -268,7 +268,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <param name="newUserName">New userName for the user in the database.</param>
         /// <param name="newPassword">New password for the user in the database.</param>
         /// <returns>Updated user..</returns>
-        public User UpdateOneUser(string email, string password, string newUserName, string newPassword)
+        public static User UpdateOneUser(string email, string password, string newUserName, string newPassword)
         {
             User user = new User();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -342,7 +342,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="foodName">Name from the food, primary key.</param>
         /// <returns>Deleted food.</returns>
-        public Food DeleteFood(string foodName)
+        public static Food DeleteFood(string foodName)
         {
             Food food = new Food();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -370,7 +370,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// Return all foods in database.
         /// </summary>
         /// <returns>List of foods.</returns>
-        public List<Food> SelectAllFoods()
+        public static List<Food> SelectAllFoods()
         {
             List<Food> foodsInDB = new List<Food>();
 
@@ -404,7 +404,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="foodName">Name from the food in the database.</param>
         /// <returns>The food with that name.</returns>
-        public Food SelectFoodByName(string foodName)
+        public static Food SelectFoodByName(string foodName)
         {
             Food food = new Food();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -434,7 +434,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <param name="foodName">name identifier for the food.</param>
         /// <param name="newFoodCalories">New calories value for the food in the database.</param>
         /// <returns>Updated food.</returns>
-        public Food UpdateOneFood(string foodName, string newFoodCalories)
+        public static Food UpdateOneFood(string foodName, string newFoodCalories)
         {
             Food food = new Food();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -507,7 +507,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <param name="foodName">Name identifier from the food to delete.</param>
         /// <param name="date">Date from the entry to delete.</param>
         /// <returns>List of historic entries.</returns>
-        public HistoricEntry DeleteEntry(string userEmail, string foodName, DateTime date)
+        public static HistoricEntry DeleteEntry(string userEmail, string foodName, DateTime date)
         {
             HistoricEntry entry = new HistoricEntry();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -536,7 +536,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// Return all entries in the historic.
         /// </summary>
         /// <returns>List of entries.</returns>
-        public List<HistoricEntry> SelectAllEntries()
+        public static List<HistoricEntry> SelectAllEntries()
         {
             List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
 
@@ -571,7 +571,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="userEmail">email identifier from the user.</param>
         /// <returns>List of historic entries.</returns>
-        public List<HistoricEntry> SelectAllEntriesFromUser(string userEmail)
+        public static List<HistoricEntry> SelectAllEntriesFromUser(string userEmail)
         {
             List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
 
@@ -606,7 +606,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="foodName">name identifier from the food.</param>
         /// <returns>List of historic entries.</returns>
-        public List<HistoricEntry> SelectAllEntriesWithFood(string foodName)
+        public static List<HistoricEntry> SelectAllEntriesWithFood(string foodName)
         {
             List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
 
