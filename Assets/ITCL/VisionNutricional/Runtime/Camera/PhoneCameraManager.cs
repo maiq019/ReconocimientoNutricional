@@ -13,7 +13,7 @@ using Zenject;
 namespace ITCL.VisionNutricional.Runtime.Camera
 {
     [RequireComponent(typeof(RawImage))]
-    public class PhoneCamera : WhateverBehaviour<PhoneCamera>
+    public class PhoneCameraManager : WhateverBehaviour<PhoneCameraManager>
     {
         /// <summary>
         /// Reference to the scene manager.
@@ -29,6 +29,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Reference to the main menu scene to go back.
         /// </summary>
         [SerializeField] private SceneReference MainMenuScene;
+        
+        /// <summary>
+        /// Reference to the cloud vision api manager.
+        /// </summary>
+        [SerializeField] private CamTextureToCloudVision CloudApi;
 
         /// <summary>
         /// Flag to check if there is a camera.
@@ -43,7 +48,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the canvas background image.
         /// </summary>
-        private RawImage Background;
+        [SerializeField] private RawImage Background;
 
         /// <summary>
         /// Indicator whether the camera is vertical or horizontal.
@@ -64,6 +69,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Hidable for the vertical screenshot button.
         /// </summary>
         [SerializeField] private HidableUiElement ScreenshotButtonVertical;
+
+        private ScreenShotButton ScreenShotButtonComponent;
 
         /// <summary>
         /// Hidable for the horizontal screenshot button.
@@ -89,11 +96,21 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Subscribable for the back button.
         /// </summary>
         private EasySubscribableButton BackButtonSus;
-        
+
+        /// <summary>
+        /// Reference to the send button.
+        /// </summary>
+        [SerializeField] private Button SendButton;
+
         /// <summary>
         /// Hidable for the send button.
         /// </summary>
-        [SerializeField] private HidableUiElement SendButtonHid;
+        private HidableUiElement SendButtonHid;
+        
+        /// <summary>
+        /// Subscribable for the send button.
+        /// </summary>
+        private EasySubscribableButton SendButtonSus;
 
         /// <summary>
         /// Reference to the coroutine to load the main menu scene.
@@ -115,9 +132,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             IsMenuLoading = false;
 
-            Background = GetComponent<RawImage>();
+            ScreenShotButtonComponent = ScreenshotButtonVertical.GetComponent<ScreenShotButton>();
             BackButtonHid = BackButton.GetComponent<HidableUiElement>();
             BackButtonSus = BackButton.GetComponent<EasySubscribableButton>();
+            SendButtonHid = SendButton.GetComponent<HidableUiElement>();
+            SendButtonSus = SendButton.GetComponent<EasySubscribableButton>();
 
             //Gets the existing cameras.
             WebCamDevice[] devices = WebCamTexture.devices;
@@ -155,6 +174,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //TouchManager.OnStopZoom += StopZoom;
 
             BackButtonSus += StartCamera;
+            SendButtonSus += SendImageToCloudVision;
         }
 
         private void OnDisable()
@@ -284,6 +304,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             ScreenshotButtonHorizontal.Show(!show);
             BackButtonHid.Show(show);
             SendButtonHid.Show(show);
+        }
+
+        private void SendImageToCloudVision()
+        {
+            CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
         }
 
         /*

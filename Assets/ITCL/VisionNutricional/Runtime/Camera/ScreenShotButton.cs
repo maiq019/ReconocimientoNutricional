@@ -10,9 +10,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
     {
         [SerializeField] private HidableUiElement UIHide;
 
-        [SerializeField] private PhoneCamera Camera;
+        [SerializeField] private PhoneCameraManager Camera;
 
-        [SerializeField] private CloudVisionSendButton SendButton;
+        protected internal Texture2D screenshot;
         
         protected override void ButtonClicked() => StartCoroutine(nameof(ScreenshotCoroutine));
 
@@ -31,7 +31,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             Logger.Debug("Capture texture created");
             //Stops the camera.
             Camera.StopCamera(capture);
-            SendButton.capture = capture;
+            screenshot = capture;
             //Finish the screenshot process.
             Camera.TakingScreenshot = false;
             
