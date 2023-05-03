@@ -5,23 +5,33 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using WhateverDevs.Core.Runtime.Ui;
+using WhateverDevs.Core.Behaviours;
+using WhateverDevs.Core.Runtime.Common;
+using WhateverDevs.Localization.Runtime;
+using Zenject;
 
 // ReSharper disable InconsistentNaming
 
 namespace ITCL.VisionNutricional.Runtime.Camera
 {
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
-    public class CamTextureToCloudVision : ActionOnButtonClick<CamTextureToCloudVision>
+    public class CamTextureToCloudVision : WhateverBehaviour<CamTextureToCloudVision>
     {
         public delegate void CloudResponse(AnnotateImageResponses responses);
 
         public event CloudResponse OnCloudResponse;
 
         private const string URL = "https://vision.googleapis.com/v1/images:annotate?key=";
-        [SerializeField] private string APIKey = "";
+        public string APIKey = "";
         [SerializeField] private FeatureType Feature_Type;
         [SerializeField] private int MaxResults = 20;
+        
+        protected internal Texture2D capture;
+
+        /// <summary>
+        /// Reference to the localizer.
+        /// </summary>
+        [Inject] private ILocalizer localizer;
 
         //private Dictionary<string, string> headers;
 
@@ -234,20 +244,18 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             VERY_LIKELY
         }
 
-        protected override void ButtonClicked()
+        protected internal void SendImageToCloudVision(Texture2D image)
         {
             //headers = new Dictionary<string, string> { { "Content-Type", "application/json; charset=UTF-8" } };
-
-            if (string.IsNullOrEmpty(APIKey))
-                Logger.Error("No API key. Please set your API key into the \"Cam Texture To Cloud Vision(Script)\" component.");
-
-            StartCoroutine(nameof(SendImageToCloudVisionCoroutine));
+            
+            if (APIKey.IsNullEmptyOrWhiteSpace()) Logger.Error(localizer["Debug/ApiKeyError"]);
+            else StartCoroutine(SendImageToCloudVisionCoroutine(image));
         }
 
         private IEnumerator SendImageToCloudVisionCoroutine(Texture2D texture2D)
         {
-            if (APIKey == null) yield return null;
-
+            if (APIKey.IsNullEmptyOrWhiteSpace()) yield return null;
+            
             byte[] jpg = texture2D.EncodeToJPG();
             string base64 = Convert.ToBase64String(jpg);
 
@@ -324,5 +332,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 entityRects.Add(entityRect);
             }
         }
+
+        
     }
 }

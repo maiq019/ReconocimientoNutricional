@@ -1,21 +1,20 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WhateverDevs.Core.Runtime.Ui;
 
 namespace ITCL.VisionNutricional.Runtime.Camera
 {
-    public class ScreenShot : ActionOnButtonClick<ScreenShot>
+    public class ScreenShotButton : ActionOnButtonClick<ScreenShotButton>
     {
         [SerializeField] private HidableUiElement UIHide;
 
         [SerializeField] private PhoneCamera Camera;
 
+        [SerializeField] private CloudVisionSendButton SendButton;
         
-
-        protected override void ButtonClicked() => TakeScreenshot();
-
-        private void TakeScreenshot() => StartCoroutine(nameof(ScreenshotCoroutine));
+        protected override void ButtonClicked() => StartCoroutine(nameof(ScreenshotCoroutine));
 
         private IEnumerator ScreenshotCoroutine()
         {
@@ -32,6 +31,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             Logger.Debug("Capture texture created");
             //Stops the camera.
             Camera.StopCamera(capture);
+            SendButton.capture = capture;
             //Finish the screenshot process.
             Camera.TakingScreenshot = false;
             

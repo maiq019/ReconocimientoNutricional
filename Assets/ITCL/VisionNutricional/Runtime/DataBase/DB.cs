@@ -96,14 +96,14 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
 
-                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) SELECT '"
+                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) VALUES ("
                                         + email
                                         + "','"
                                         + userName
                                         + "','"
                                         + password
-                                        + "' WHERE NOT EXISTS(SELECT 1 FROM Users WHERE userName='"
-                                        + userName
+                                        + ") WHERE NOT EXISTS(SELECT 1 FROM Users WHERE email='"
+                                        + email
                                         + "')";
 
                 IDataReader reader = dbCommand.ExecuteReader();

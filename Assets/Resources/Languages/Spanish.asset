@@ -66,3 +66,8 @@ MonoBehaviour:
       Value: "Cargando men\xFA..."
     - Key: Debug/LoadingCamera
       Value: "Cargando c\xE1mara..."
+    - Key: Debug/LoadingHistoric
+      Value: Cargando historial...
+    - Key: Debug/ApiKeyError
+      Value: Introduzca la clave de cloud vision API en el componente 'CamTextureToCloudVision'
+        del 'SendButton' en la escena de camara.

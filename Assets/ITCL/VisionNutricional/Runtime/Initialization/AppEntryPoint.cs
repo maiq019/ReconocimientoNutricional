@@ -32,7 +32,6 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         {
             DB.CreateDatabaseTables();
             DB.InsertFood("pasta", 131);
-            
         }
 
         /// <summary>

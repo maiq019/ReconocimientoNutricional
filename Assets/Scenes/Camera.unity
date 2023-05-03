@@ -304,7 +304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &410980398
 RectTransform:
   m_ObjectHideFlags: 0
@@ -356,6 +356,7 @@ MonoBehaviour:
   ButtonReference: {fileID: 0}
   UIHide: {fileID: 886969267}
   Camera: {fileID: 913844264}
+  SendButton: {fileID: 0}
 --- !u!225 &410980401
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -740,14 +741,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 614553890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b99a2f9b247cfc44a801dbbc000d975e, type: 3}
+  m_Script: {fileID: 11500000, guid: 24c584687de54dc45864922a87fad100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ButtonInTheSameObject: 1
   ButtonReference: {fileID: 0}
-  APIKey: AIzaSyBBZfFNEB6ZGKF5eYiNnGJmRuN1OpqxHSo
-  Feature_Type: 0
-  MaxResults: 20
+  CloudApi: {fileID: 1886171919}
 --- !u!1 &886969266
 GameObject:
   m_ObjectHideFlags: 0
@@ -957,6 +956,7 @@ MonoBehaviour:
   ButtonReference: {fileID: 0}
   UIHide: {fileID: 886969267}
   Camera: {fileID: 913844264}
+  SendButton: {fileID: 614553893}
 --- !u!114 &913639168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1871,3 +1871,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1873699186}
   m_CullTransparentMesh: 1
+--- !u!1 &1886171918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1886171920}
+  - component: {fileID: 1886171919}
+  m_Layer: 0
+  m_Name: CloudApiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1886171919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886171918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b99a2f9b247cfc44a801dbbc000d975e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  APIKey: AIzaSyBBZfFNEB6ZGKF5eYiNnGJmRuN1OpqxHSo
+  Feature_Type: 0
+  MaxResults: 20
+--- !u!4 &1886171920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886171918}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 761.92505, y: 1270.3068, z: -4.296525}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
