@@ -33,6 +33,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 Texto.text += food.foodName + "         " + food.foodCalories + "\n";
             }
             
+            Texto.text += "\nHISTORIC:\n";
+            List<DB.HistoricEntry> entries = DB.SelectAllEntries();
+            foreach (DB.HistoricEntry entry in entries)
+            {
+                Texto.text += entry.userEmail + "   " + entry.foodName + "   " + entry.date + "\n";
+            }
+            
             Hide.Show();
 
             yield return new WaitForSeconds(5);

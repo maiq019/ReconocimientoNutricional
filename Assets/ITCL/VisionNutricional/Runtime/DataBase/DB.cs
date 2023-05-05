@@ -57,14 +57,16 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             Command(foodsQuery);
 
             const string historicQuery =
-                /*"CREATE TABLE IF NOT EXISTS Historic (FOREIGN KEY(userEmail) REFERENCES Users(email), "
-                                                + "FOREIGN KEY(foodName) REFERENCES Foods(foodName), "
-                                                + "_date DATE, "
-                                                + "PRIMARY KEY(userEmail, foodName, _date) )";*/
                 "CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
                                                 + "foodName TEXT NOT NULL, "
                                                 + "_date DATE NOT NULL, "
+                                                + "FOREIGN KEY(userEmail) REFERENCES Users(email), "
+                                                + "FOREIGN KEY(foodName) REFERENCES Foods(foodName), "
                                                 + "PRIMARY KEY(userEmail, foodName, _date))";
+                /*"CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
+                                                + "foodName TEXT NOT NULL, "
+                                                + "_date DATE NOT NULL, "
+                                                + "PRIMARY KEY(userEmail, foodName, _date))";*/
             Command(historicQuery);
         }
         
@@ -130,24 +132,28 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                                         + "','"
                                         + password
                                         + "')";
-
-                IDataReader reader = dbCommand.ExecuteReader();
-                
-                while (reader.Read())
+                try
                 {
-                    user.email = reader.GetString(0);
-                    user.userName = reader.GetString(1);
-                    user.password = reader.GetString(2);
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        user.email = dataReader.GetString(0);
+                        user.userName = dataReader.GetString(1);
+                        user.password = dataReader.GetString(2);
+                    }
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
                 }
 
-                reader.Close();
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
 
             return user;
         }
-
         
         /// <summary>
         /// Deletes an user from the database with its email.
@@ -168,17 +174,23 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                                         + "' AND password='"
                                         + password
                                         +"'";
-                
-                IDataReader reader = dbCommand.ExecuteReader();
-                
-                while (reader.Read())
-                {
-                    user.email = reader.GetString(0);
-                    user.userName = reader.GetString(1);
-                    user.password = reader.GetString(2);
-                }
 
-                reader.Close();
+                try
+                {
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        user.email = dataReader.GetString(0);
+                        user.userName = dataReader.GetString(1);
+                        user.password = dataReader.GetString(2);
+                    }
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
@@ -199,20 +211,21 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "SELECT * FROM Users ";
-                IDataReader reader = dbCommand.ExecuteReader();
+                
+                IDataReader dataReader = dbCommand.ExecuteReader();
 
-                while (reader.Read())
+                while (dataReader.Read())
                 {
                     User userAux = new User
                     {
-                        email = reader.GetString(0),
-                        userName = reader.GetString(1),
-                        password = reader.GetString(2)
+                        email = dataReader.GetString(0),
+                        userName = dataReader.GetString(1),
+                        password = dataReader.GetString(2)
                     };
                     usersInDB.Add(userAux);
                 }
 
-                reader.Close();
+                dataReader.Close();
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
@@ -346,15 +359,22 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO Foods (foodName, foodCalories) VALUES ('" + fName + "','" + fCalories + "')";
-                IDataReader dataReader = dbCommand.ExecuteReader();
                 
-                while (dataReader.Read())
+                try
                 {
-                    food.foodName = dataReader.GetString(0);
-                    food.foodCalories = dataReader.GetFloat(1);
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+                
+                    while (dataReader.Read())
+                    {
+                        food.foodName = dataReader.GetString(0);
+                        food.foodCalories = dataReader.GetFloat(1);
+                    }
                 }
-
-                dataReader.Close();
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
@@ -375,15 +395,22 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "DELETE FROM Foods WHERE foodName='" + foodName +"'";
-                IDataReader reader = dbCommand.ExecuteReader();
                 
-                while (reader.Read())
+                try
                 {
-                    food.foodName = reader.GetString(0);
-                    food.foodCalories = reader.GetFloat(1);
+                    IDataReader reader = dbCommand.ExecuteReader();
+                
+                    while (reader.Read())
+                    {
+                        food.foodName = reader.GetString(0);
+                        food.foodCalories = reader.GetFloat(1);
+                    }
                 }
-
-                reader.Close();
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
@@ -513,16 +540,23 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO Historic (userEmail, foodName, _date) VALUES (" + userEmail + ", " + foodName + ", " + date + ")";
-                IDataReader dataReader = dbCommand.ExecuteReader();
                 
-                while (dataReader.Read())
+                try
                 {
-                    entry.userEmail = dataReader.GetString(0);
-                    entry.foodName = dataReader.GetString(1);
-                    entry.date = dataReader .GetDateTime(2);
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+                
+                    while (dataReader.Read())
+                    {
+                        entry.userEmail = dataReader.GetString(0);
+                        entry.foodName = dataReader.GetString(1);
+                        entry.date = dataReader .GetDateTime(2);
+                    }
                 }
-
-                dataReader.Close();
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
