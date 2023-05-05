@@ -42,26 +42,30 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             // Open a connection to the database.
             string filepath = Application.persistentDataPath + "/" + DBName;
             _dbUri = "URI=file:" + filepath + ".sqlite";
+            
             _dbConnection = new SqliteConnection(_dbUri);
 
             // Create tables for the users, foods and historic in the database if they do not exist yet.
-            const string queryCreateUsers =
-                "CREATE TABLE IF NOT EXIST Users (email VARCHAR(100) PRIMARY KEY, "
-                                                + "userName VARCHAR(100) NOT NULL, "
-                                                + "password VARCHAR(100) NOT NULL)";
-            Command(queryCreateUsers);
+            const string usersQuery = "CREATE TABLE IF NOT EXISTS Users (email TEXT PRIMARY KEY, "
+                                                                    + "userName TEXT NOT NULL, "
+                                                                    + "password TEXT NOT NULL) STRICT";
+            Command(usersQuery);
             
-            const string queryCreateNutritionalValues =
-                "CREATE TABLE IF NOT EXIST NutritionalValues (foodName VARCHAR(100) PRIMARY KEY, "
-                                                            + "foodCalories FLOAT )";
-            Command(queryCreateNutritionalValues);
-            
-            const string queryCreateHistoric =
-                "CREATE TABLE IF NOT EXIST Historic (FOREIGN KEY(userEmail) REFERENCES Users(email), "
-                                                + "FOREIGN KEY(foodName) REFERENCES NutritionalValues(foodName), "
+            const string foodsQuery =
+                "CREATE TABLE IF NOT EXISTS Foods (foodName TEXT PRIMARY KEY, "
+                                            + "foodCalories FLOAT ) STRICT";
+            Command(foodsQuery);
+
+            const string historicQuery =
+                /*"CREATE TABLE IF NOT EXISTS Historic (FOREIGN KEY(userEmail) REFERENCES Users(email), "
+                                                + "FOREIGN KEY(foodName) REFERENCES Foods(foodName), "
                                                 + "_date DATE, "
-                                                + "PRIMARY KEY(userName, foodId, _date) )";
-            Command(queryCreateHistoric);
+                                                + "PRIMARY KEY(userEmail, foodName, _date) )";*/
+                "CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
+                                                + "foodName TEXT NOT NULL, "
+                                                + "_date DATE NOT NULL, "
+                                                + "PRIMARY KEY(userEmail, foodName, _date))";
+            Command(historicQuery);
         }
         
         public static IDbConnection GetDB() => _dbConnection;
@@ -73,10 +77,33 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         public static void Command(string command)
         {
             _dbConnection.Open(); // Open connection to the database.
+            IDbCommand cmd = _dbConnection.CreateCommand();
+            cmd.CommandText = "PRAGMA foreign_keys = ON";
+            cmd.ExecuteNonQuery();
             IDbCommand dbCommand = _dbConnection.CreateCommand();
             dbCommand.CommandText = command;
             dbCommand.ExecuteReader();
             _dbConnection.Close();
+        }
+        
+        public static void DeleteDatabase()
+        {
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+                
+                dbCommand.CommandText = "DROP TABLE Users";
+                dbCommand.ExecuteScalar();
+                
+                dbCommand.CommandText = "DROP TABLE Foods";
+                dbCommand.ExecuteScalar();
+                
+                dbCommand.CommandText = "DROP TABLE Historic";
+                dbCommand.ExecuteScalar();
+                
+                _dbConnection.Close();
+            }
         }
 
         #region Users
@@ -96,14 +123,12 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
 
-                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) VALUES ("
+                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) VALUES ('"
                                         + email
                                         + "','"
                                         + userName
                                         + "','"
                                         + password
-                                        + ") WHERE NOT EXISTS(SELECT 1 FROM Users WHERE email='"
-                                        + email
                                         + "')";
 
                 IDataReader reader = dbCommand.ExecuteReader();
@@ -173,7 +198,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "SELECT email, userName, password FROM Users ";
+                dbCommand.CommandText = "SELECT * FROM Users ";
                 IDataReader reader = dbCommand.ExecuteReader();
 
                 while (reader.Read())
@@ -207,7 +232,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "SELECT email, userName, password FROM Users WHERE email ='" + email + "'";
+                dbCommand.CommandText = "SELECT * FROM Users WHERE email ='" + email + "'";
                 IDataReader dataReader = dbCommand.ExecuteReader();
 
                 while (dataReader.Read())
@@ -238,7 +263,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "SELECT email, userName, password FROM Users WHERE userName ='" + user + "'";
+                dbCommand.CommandText = "SELECT * FROM Users WHERE userName ='" + user + "'";
                 IDataReader dataReader = dbCommand.ExecuteReader();
 
                 while (dataReader.Read())
@@ -308,7 +333,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         #region Food
 
         /// <summary>
-        /// Inserts or modifies a food on the NutritionalValues table.
+        /// Inserts or modifies a food on the Foods table.
         /// </summary>
         /// <param name="fName">Food name.</param>
         /// <param name="fCalories">Food calories.</param>
@@ -320,13 +345,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "INSERT OR REPLACE INTO NutritionalValues (foodName, foodCalories) VALUES (" + fName + ", " + fCalories + ")";
+                dbCommand.CommandText = "INSERT INTO Foods (foodName, foodCalories) VALUES ('" + fName + "','" + fCalories + "')";
                 IDataReader dataReader = dbCommand.ExecuteReader();
                 
                 while (dataReader.Read())
                 {
-                    food.foodName = dataReader.GetString(1);
-                    food.foodCalories = dataReader.GetFloat(2);
+                    food.foodName = dataReader.GetString(0);
+                    food.foodCalories = dataReader.GetFloat(1);
                 }
 
                 dataReader.Close();
@@ -349,13 +374,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "DELETE FROM NutritionalValues WHERE foodName='" + foodName +"'";
+                dbCommand.CommandText = "DELETE FROM Foods WHERE foodName='" + foodName +"'";
                 IDataReader reader = dbCommand.ExecuteReader();
                 
                 while (reader.Read())
                 {
-                    food.foodName = reader.GetString(1);
-                    food.foodCalories = reader.GetFloat(2);
+                    food.foodName = reader.GetString(0);
+                    food.foodCalories = reader.GetFloat(1);
                 }
 
                 reader.Close();
@@ -378,15 +403,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "SELECT foodName, foodCalories FROM NutritionalValues ";
+                dbCommand.CommandText = "SELECT foodName, foodCalories FROM Foods ";
                 IDataReader reader = dbCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
                     Food foodAux = new Food
                     {
-                        foodName = reader.GetString(1),
-                        foodCalories = reader.GetFloat(2)
+                        foodName = reader.GetString(0),
+                        foodCalories = reader.GetFloat(1)
                     };
                     foodsInDB.Add(foodAux);
                 }
@@ -411,13 +436,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "SELECT foodName, foodCalories FROM NutritionalValues WHERE foodName ='" + foodName + "'";
+                dbCommand.CommandText = "SELECT foodName, foodCalories FROM Foods WHERE foodName ='" + foodName + "'";
                 IDataReader dataReader = dbCommand.ExecuteReader();
 
                 while (dataReader.Read())
                 {
-                    food.foodName = dataReader.GetString(1);
-                    food.foodCalories = dataReader.GetFloat(2);
+                    food.foodName = dataReader.GetString(0);
+                    food.foodCalories = dataReader.GetFloat(1);
                 }
 
                 dataReader.Close();
@@ -442,7 +467,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
 
-                dbCommand.CommandText = "UPDATE NutritionalValues SET foodcalories='"
+                dbCommand.CommandText = "UPDATE Foods SET foodcalories='"
                                         + newFoodCalories
                                         + "' WHERE foodName ='"
                                         + foodName
@@ -452,8 +477,8 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 
                 while (reader.Read())
                 {
-                    food.foodName = reader.GetString(1);
-                    food.foodCalories = reader.GetFloat(2);
+                    food.foodName = reader.GetString(0);
+                    food.foodCalories = reader.GetFloat(1);
                 }
 
                 reader.Close();
@@ -481,6 +506,11 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO Historic (userEmail, foodName, _date) VALUES (" + userEmail + ", " + foodName + ", " + date + ")";
                 IDataReader dataReader = dbCommand.ExecuteReader();
@@ -513,6 +543,11 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "DELETE FROM Historic WHERE userEmail='" + userEmail +"' AND foodName ='" + foodName + "' AND _date='" + date +"'";
                 IDataReader reader = dbCommand.ExecuteReader();
@@ -543,6 +578,11 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "SELECT userEmail, foodName, _date FROM Historic ";
                 IDataReader reader = dbCommand.ExecuteReader();
@@ -578,6 +618,11 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "SELECT userEmail, foodName, _date FROM Historic WHERE userEmail='" + userEmail +"'";
                 IDataReader reader = dbCommand.ExecuteReader();
@@ -613,6 +658,11 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "SELECT userEmail, foodName, _date FROM Historic WHERE foodName='" + foodName +"'";
                 IDataReader reader = dbCommand.ExecuteReader();

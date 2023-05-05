@@ -92,6 +92,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// </summary>
         private void Start()
         {
+            Logger.Debug("Started Login");
             if (Application.platform != RuntimePlatform.Android) return;
             if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
             {
@@ -137,9 +138,9 @@ namespace ITCL.VisionNutricional.Runtime.Login
             {
                 if (Email.Equals(user.email) && Passwd.Equals(user.password))
                 {
-                    Session.Instance.Email = user.email;
-                    Session.Instance.userName = user.userName;
-                    Session.Instance.Passwd = user.password;
+                    Session.Email = user.email;
+                    Session.UserName = user.userName;
+                    Session.Passwd = user.password;
                     LoadMainMenu();
                     break;
                 }
