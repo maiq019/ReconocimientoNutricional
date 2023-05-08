@@ -3,6 +3,9 @@
     "rootNamespace": "",
     "references": [
         "GUID:ed8b64f314bc6ca478e1df735ff57046",
+        "GUID:46aa7bded5814024ca784cfa1afa41e2",
+        "GUID:aae4add5d5c67aa4d93b523bec04893b",
+        "GUID:65b45c1fca0f88146a105e3b90cf3221",
         "GUID:6f75e3e9b2be11e40a79ad3ceec60e41",
         "GUID:dcd1c851940864d4a942993d10fb4b57"
     ],
@@ -10,7 +13,9 @@
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "Sirenix.Utilities.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

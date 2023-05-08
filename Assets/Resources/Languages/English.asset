@@ -71,3 +71,13 @@ MonoBehaviour:
     - Key: Debug/ApiKeyError
       Value: Enter the cloud vision API key in the 'CamTextureToCloudVision' component
         of the 'SendButton' on the camera scene.
+    - Key: Foods/bread
+      Value: bread
+    - Key: Foods/pasta
+      Value: pasta
+    - Key: Foods/rice
+      Value: rice
+    - Key: Foods/beef meat
+      Value: beef
+    - Key: Foods/chicken meat
+      Value: chicken

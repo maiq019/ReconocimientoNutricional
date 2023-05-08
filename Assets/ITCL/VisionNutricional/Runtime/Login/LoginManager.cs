@@ -84,8 +84,8 @@ namespace ITCL.VisionNutricional.Runtime.Login
 
         private void OnEnable()
         {
-            //EnterSus += LoadMainMenu;
-            EnterSus += Login;
+            EnterSus += LoadMainMenu;
+            //EnterSus += Login;
         }
 
         /// <summary>
