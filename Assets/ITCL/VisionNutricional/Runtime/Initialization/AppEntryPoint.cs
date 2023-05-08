@@ -31,21 +31,22 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// </summary>
         [Inject] private ILocalizer localizer;
 
-        private void Awake()
-        {
-            DB.CreateDataBase();
-            CoroutineRunner.RunRoutine(FillDbCoroutine());
-        }
-
         /// <summary>
         /// Loads the selected first scene, the login.
         /// </summary>
-        private void OnEnable() =>
+        private void OnEnable()
+        {
+            DB.CreateDataBase();
+            CoroutineRunner.RunRoutine(FillDbCoroutine());
+            
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 2));
+        }
 
         private IEnumerator FillDbCoroutine()
         {
+            DB.CreateDataBase();
+            yield return new WaitForEndOfFrame();
             DB.DeleteDatabase();
             DB.CreateDatabaseTables();
             yield return new WaitForEndOfFrame();

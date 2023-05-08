@@ -1,11 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Initialization;
+using ModestTree;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Android;
-using UnityEngine.Networking;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
@@ -43,7 +43,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// <summary>
         /// Reference to the input text box for the email.
         /// </summary>
-        [SerializeField] private TMP_Text EmailInput;
+        [SerializeField] private TMP_InputField EmailInput;
 
         /// <summary>
         /// Reference to the hidable for the email error.
@@ -58,7 +58,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// <summary>
         /// Reference to the input text box for the password.
         /// </summary>
-        [SerializeField] private TMP_Text PasswdInput;
+        [SerializeField] private TMP_InputField PasswdInput;
 
         /// <summary>
         /// Reference to the hidable for the password error.
@@ -84,7 +84,8 @@ namespace ITCL.VisionNutricional.Runtime.Login
 
         private void OnEnable()
         {
-            EnterSus += LoadMainMenu;
+            //EnterSus += LoadMainMenu;
+            EnterSus += Login;
         }
 
         /// <summary>
@@ -112,41 +113,35 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// </summary>
         private void Login()
         {
-            Email = EmailInput.text;
-            Passwd = PasswdInput.text;
+            EmailErrorHid.Show(false);
+            PasswdErrorHid.Show(false);
             
-            if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Passwd)) ConnectToLogIn();
-            else
-            {
-                if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
-                if (string.IsNullOrEmpty(Passwd)) PasswdErrorHid.Show();
-            }
+            Email = EmailInput.text.Replace("\u200B", "");
+            Passwd = PasswdInput.text.Replace("\u200B", "");
+            
+            if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
+            else if (string.IsNullOrEmpty(Passwd)) PasswdErrorHid.Show();
+            else ConnectToLogIn();
         }
 
         /// <summary>
         /// Connects to the database to check the user account and log in to it.
         /// </summary>
-        /// <returns></returns>
         private void ConnectToLogIn()
         {
             bool incorrectEmail = true;
 
             List<DB.User> users = DB.SelectAllUsers();
             
-            foreach (DB.User user in users)
+            foreach (DB.User user in users.Where(user => Email.Equals(user.email)))
             {
-                if (Email.Equals(user.email) && Passwd.Equals(user.password))
-                {
-                    Session.Email = user.email;
-                    Session.UserName = user.userName;
-                    Session.Passwd = user.password;
-                    LoadMainMenu();
-                    break;
-                }
-
-                if (!Email.Equals(user.email)) continue;
                 incorrectEmail = false;
-                break;
+                if (!Passwd.Equals(user.password)) continue;
+                Session.Email = user.email;
+                Session.UserName = user.userName;
+                Session.Passwd = user.password;
+                LoadMainMenu();
+                return;
             }
 
             if (incorrectEmail) EmailErrorHid.Show();
