@@ -92,7 +92,6 @@ namespace ITCL.VisionNutricional.Runtime.Login
         /// </summary>
         private void Start()
         {
-            Logger.Debug("Started Login");
             if (Application.platform != RuntimePlatform.Android) return;
             if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
             {

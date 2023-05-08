@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using WhateverDevs.Core.Runtime.Ui;
@@ -30,21 +31,17 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             List<DB.Food> foods = DB.SelectAllFoods();
             foreach (DB.Food food in foods)
             {
-                Texto.text += food.foodName + "         " + food.foodCalories + "\n";
+                Texto.text += food.foodName+" "+food.calories+" "+food.fat+" " +food.saturatedFat+ " "+food.carbHyd+" "+food.sugar+" "+food.protein+" "+food.salt+"\n";
             }
             
             Texto.text += "\nHISTORIC:\n";
             List<DB.HistoricEntry> entries = DB.SelectAllEntries();
             foreach (DB.HistoricEntry entry in entries)
             {
-                Texto.text += entry.userEmail + "   " + entry.foodName + "   " + entry.date + "\n";
+                Texto.text += entry.userEmail + "   " + entry.foodName + "   " + entry.date.ToString(CultureInfo.InvariantCulture) + "\n";
             }
             
             Hide.Show();
-
-            yield return new WaitForSeconds(5);
-
-            Hide.Show(false);
 
             yield return new WaitForEndOfFrame();
         }
