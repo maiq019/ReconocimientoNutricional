@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Camera.unity
     guid: 34cca1add92a5bc47b5f80b95e47774c
+  - enabled: 1
+    path: Assets/Scenes/Historic.unity
+    guid: d801947db8ae3ed47a33c903131e4bb8
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
       type: 2}

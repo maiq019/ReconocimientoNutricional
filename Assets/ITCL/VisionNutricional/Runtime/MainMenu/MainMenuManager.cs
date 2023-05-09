@@ -1,5 +1,6 @@
 using ITCL.VisionNutricional.Runtime.Initialization;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
@@ -10,7 +11,7 @@ using Zenject;
 namespace ITCL.VisionNutricional.Runtime.MainMenu
 {
     /// <summary>
-    /// Window popup manager for Main Menu.
+    /// Manager for Main Menu and its screens.
     /// </summary>
     public class MainMenuManager : WhateverBehaviour<MainMenuManager>
     {
@@ -25,26 +26,9 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         [Inject] private ILocalizer localizer;
 
         /// <summary>
-        /// Config popup window
+        /// Reference to the config popup screen.
         /// </summary>
-        [SerializeField] private HidableUiElement ConfigScreenHide;
-
-        /// <summary>
-        /// Config button subscribable.
-        /// </summary>
-        [SerializeField] private EasySubscribableButton ConfigButtonSus;
-
-        /// <summary>
-        /// Config ok button subscribable.
-        /// </summary>
-        [SerializeField] private EasySubscribableButton ConfigOkButtonSus;
-        
-        /// <summary>
-        /// Logout button subscribable.
-        /// </summary>
-        [SerializeField] private EasySubscribableButton LogoutButtonSus;
-
-        [SerializeField] private SceneReference LoginScene;
+        [SerializeField] private ConfigManager ConfigWindow;
 
         /// <summary>
         /// Scan for food button subscribable.
@@ -55,39 +39,26 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         /// Reference to the camera scene to load.
         /// </summary>
         [SerializeField] private SceneReference CameraScene;
+        
+        /// <summary>
+        /// Scan for food button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton HistoricButtonSus;
+
+        /// <summary>
+        /// Reference to the camera scene to load.
+        /// </summary>
+        [SerializeField] private SceneReference HistoricScene;
 
         /// <summary>
         /// Subscribes to the OnButtonClicked of the corresponding button.
         /// </summary>
         private void OnEnable()
-        {
-            HideConfigScreen();
-            ConfigButtonSus += ShowConfigScreen;
-            ConfigOkButtonSus += HideConfigScreen;
-            
-            LogoutButtonSus += Logout;
+        { 
+            ConfigWindow.HideConfigScreen();
             ScanButtonSus += LoadCameraScene;
+            HistoricButtonSus += LoadHistoricScene;
         }
-
-        /// <summary>
-        /// Logs out from the user account and returns to the login screen.
-        /// </summary>
-        private void Logout()
-        {
-            LogoutButtonSus -= Logout;
-            CoroutineRunner.RunRoutine(
-                Loader.LoadSceneCoroutine(sceneManager, LoginScene, localizer["Common/title"], localizer["Common/Menu/Logout"]));
-        }
-
-        /// <summary>
-        /// Shows the config popup window.
-        /// </summary>
-        private void ShowConfigScreen() => ConfigScreenHide.Show();
-
-        /// <summary>
-        /// Hides the config popup window.
-        /// </summary>
-        private void HideConfigScreen() => ConfigScreenHide.Show(false);
 
         /// <summary>
         /// Loads the camera scene.
@@ -97,6 +68,16 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
             ScanButtonSus -= LoadCameraScene;
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, CameraScene, localizer["Common/Title"], localizer["Debug/LoadingCamera"]));
+        }
+        
+        /// <summary>
+        /// Loads the camera scene.
+        /// </summary>
+        private void LoadHistoricScene()
+        {
+            HistoricButtonSus -= LoadHistoricScene;
+            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
+                sceneManager, HistoricScene, localizer["Common/Title"], localizer["Debug/LoadingHistoric"]));
         }
     }
 }
