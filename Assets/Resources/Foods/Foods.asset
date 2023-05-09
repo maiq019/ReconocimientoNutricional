@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a015818f3036bd64f8d09bd1f892d96b, type: 3}
+  m_Name: Foods
+  m_EditorClassIdentifier: 
+  Foods:
+  - foodName: bread
+    calories: 265
+    fat: 4
+    saturatedFat: 0
+    carbHyd: 46
+    sugar: 3
+    protein: 7
+    salt: 0
+  - foodName: pasta
+    calories: 221
+    fat: 13
+    saturatedFat: -1
+    carbHyd: 432
+    sugar: 17
+    protein: 81
+    salt: 5
+  - foodName: rice
+    calories: 121
+    fat: 38
+    saturatedFat: 9
+    carbHyd: 25
+    sugar: 5
+    protein: 35
+    salt: 12
+  - foodName: beef meat
+    calories: 201
+    fat: 81
+    saturatedFat: 0
+    carbHyd: 0
+    sugar: 0
+    protein: 338
+    salt: 0
+  - foodName: chicken meat
+    calories: 158
+    fat: 10
+    saturatedFat: 0
+    carbHyd: 0
+    sugar: 0
+    protein: 23
+    salt: 0

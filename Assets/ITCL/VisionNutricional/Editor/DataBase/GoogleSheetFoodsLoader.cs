@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using UnityEditor;
 using UnityEngine;
 using WhateverDevs.Localization.Editor;
-using WhateverDevs.Localization.Runtime;
 using CsvReader = ITCL.VisionNutricional.Runtime.DataBase.CsvReader;
 
 namespace ITCL.VisionNutricional.Editor.DataBase
@@ -24,7 +22,6 @@ namespace ITCL.VisionNutricional.Editor.DataBase
     /// </summary>
     public abstract class GoogleSheetsLoader : EditorWindow
     {
-
         private string downLoadUrl = "";
 
         private bool deleteFileWhenFinished = true;
@@ -41,8 +38,8 @@ namespace ITCL.VisionNutricional.Editor.DataBase
             EditorGUILayout.HelpBox("The file in drive must be shared publicly!", MessageType.Warning);
 
             EditorGUILayout.HelpBox("This tool downloads the file as a tsv with tab separators. "
-                                  + "If you have tabs inside your localization text you will fuck up!",
-                                    MessageType.Warning);
+                                    + "If you have tabs inside your localization text you will fuck up!",
+                MessageType.Warning);
 
             downLoadUrl = EditorGUILayout.TextField("Url to file", downLoadUrl);
 
@@ -52,7 +49,7 @@ namespace ITCL.VisionNutricional.Editor.DataBase
         }
 
         /// <summary>
-        ///     Load Languages
+        /// Load foods.
         /// </summary>
         /// <returns>IEnumerator</returns>
         private void LoadFoods()
@@ -80,31 +77,38 @@ namespace ITCL.VisionNutricional.Editor.DataBase
         }
 
         /// <summary>
-        ///     Parses the CSV formatted Sheet
+        /// Parses the CSV formatted Sheet
         /// </summary>
         /// <param name="csvData">The Sheet in CSV format</param>
         private void ParseFoodsData(string csvData)
         {
             List<DB.Food> foodsList = CsvReader.Read(csvData);
-            
-            string folderPath = "Assets/Resources/Foods/";
+
+            const string folderPath = "Assets/Resources/Foods/";
 
             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
+            string filePath = folderPath + "Foods.asset";
 
-            ScriptableFood asset = CreateInstance<ScriptableFood>();
+            ScriptableFood asset;
 
-            AssetDatabase.CreateAsset(asset, folderPath + "Food.asset");
-            
-            for (int i = 0; i < foodsList.Count - 1; ++i)
+            if(File.Exists(filePath))
             {
-                asset.Foods.Add(foodsList[i]);
+                asset = AssetDatabase.LoadAssetAtPath<ScriptableFood>(filePath);
             }
-            
-            foreach (DB.Food food in foodsList)
+            else
             {
-                DB.InsertFood(food.foodName, food.calories, food.fat, food.saturatedFat, food.carbHyd, food.sugar, food.protein, food.salt);
+                asset = CreateInstance<ScriptableFood>();
+                AssetDatabase.CreateAsset(asset, filePath);
             }
+
+            asset.Foods = foodsList;
+
+            EditorUtility.SetDirty(asset);
+
+            AssetDatabase.SaveAssets();
+
+            AssetDatabase.Refresh();
         }
     }
 }

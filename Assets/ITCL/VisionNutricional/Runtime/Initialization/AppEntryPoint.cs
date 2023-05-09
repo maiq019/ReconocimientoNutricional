@@ -20,16 +20,21 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// Reference to the scene manager.
         /// </summary>
         [Inject] private ISceneManager sceneManager;
-
+        
+        /// <summary>
+        /// Reference to the localizer.
+        /// </summary>
+        [Inject] private ILocalizer localizer;
+        
         /// <summary>
         /// Reference to the next scene to load.
         /// </summary>
         [SerializeField] private SceneReference NextScene;
 
         /// <summary>
-        /// Reference to the localizer.
+        /// Reference to the foods asset.
         /// </summary>
-        [Inject] private ILocalizer localizer;
+        [SerializeField] private ScriptableFood FoodsAsset;
 
         /// <summary>
         /// Loads the selected first scene, the login.
@@ -47,13 +52,17 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         {
             DB.CreateDataBase();
             yield return new WaitForEndOfFrame();
+            DB.DeleteDatabase();
             DB.CreateDatabaseTables();
             yield return new WaitForEndOfFrame();
             DB.InsertUser("user0@gmail.com", "user0", "0000");
             DB.InsertUser("user1@gmail.com", "user1", "1111");
+
+            foreach (DB.Food food in FoodsAsset.Foods) DB.InsertFood(food);
             
+            CultureInfo spanishCultureInfo = CultureInfo.CreateSpecificCulture("es-ES");
+            DB.InsertIntoHistoric("user0@gmail.com", "bread", DateTime.Now.ToString(spanishCultureInfo));
             
-            DB.InsertIntoHistoric("user0@gmail.com", "bread", DateTime.Now.ToString(CultureInfo.InvariantCulture));
             yield return new WaitForEndOfFrame();
         }
     }

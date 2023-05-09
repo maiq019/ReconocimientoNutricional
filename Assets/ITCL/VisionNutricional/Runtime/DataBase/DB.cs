@@ -14,6 +14,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         private static string _dbUri;
         private static IDbConnection _dbConnection;
         
+        [Serializable]
         public struct User
         {
             public string email;
@@ -21,6 +22,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             public string password;
         }
         
+        [Serializable]
         public struct Food
         {
             public string foodName;
@@ -33,6 +35,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             public float salt;
         }
         
+        [Serializable]
         public struct HistoricEntry
         {
             public string userEmail;
@@ -413,7 +416,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         #region Food
 
         /// <summary>
-        /// Inserts or modifies a food on the Foods table.
+        /// Inserts a food on the Foods table.
         /// </summary>
         /// <param name="fName">Food name.</param>
         /// <param name="fCalories">Food calories.</param>
@@ -427,6 +430,51 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
                                         + fName+"', "+calories+", "+fat+", "+saturatedFat+", "+carbHyd+", "+sugar+", "+protein+", "+salt+")";
+                
+                try
+                {
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+                    
+                    while (dataReader.Read())
+                    {
+                        food.foodName = dataReader.GetString(0);
+                        food.calories = dataReader.GetFloat(1);
+                        food.fat = dataReader.GetFloat(2);
+                        food.saturatedFat = dataReader.GetFloat(3);
+                        food.carbHyd = dataReader.GetFloat(4);
+                        food.sugar = dataReader.GetFloat(5);
+                        food.protein = dataReader.GetFloat(6);
+                        food.salt = dataReader.GetFloat(7);
+                    }
+
+                    dataReader.Close();
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Error(e);
+                }
+                
+                dbCommand.Dispose();
+                _dbConnection.Close();
+            }
+
+            return food;
+        }
+        
+        /// <summary>
+        /// Inserts a food on the Foods table.
+        /// </summary>
+        /// <param name="food">Food to insert.</param>
+        /// <returns></returns>
+        public static Food InsertFood(Food food)
+        {
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+                dbCommand.CommandText = "INSERT INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
+                                        + food.foodName+"', "+food.calories+", "+food.fat+", "+food.saturatedFat+", "
+                                        +food.carbHyd+", "+food.sugar+", "+food.protein+", "+food.salt+")";
                 
                 try
                 {

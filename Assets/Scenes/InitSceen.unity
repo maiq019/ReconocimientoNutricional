@@ -462,6 +462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NextScene:
     SceneName: Login
+  FoodsAsset: {fileID: 11400000, guid: 1e74481fbd4c70b4cb975f0eaf556783, type: 2}
 --- !u!4 &737858101
 Transform:
   m_ObjectHideFlags: 0
