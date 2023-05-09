@@ -61,7 +61,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             foreach (DB.Food food in FoodsAsset.Foods) DB.InsertFood(food);
             
             CultureInfo spanishCultureInfo = CultureInfo.CreateSpecificCulture("es-ES");
-            DB.InsertIntoHistoric("user0@gmail.com", "bread", DateTime.Now.ToString(spanishCultureInfo));
+            DB.InsertIntoHistoric("user0@gmail.com", "bread");
             
             yield return new WaitForEndOfFrame();
         }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Mono.Data.Sqlite;
 using UnityEngine;
 using WhateverDevs.Core.Runtime.Common;
@@ -8,6 +10,8 @@ using WhateverDevs.Core.Runtime.Common;
 
 namespace ITCL.VisionNutricional.Runtime.DataBase
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class DB : Loggable<DB>
     {
         private const string DBName = "Database";
@@ -190,6 +194,53 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         }
         
         /// <summary>
+        /// Inserts a new user on the database.
+        /// </summary>
+        /// <param name="user">User to insert.</param>
+        /// <returns></returns>
+        public static User InsertUser(User user)
+        {
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+
+                string email = user.email;
+                string userName = user.userName;
+                string password = user.password;
+                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) VALUES ('"
+                                        + email
+                                        + "', '"
+                                        + userName
+                                        + "', '"
+                                        + password
+                                        + "')";
+                try
+                {
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        user.email = dataReader.GetString(0);
+                        user.userName = dataReader.GetString(1);
+                        user.password = dataReader.GetString(2);
+                    }
+                    
+                    dataReader.Close();
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+
+                dbCommand.Dispose();
+                _dbConnection.Close();
+            }
+
+            return user;
+        }
+        
+        /// <summary>
         /// Deletes an user from the database with its email.
         /// </summary>
         /// <param name="email">Email of the user, primary key.</param>
@@ -203,6 +254,51 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
 
+                dbCommand.CommandText = "DELETE FROM Users WHERE email='"
+                                        + email
+                                        + "' AND password='"
+                                        + password
+                                        +"'";
+
+                try
+                {
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        user.email = dataReader.GetString(0);
+                        user.userName = dataReader.GetString(1);
+                        user.password = dataReader.GetString(2);
+                    }
+                    
+                    dataReader.Close();
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+                
+                dbCommand.Dispose();
+                _dbConnection.Close();
+            }
+
+            return user;
+        }
+        
+        /// <summary>
+        /// Deletes an user from the database.
+        /// </summary>
+        /// <param name="user">User to delete.</param>
+        /// <returns></returns>
+        public static User DeleteUser(User user)
+        {
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+
+                string email = user.email;
+                string password = user.password;
                 dbCommand.CommandText = "DELETE FROM Users WHERE email='"
                                         + email
                                         + "' AND password='"
@@ -419,7 +515,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// Inserts a food on the Foods table.
         /// </summary>
         /// <param name="fName">Food name.</param>
-        /// <param name="fCalories">Food calories.</param>
+        /// <param name="calories">Food calories.</param>
+        /// <param name="fat">Food fat.</param>
+        /// <param name="saturatedFat">Food saturatedFat.</param>
+        /// <param name="carbHyd">Food carbHyd.</param>
+        /// <param name="sugar">Food sugar.</param>
+        /// <param name="protein">Food protein.</param>
+        /// <param name="salt">Food salt.</param>
         /// <returns>Inserted food.</returns>
         public static Food InsertFood(string fName, float calories, float fat, float saturatedFat, float carbHyd, float sugar, float protein, float salt)
         {
@@ -472,8 +574,10 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
+
+                string foodName = food.foodName;
                 dbCommand.CommandText = "INSERT INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
-                                        + food.foodName+"', "+food.calories+", "+food.fat+", "+food.saturatedFat+", "
+                                        +foodName+"', "+food.calories+", "+food.fat+", "+food.saturatedFat+", "
                                         +food.carbHyd+", "+food.sugar+", "+food.protein+", "+food.salt+")";
                 
                 try
@@ -518,6 +622,50 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
+                dbCommand.CommandText = "DELETE FROM Foods WHERE foodName='" + foodName + "'";
+                
+                try
+                {
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+                
+                    while (dataReader.Read())
+                    {
+                        food.foodName = dataReader.GetString(0);
+                        food.calories = dataReader.GetFloat(1);
+                        food.fat = dataReader.GetFloat(2);
+                        food.saturatedFat = dataReader.GetFloat(3);
+                        food.carbHyd = dataReader.GetFloat(4);
+                        food.sugar = dataReader.GetFloat(5);
+                        food.protein = dataReader.GetFloat(6);
+                        food.salt = dataReader.GetFloat(7);
+                    }
+
+                    dataReader.Close();
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Debug(e);
+                }
+                
+                dbCommand.Dispose();
+                _dbConnection.Close();
+            }
+
+            return food;
+        }
+        
+        /// <summary>
+        /// Deletes a food from the database.
+        /// </summary>
+        /// <param name="food">Food to delete.</param>
+        /// <returns></returns>
+        public static Food DeleteFood(Food food)
+        {
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+                string foodName = food.foodName;
                 dbCommand.CommandText = "DELETE FROM Foods WHERE foodName='" + foodName + "'";
                 
                 try
@@ -641,14 +789,20 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
 
             return food;
         }
-        
+
         /// <summary>
         /// Updates one foods data in the database.
         /// </summary>
         /// <param name="foodName">name identifier for the food.</param>
-        /// <param name="newFoodCalories">New calories value for the food in the database.</param>
+        /// <param name="newCalories">New calories value for the food.</param>
+        /// <param name="newFat">New fat value for the food.</param>
+        /// <param name="newSatFat">New saturated fat value for the food.</param>
+        /// <param name="newCarbhyd">New carbohydrates value for the food.</param>
+        /// <param name="newSugar">New sugar value for the food.</param>
+        /// <param name="newProtein">New protein value for the food.</param>
+        /// <param name="newSalt">New salt value for the food.</param>
         /// <returns>Updated food.</returns>
-        public static Food UpdateOneFood(string foodName, float newCalories)
+        public static Food UpdateOneFood(string foodName, float newCalories, float newFat, float newSatFat, float newCarbhyd, float newSugar, float newProtein, float newSalt)
         {
             Food food = new Food();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -658,6 +812,18 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
 
                 dbCommand.CommandText = "UPDATE Foods SET calories="
                                         + newCalories
+                                        + ", fat="
+                                        + newFat
+                                        + ", saturatedFat="
+                                        + newSatFat
+                                        + ", carbhyd="
+                                        + newCarbhyd
+                                        + ", sugar="
+                                        + newSugar
+                                        + ", protein="
+                                        + newProtein
+                                        + ", salt="
+                                        + newSalt
                                         + " WHERE foodName ='"
                                         + foodName
                                         + "'";
@@ -701,9 +867,8 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         /// <param name="userEmail">email identifier from the user.</param>
         /// <param name="foodName">Name identifier from the food.</param>
-        /// <param name="date">Actual date.</param>
         /// <returns>HistoricEntry struct.</returns>
-        public static HistoricEntry InsertIntoHistoric(string userEmail, string foodName, string date)
+        public static HistoricEntry InsertIntoHistoric(string userEmail, string foodName)
         {
             HistoricEntry entry = new HistoricEntry();
             using (_dbConnection = new SqliteConnection(_dbUri))
@@ -713,6 +878,9 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 IDbCommand cmd = _dbConnection.CreateCommand();
                 cmd.CommandText = "PRAGMA foreign_keys = ON";
                 cmd.ExecuteNonQuery();
+                
+                CultureInfo spanishCultureInfo = CultureInfo.CreateSpecificCulture("es-ES");
+                string date = DateTime.Now.ToString(spanishCultureInfo);
                 
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "INSERT INTO Historic (userEmail, foodName, _date) VALUES ('" + userEmail + "', '" + foodName + "', '" + date + "')";
@@ -761,6 +929,52 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 cmd.ExecuteNonQuery();
                 
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
+                dbCommand.CommandText = "DELETE FROM Historic WHERE userEmail='" + userEmail + "' AND foodName ='" + foodName + "' AND _date='" + date + "'";
+                
+                try
+                {
+                    IDataReader reader = dbCommand.ExecuteReader();
+                
+                    while (reader.Read())
+                    {
+                        entry.userEmail = reader.GetString(0);
+                        entry.foodName = reader.GetString(1);
+                        entry.date = reader.GetString(2);
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Error(e);
+                }
+                
+                dbCommand.Dispose();
+                _dbConnection.Close();
+            }
+
+            return entry;
+        }
+
+        /// <summary>
+        /// Deletes an entry from the historic.
+        /// </summary>
+        /// <param name="entry">Entry to delete.</param>
+        /// <returns></returns>
+        public static HistoricEntry DeleteEntry(HistoricEntry entry)
+        {
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+                string userEmail = entry.userEmail;
+                string foodName = entry.foodName;
+                string date = entry.date;
                 dbCommand.CommandText = "DELETE FROM Historic WHERE userEmail='" + userEmail + "' AND foodName ='" + foodName + "' AND _date='" + date + "'";
                 
                 try
