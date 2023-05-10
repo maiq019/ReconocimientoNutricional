@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 413778681}
   - component: {fileID: 413778680}
   - component: {fileID: 413778679}
+  - component: {fileID: 6845609284555507064}
   m_Layer: 5
   m_Name: UserName
   m_TagString: Untagged
@@ -178,6 +179,22 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6845609284555507064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413778677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8317c2454c5e03a429ad6e8f55b56e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextInTheSameObject: 1
+  TextReference: {fileID: 0}
+  SetOnEnable: 1
+  LocalizationKey: Common/Config/UserName
 --- !u!1001 &293703319277562366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -355,6 +372,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 15.275024
       objectReference: {fileID: 0}
+    - target: {fileID: 4720321294266849194, guid: ad629118667eb8a44b0b0dd8a2d0cca2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4919146816621754583, guid: ad629118667eb8a44b0b0dd8a2d0cca2,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -393,7 +415,7 @@ PrefabInstance:
     - target: {fileID: 6543376689933111052, guid: ad629118667eb8a44b0b0dd8a2d0cca2,
         type: 3}
       propertyPath: m_Name
-      value: Config Window
+      value: Config Window Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8335115055869371697, guid: ad629118667eb8a44b0b0dd8a2d0cca2,
         type: 3}
@@ -517,7 +539,7 @@ MonoBehaviour:
   ConfigScreenHide: {fileID: 5231823144493905214}
   ConfigButtonSus: {fileID: 0}
   ConfigOkButtonSus: {fileID: 3482927788613821310}
-  UserName: {fileID: 413778679}
+  UserName: {fileID: 6845609284555507064}
   LogoutButtonSus: {fileID: 3569177854400665665}
   LoginScene:
     SceneName: Login

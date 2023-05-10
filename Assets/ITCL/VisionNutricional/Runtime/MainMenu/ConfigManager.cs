@@ -6,6 +6,7 @@ using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
+using WhateverDevs.Localization.Runtime.Ui;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 using Zenject;
 
@@ -41,7 +42,7 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         /// <summary>
         /// Reference to the userName text.
         /// </summary>
-        [SerializeField] private TMP_Text UserName;
+        [SerializeField] private LocalizedTextMeshPro UserName;
         
         /// <summary>
         /// Logout button subscribable.
@@ -63,7 +64,7 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
             
             LogoutButtonSus += Logout;
 
-            UserName.text = localizer["Common/Config/UserName"] + Session.UserName;
+            UserName.SetValue("Common/Config/UserName", false, Session.UserName);
         }
         
         /// <summary>

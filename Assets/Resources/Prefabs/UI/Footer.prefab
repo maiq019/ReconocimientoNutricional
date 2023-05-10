@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Version: {fileID: 11400000, guid: 54f0d17330a21534c9851f322a265b31, type: 2}
-  VersionText: {fileID: 1139954702887732760}
+  VersionText: {fileID: 1139954702887732761}
 --- !u!1 &1139954702887732763
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "versi\xF3n: 0.1"
+  m_text: 'version: a'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

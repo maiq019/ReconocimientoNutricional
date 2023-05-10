@@ -44,7 +44,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <param name="entry"></param>
         public void SetData(DB.HistoricEntry entry)
         {
-            Food.SetValue(entry.foodName);
+            Food.SetValue("Foods/" + entry.foodName);
             Date.text = entry.date;
         }
 

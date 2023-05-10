@@ -52,6 +52,11 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// Reference to the search bar input field.
         /// </summary>
         [SerializeField] private TMP_InputField SearchInput;
+
+        /// <summary>
+        /// Reference to the search button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton SearchButtonSus;
         
         /// <summary>
         /// Reference to the search error popup hidable.
@@ -128,10 +133,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// </summary>
         private void OnEnable()
         {
+            SearchErrorHid.Show(false);
+            
             ConfigWindow.HideConfigScreen();
             MainButtonSus += LoadMainMenu;
 
             StartCoroutine(LoadEntriesCoroutine());
+            SearchButtonSus += () => StartCoroutine(LoadEntriesCoroutine());
             CloseEntryPopupSus += () => EntryPopupHid.Show(false);
         }
         
@@ -151,6 +159,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <returns></returns>
         private IEnumerator LoadEntriesCoroutine()
         {
+            ClearContent();
+            
             List<DB.HistoricEntry> entries = SearchEntries();
             entries.Sort((e1, e2) => string.Compare(e1.date, e2.date, StringComparison.Ordinal));
             
@@ -163,6 +173,14 @@ namespace ITCL.VisionNutricional.Runtime.Historic
                 button.ButtonSus.OnButtonClicked += () => ShowEntryPopup(entry);
             }
         }
+
+        /// <summary>
+        /// Deletes all the entry buttons.
+        /// </summary>
+        private void ClearContent()
+        {
+            foreach (Transform child in Content) Destroy(child.gameObject);
+        }
         
         /// <summary>
         /// Gets the needed entries from the database.
@@ -172,11 +190,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             SearchErrorHid.Show(false);
             
-            if (!string.IsNullOrEmpty(SearchInput.text)) return DB.SelectAllEntriesFromUser(Session.Email);
+            string input = SearchInput.text.Replace("\u200B", "");
+            
+            if (string.IsNullOrEmpty(input)) return DB.SelectAllEntriesFromUser(Session.Email);
             
             List<DB.Food> foodsInDb = DB.SelectAllFoods();
-            if (foodsInDb.Any(food => food.foodName.Equals(SearchInput.text)))
-                return DB.SelectAllEntriesFromUserAndFood(Session.Email, SearchInput.text);
+            if (foodsInDb.Any(food => food.foodName.Equals(input)))
+                return DB.SelectAllEntriesFromUserAndFood(Session.Email, input);
             
             SearchErrorHid.Show();
             

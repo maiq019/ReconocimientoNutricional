@@ -51,13 +51,13 @@ MonoBehaviour:
     - Key: Common/Config/Logout
       Value: Log out
     - Key: Common/Config/UserName
-      Value: 'Username:'
+      Value: 'Username: {0}'
     - Key: Common/Menu/IdentifyButton
       Value: Identify food
     - Key: Common/Menu/Record
       Value: Historic
     - Key: Common/Menu/Version
-      Value: 'version:'
+      Value: 'version: {0}'
     - Key: Common/Menu/Help
       Value: Help
     - Key: Common/Historic/Search
@@ -76,8 +76,10 @@ MonoBehaviour:
       Value: Protein
     - Key: Common/Historic/Salt
       Value: Salt
-    - Key: Common/historic/Close
+    - Key: Common/Historic/Close
       Value: Close
+    - Key: Common/Historic/SearchError
+      Value: The food was not found in the database
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu
@@ -92,12 +94,12 @@ MonoBehaviour:
       Value: Enter the cloud vision API key in the 'CamTextureToCloudVision' component
         of the 'SendButton' on the camera scene.
     - Key: Foods/bread
-      Value: bread
+      Value: Bread
     - Key: Foods/pasta
-      Value: pasta
+      Value: Pasta
     - Key: Foods/rice
-      Value: rice
+      Value: Rice
     - Key: Foods/beef meat
-      Value: beef
+      Value: Beef
     - Key: Foods/chicken meat
-      Value: chicken
+      Value: Chicken

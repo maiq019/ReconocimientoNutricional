@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Build;
+using WhateverDevs.Localization.Runtime.Ui;
 
 namespace ITCL.VisionNutricional.Runtime.UI
 {
@@ -18,8 +19,8 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// <summary>
         /// Version text on the bottom of the main menu window.
         /// </summary>
-        [SerializeField] private TMP_Text VersionText;
+        [SerializeField] private LocalizedTextMeshPro VersionText;
         
-        private void OnEnable() => VersionText.text += Version.ToString(VersionDisplayMode.Short);
+        private void OnEnable() => VersionText.SetValue("Common/Menu/Version", false, Version.ToString(VersionDisplayMode.Short));
     }
 }

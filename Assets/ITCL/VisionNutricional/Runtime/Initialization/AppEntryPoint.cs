@@ -52,7 +52,6 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         {
             DB.CreateDataBase();
             yield return new WaitForEndOfFrame();
-            DB.DeleteDatabase();
             DB.CreateDatabaseTables();
             yield return new WaitForEndOfFrame();
             DB.InsertUser("user0@gmail.com", "user0", "0000");
@@ -60,8 +59,8 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
 
             foreach (DB.Food food in FoodsAsset.Foods) DB.InsertFood(food);
             
-            CultureInfo spanishCultureInfo = CultureInfo.CreateSpecificCulture("es-ES");
             DB.InsertIntoHistoric("user0@gmail.com", "bread");
+            DB.InsertIntoHistoric("user0@gmail.com", "rice");
             
             yield return new WaitForEndOfFrame();
         }

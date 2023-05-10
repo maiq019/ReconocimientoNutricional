@@ -161,7 +161,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
 
-                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) VALUES ('"
+                dbCommand.CommandText = "INSERT OR IGNORE INTO Users (email,userName,password) VALUES ('"
                                         + email
                                         + "', '"
                                         + userName
@@ -208,7 +208,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 string email = user.email;
                 string userName = user.userName;
                 string password = user.password;
-                dbCommand.CommandText = "INSERT INTO Users (email,userName,password) VALUES ('"
+                dbCommand.CommandText = "INSERT OR IGNORE INTO Users (email,userName,password) VALUES ('"
                                         + email
                                         + "', '"
                                         + userName
@@ -530,7 +530,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "INSERT INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
+                dbCommand.CommandText = "INSERT OR IGNORE INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
                                         + fName+"', "+calories+", "+fat+", "+saturatedFat+", "+carbHyd+", "+sugar+", "+protein+", "+salt+")";
                 
                 try
@@ -576,7 +576,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
 
                 string foodName = food.foodName;
-                dbCommand.CommandText = "INSERT INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
+                dbCommand.CommandText = "INSERT OR IGNORE INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
                                         +foodName+"', "+food.calories+", "+food.fat+", "+food.saturatedFat+", "
                                         +food.carbHyd+", "+food.sugar+", "+food.protein+", "+food.salt+")";
                 
@@ -883,7 +883,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 string date = DateTime.Now.ToString(spanishCultureInfo);
                 
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "INSERT INTO Historic (userEmail, foodName, _date) VALUES ('" + userEmail + "', '" + foodName + "', '" + date + "')";
+                dbCommand.CommandText = "INSERT OR IGNORE INTO Historic (userEmail, foodName, _date) VALUES ('" + userEmail + "', '" + foodName + "', '" + date + "')";
                 
                 try
                 {

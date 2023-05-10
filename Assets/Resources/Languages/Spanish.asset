@@ -51,13 +51,13 @@ MonoBehaviour:
     - Key: Common/Config/Logout
       Value: "Cerrar sesi\xF3n"
     - Key: Common/Config/UserName
-      Value: 'Nombre de usuario: '
+      Value: 'Nombre de usuario: {0}'
     - Key: Common/Menu/IdentifyButton
       Value: Identificar comida
     - Key: Common/Menu/Record
       Value: Historial
     - Key: Common/Menu/Version
-      Value: "versi\xF3n:"
+      Value: "versi\xF3n: {0}"
     - Key: Common/Menu/Help
       Value: Ayuda
     - Key: Common/Historic/Search
@@ -76,8 +76,10 @@ MonoBehaviour:
       Value: "Prote\xEDnas"
     - Key: Common/Historic/Salt
       Value: Sal
-    - Key: Common/historic/Close
+    - Key: Common/Historic/Close
       Value: Cerrar
+    - Key: Common/Historic/SearchError
+      Value: No se ha encontrado la comida en la base de datos
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu
@@ -92,12 +94,12 @@ MonoBehaviour:
       Value: Introduzca la clave de cloud vision API en el componente 'CamTextureToCloudVision'
         del 'SendButton' en la escena de camara.
     - Key: Foods/bread
-      Value: pan
+      Value: Pan
     - Key: Foods/pasta
-      Value: pasta
+      Value: Pasta
     - Key: Foods/rice
-      Value: arroz
+      Value: Arroz
     - Key: Foods/beef meat
-      Value: vaca
+      Value: Vaca
     - Key: Foods/chicken meat
-      Value: pollo
+      Value: Pollo
