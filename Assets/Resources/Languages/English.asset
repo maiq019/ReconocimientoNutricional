@@ -26,28 +26,6 @@ MonoBehaviour:
       Value: Exit
     - Key: Common/Statistics
       Value: Statistics
-    - Key: Common/Config
-      Value: Configuration
-    - Key: Common/Config/Language
-      Value: Language
-    - Key: Common/Config/Language/Current
-      Value: English
-    - Key: Common/Config/Language/English
-      Value: English
-    - Key: Common/Config/Language/Spanish
-      Value: Spanish
-    - Key: Common/Config/Logout
-      Value: Log out
-    - Key: Common/Menu/IdentifyButton
-      Value: Identify food
-    - Key: Common/Menu/Record
-      Value: Record
-    - Key: Common/Menu/Version
-      Value: 'version:'
-    - Key: Common/Menu/Help
-      Value: Help
-    - Key: Common/Menu/Logout
-      Value: Loging out...
     - Key: Common/Login
       Value: Login
     - Key: Common/Login/Email
@@ -60,6 +38,46 @@ MonoBehaviour:
       Value: Wrong password
     - Key: Common/Login/ConnectError
       Value: Connection error
+    - Key: Common/Config
+      Value: Configuration
+    - Key: Common/Config/Language
+      Value: Language
+    - Key: Common/Config/Language/Current
+      Value: English
+    - Key: Common/Config/Language/English
+      Value: English
+    - Key: Common/Config/Language/Spanish
+      Value: Spanish
+    - Key: Common/Config/Logout
+      Value: Log out
+    - Key: Common/Config/UserName
+      Value: 'Username:'
+    - Key: Common/Menu/IdentifyButton
+      Value: Identify food
+    - Key: Common/Menu/Record
+      Value: Historic
+    - Key: Common/Menu/Version
+      Value: 'version:'
+    - Key: Common/Menu/Help
+      Value: Help
+    - Key: Common/Historic/Search
+      Value: Search food
+    - Key: Common/Historic/Calories
+      Value: Calories
+    - Key: Common/Historic/Fat
+      Value: Fat
+    - Key: Common/Historic/SatFat
+      Value: Saturated fat
+    - Key: Common/Historic/Carbhyd
+      Value: Carbohydrates
+    - Key: Common/Historic/Sugar
+      Value: Sugar
+    - Key: Common/Historic/Protein
+      Value: Protein
+    - Key: Common/Historic/Salt
+      Value: Salt
+    - Key: Common/historic/Close
+      Value: Close
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu
@@ -67,7 +85,9 @@ MonoBehaviour:
     - Key: Debug/LoadingCamera
       Value: Loading camera...
     - Key: Debug/LoadingHistoric
-      Value: loading historic...
+      Value: Loading historic...
+    - Key: Debug/Logout
+      Value: Loging out...
     - Key: Debug/ApiKeyError
       Value: Enter the cloud vision API key in the 'CamTextureToCloudVision' component
         of the 'SendButton' on the camera scene.

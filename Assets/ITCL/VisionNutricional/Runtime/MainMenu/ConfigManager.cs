@@ -1,4 +1,6 @@
 using ITCL.VisionNutricional.Runtime.Initialization;
+using ITCL.VisionNutricional.Runtime.Login;
+using TMPro;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
@@ -35,6 +37,11 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         /// Config ok button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton ConfigOkButtonSus;
+
+        /// <summary>
+        /// Reference to the userName text.
+        /// </summary>
+        [SerializeField] private TMP_Text UserName;
         
         /// <summary>
         /// Logout button subscribable.
@@ -55,6 +62,8 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
             ConfigOkButtonSus += HideConfigScreen;
             
             LogoutButtonSus += Logout;
+
+            UserName.text = localizer["Common/Config/UserName"] + Session.UserName;
         }
         
         /// <summary>
@@ -64,7 +73,7 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         {
             LogoutButtonSus -= Logout;
             CoroutineRunner.RunRoutine(
-                Loader.LoadSceneCoroutine(sceneManager, LoginScene, localizer["Common/title"], localizer["Common/Menu/Logout"]));
+                Loader.LoadSceneCoroutine(sceneManager, LoginScene, localizer["Common/title"], localizer["Debug/Logout"]));
         }
         
         /// <summary>

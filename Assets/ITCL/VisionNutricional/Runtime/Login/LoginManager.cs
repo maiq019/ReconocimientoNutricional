@@ -83,8 +83,16 @@ namespace ITCL.VisionNutricional.Runtime.Login
 
         private void OnEnable()
         {
-            EnterSus += LoadMainMenu;
+            EnterSus += DirtyLogin;
             //EnterSus += Login;
+        }
+
+        private void DirtyLogin()
+        {
+            Session.Email = "user0@gmail.com";
+            Session.UserName = "user0";
+            Session.Passwd = "0000";
+            LoadMainMenu();
         }
 
         /// <summary>

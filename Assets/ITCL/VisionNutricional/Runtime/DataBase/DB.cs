@@ -1147,6 +1147,56 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
 
             return entriesInDB;
         }
+        
+        /// <summary>
+        /// Return all entries in the historic from a specific user with a specific food.
+        /// </summary>
+        /// <param name="userEmail">email identifier from the user.</param>
+        /// <param name="foodName">name identifier from the food.</param>
+        /// <returns></returns>
+        public static List<HistoricEntry> SelectAllEntriesFromUserAndFood(string userEmail, string foodName)
+        {
+            List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
+
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
+                
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+                
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+                dbCommand.CommandText = "SELECT * FROM Historic WHERE userEmail='" + userEmail + "' AND foodName='" + foodName + "'";
+                
+                try
+                {
+                    IDataReader dataReader = dbCommand.ExecuteReader();
+
+                    while (dataReader.Read())
+                    {
+                        HistoricEntry entryAux = new HistoricEntry
+                        {
+                            userEmail = dataReader.GetString(0),
+                            foodName = dataReader.GetString(1),
+                            date = dataReader.GetString(2)
+                        };
+                        entriesInDB.Add(entryAux);
+                    }
+
+                    dataReader.Close();
+                }
+                catch (Exception e)
+                {
+                    StaticLogger.Error(e);
+                }
+                
+                dbCommand.Dispose();
+                _dbConnection.Close();
+            }
+
+            return entriesInDB;
+        }
 
         #endregion
     }

@@ -26,28 +26,6 @@ MonoBehaviour:
       Value: Salir
     - Key: Common/Statistics
       Value: "Estad\xEDsticas"
-    - Key: Common/Config
-      Value: "Configuraci\xF3n"
-    - Key: Common/Config/Language
-      Value: Idioma
-    - Key: Common/Config/Language/Current
-      Value: "Espa\xF1ol"
-    - Key: Common/Config/Language/English
-      Value: "Ingl\xE9s"
-    - Key: Common/Config/Language/Spanish
-      Value: "Espa\xF1ol"
-    - Key: Common/Config/Logout
-      Value: "Cerrar sesi\xF3n"
-    - Key: Common/Menu/IdentifyButton
-      Value: Identificar comida
-    - Key: Common/Menu/Record
-      Value: Historial
-    - Key: Common/Menu/Version
-      Value: "versi\xF3n:"
-    - Key: Common/Menu/Help
-      Value: Ayuda
-    - Key: Common/Menu/Logout
-      Value: "Cerrando sesi\xF3n..."
     - Key: Common/Login
       Value: Login
     - Key: Common/Login/Email
@@ -60,6 +38,46 @@ MonoBehaviour:
       Value: "Contrase\xF1a incorrecta"
     - Key: Common/Login/ConnectError
       Value: "Error de conexi\xF3n"
+    - Key: Common/Config
+      Value: "Configuraci\xF3n"
+    - Key: Common/Config/Language
+      Value: Idioma
+    - Key: Common/Config/Language/Current
+      Value: "Espa\xF1ol"
+    - Key: Common/Config/Language/English
+      Value: "Ingl\xE9s"
+    - Key: Common/Config/Language/Spanish
+      Value: "Espa\xF1ol"
+    - Key: Common/Config/Logout
+      Value: "Cerrar sesi\xF3n"
+    - Key: Common/Config/UserName
+      Value: 'Nombre de usuario: '
+    - Key: Common/Menu/IdentifyButton
+      Value: Identificar comida
+    - Key: Common/Menu/Record
+      Value: Historial
+    - Key: Common/Menu/Version
+      Value: "versi\xF3n:"
+    - Key: Common/Menu/Help
+      Value: Ayuda
+    - Key: Common/Historic/Search
+      Value: Buscar comida
+    - Key: Common/Historic/Calories
+      Value: "Calor\xEDas"
+    - Key: Common/Historic/Fat
+      Value: Grasas
+    - Key: Common/Historic/SatFat
+      Value: Grasas saturadas
+    - Key: Common/Historic/Carbhyd
+      Value: Carbohidratos
+    - Key: Common/Historic/Sugar
+      Value: "Az\xFAcares"
+    - Key: Common/Historic/Protein
+      Value: "Prote\xEDnas"
+    - Key: Common/Historic/Salt
+      Value: Sal
+    - Key: Common/historic/Close
+      Value: Cerrar
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu
@@ -68,6 +86,8 @@ MonoBehaviour:
       Value: "Cargando c\xE1mara..."
     - Key: Debug/LoadingHistoric
       Value: Cargando historial...
+    - Key: Debug/Logout
+      Value: "Cerrando sesi\xF3n..."
     - Key: Debug/ApiKeyError
       Value: Introduzca la clave de cloud vision API en el componente 'CamTextureToCloudVision'
         del 'SendButton' en la escena de camara.
