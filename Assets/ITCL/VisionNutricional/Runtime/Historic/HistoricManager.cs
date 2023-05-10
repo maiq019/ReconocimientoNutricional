@@ -159,10 +159,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <returns></returns>
         private IEnumerator LoadEntriesCoroutine()
         {
+            List<DB.HistoricEntry> entries = SearchEntries();
+            yield return new WaitForEndOfFrame();
+            if (entries == null) yield break;
+            
             ClearContent();
             
-            List<DB.HistoricEntry> entries = SearchEntries();
-            entries.Sort((e1, e2) => string.Compare(e1.date, e2.date, StringComparison.Ordinal));
+            entries.Sort((e1, e2) => string.Compare(e2.date, e1.date, StringComparison.Ordinal));
             
             foreach (DB.HistoricEntry entry in entries)
             {
@@ -192,7 +195,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             
             string input = SearchInput.text.Replace("\u200B", "");
             
-            if (string.IsNullOrEmpty(input)) return DB.SelectAllEntriesFromUser(Session.Email);
+            if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input)) return DB.SelectAllEntriesFromUser(Session.Email);
             
             List<DB.Food> foodsInDb = DB.SelectAllFoods();
             if (foodsInDb.Any(food => food.foodName.Equals(input)))
@@ -200,7 +203,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             
             SearchErrorHid.Show();
             
-            return DB.SelectAllEntriesFromUser(Session.Email);
+            return null;
         }
 
         /// <summary>
