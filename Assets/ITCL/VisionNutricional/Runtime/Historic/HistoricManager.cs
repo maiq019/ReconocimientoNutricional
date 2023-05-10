@@ -79,6 +79,11 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         [SerializeField] private HidableUiElement EntryPopupHid;
 
         /// <summary>
+        /// Reference to the historic entry opened.
+        /// </summary>
+        private DB.HistoricEntry EntryDisplayed;
+
+        /// <summary>
         /// Reference to the food name localizer.
         /// </summary>
         [SerializeField] private LocalizedTextMeshPro FoodName;
@@ -122,6 +127,11 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// Reference to the date.
         /// </summary>
         [SerializeField] private TMP_Text Date;
+        
+        /// <summary>
+        /// Reference to the entry popup's delete button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton DeleteEntrySus;
 
         /// <summary>
         /// Reference to the entry popup's close button subscribable.
@@ -134,12 +144,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         private void OnEnable()
         {
             SearchErrorHid.Show(false);
-            
             ConfigWindow.HideConfigScreen();
-            MainButtonSus += LoadMainMenu;
-
+            EntryPopupHid.Show(false);
             StartCoroutine(LoadEntriesCoroutine());
+            
+            MainButtonSus += LoadMainMenu;
             SearchButtonSus += () => StartCoroutine(LoadEntriesCoroutine());
+            DeleteEntrySus += DeleteEntry;
             CloseEntryPopupSus += () => EntryPopupHid.Show(false);
         }
         
@@ -212,6 +223,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <param name="entry"></param>
         private void ShowEntryPopup(DB.HistoricEntry entry)
         {
+            EntryDisplayed = entry;
+            
             DB.Food food = DB.SelectFoodByName(entry.foodName);
 
             FoodName.SetValue("Foods/" + food.foodName);
@@ -225,6 +238,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             Date.text = entry.date;
             
             EntryPopupHid.Show();
+        }
+
+        private void DeleteEntry()
+        {
+            DB.DeleteEntry(EntryDisplayed);
+            EntryPopupHid.Show(false);
+            StartCoroutine(LoadEntriesCoroutine());
         }
     }
 }

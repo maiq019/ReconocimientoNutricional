@@ -78,6 +78,11 @@ MonoBehaviour:
       Value: Sal
     - Key: Common/Historic/Close
       Value: Cerrar
+    - Key: Common/Historic/DeleteEntry
+      Value: Eliminar entrada
+    - Key: Common/Historic/DeleteSure
+      Value: "\xBFSeguro que quieres eliminar esta entrada del historial? No se podr\xE1
+        recuperar"
     - Key: Common/Historic/SearchError
       Value: No se ha encontrado la comida en la base de datos
     - Key: Debug/Loading

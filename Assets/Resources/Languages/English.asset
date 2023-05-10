@@ -78,6 +78,10 @@ MonoBehaviour:
       Value: Salt
     - Key: Common/Historic/Close
       Value: Close
+    - Key: Common/Historic/DeleteEntry
+      Value: Delete entry
+    - Key: Common/Historic/DeleteSure
+      Value: Are you sure you want to delete this history entry? Can't be recovered
     - Key: Common/Historic/SearchError
       Value: The food was not found in the database
     - Key: Debug/Loading
