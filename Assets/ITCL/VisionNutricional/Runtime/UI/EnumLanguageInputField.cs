@@ -26,14 +26,14 @@ namespace ITCL.VisionNutricional.Runtime.UI
         private void OnEnable()
         {
             enumList = localizer.GetAllLanguageIds();
-            Set(localizer.GetCurrentLanguageId());
+            Set(localizer.GetCurrentLanguageIndex()); //GetCurrentLanguageId());
         }
-        
+
         /// <summary>
         /// Getter for the index value.
         /// </summary>
         /// <returns>The index value of the language selection.</returns>
-        public override int Get() => localizer.GetCurrentLanguageId();
+        public override int Get() => localizer.GetCurrentLanguageIndex(); // .GetCurrentLanguageId();
 
         /// <summary>
         /// Setter for the index value.

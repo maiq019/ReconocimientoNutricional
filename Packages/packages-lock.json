@@ -320,7 +320,7 @@
       "url": "http://upm.rodrigovarga.com"
     },
     "whateverdevs.core": {
-      "version": "0.2.19",
+      "version": "0.2.20",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -350,7 +350,7 @@
       "url": "http://upm.rodrigovarga.com"
     },
     "whateverdevs.localization": {
-      "version": "0.1.14",
+      "version": "0.1.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {
