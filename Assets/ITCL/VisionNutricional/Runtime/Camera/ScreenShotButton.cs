@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
+using ModestTree;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Runtime.Ui;
 
 namespace ITCL.VisionNutricional.Runtime.Camera
@@ -28,7 +28,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             Texture2D capture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
             capture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
             capture.Apply();
-            Logger.Debug("Capture texture created");
+            Log.Debug("Capture texture created");
             //Stops the camera.
             Camera.StopCamera(capture);
             screenshot = capture;
@@ -42,13 +42,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             switch (per)
             {
                 case NativeGallery.Permission.Denied:
-                    Logger.Error("Gallery permission denied");
+                    Log.Error("Gallery permission denied");
                     break;
                 case NativeGallery.Permission.Granted:
-                    Logger.Debug("Gallery permission granted, image saved");
+                    Log.Debug("Gallery permission granted, image saved");
                     break;
                 case NativeGallery.Permission.ShouldAsk:
-                    Logger.Debug("Gallery permission should ask");
+                    Log.Debug("Gallery permission should ask");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

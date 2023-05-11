@@ -3230,9 +3230,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9b3fe07c824dfc429c9cf95063df263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThisScene:
+    SceneName: Historic
   MainButtonSus: {fileID: 980079070}
   MainMenuScene:
     SceneName: MainMenu
+  ConfigButtonSus: {fileID: 2014562700}
+  ConfigScene:
+    SceneName: Config
   SearchInput: {fileID: 1889050905}
   SearchButtonSus: {fileID: 1191125729}
   SearchErrorHid: {fileID: 989428734}
@@ -3579,6 +3584,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 111315016}
     m_Modifications:
+    - target: {fileID: 389646470882812726, guid: 03983614050ca62409a5078e45468b65,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.78431374
+      objectReference: {fileID: 0}
+    - target: {fileID: 389646470882812726, guid: 03983614050ca62409a5078e45468b65,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 389646470882812726, guid: 03983614050ca62409a5078e45468b65,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 389646470882812726, guid: 03983614050ca62409a5078e45468b65,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 389646470882812728, guid: 03983614050ca62409a5078e45468b65,
         type: 3}
       propertyPath: m_Pivot.x
@@ -6160,7 +6185,7 @@ GameObject:
   - component: {fileID: 2014562701}
   - component: {fileID: 2014562700}
   m_Layer: 5
-  m_Name: Menu
+  m_Name: ConfigButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

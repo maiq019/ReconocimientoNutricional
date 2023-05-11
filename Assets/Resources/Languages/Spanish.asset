@@ -26,6 +26,8 @@ MonoBehaviour:
       Value: Salir
     - Key: Common/Statistics
       Value: "Estad\xEDsticas"
+    - Key: Common/Edit
+      Value: Editar
     - Key: Common/Login
       Value: Login
     - Key: Common/Login/Email
@@ -50,8 +52,16 @@ MonoBehaviour:
       Value: "Espa\xF1ol"
     - Key: Common/Config/Logout
       Value: "Cerrar sesi\xF3n"
+    - Key: Common/Config/UserEmail
+      Value: 'Correo: {0}'
     - Key: Common/Config/UserName
-      Value: 'Nombre de usuario: {0}'
+      Value: 'Usuario: '
+    - Key: Common/Config/NewPassword
+      Value: "Nueva contrase\xF1a:"
+    - Key: Common/Config/RepeatPassword
+      Value: "Repetir contrase\xF1a:"
+    - Key: Common/Config/PasswdError
+      Value: "La nueva contrase\xF1a no coincide"
     - Key: Common/Menu/IdentifyButton
       Value: Identificar comida
     - Key: Common/Menu/Record
@@ -95,18 +105,22 @@ MonoBehaviour:
       Value: "Cargando c\xE1mara..."
     - Key: Debug/LoadingHistoric
       Value: Cargando historial...
+    - Key: Debug/LoadingConfig
+      Value: "Cargando configuraci\xF3n..."
+    - Key: Debug/LoadingConfigExit
+      Value: "Guardando configuraci\xF3n..."
     - Key: Debug/Logout
       Value: "Cerrando sesi\xF3n..."
     - Key: Debug/ApiKeyError
       Value: Introduzca la clave de cloud vision API en el componente 'CamTextureToCloudVision'
         del 'SendButton' en la escena de camara.
-    - Key: Foods/bread
+    - Key: Foods/Bread
       Value: Pan
-    - Key: Foods/pasta
+    - Key: Foods/Pasta
       Value: Pasta
-    - Key: Foods/rice
+    - Key: Foods/Rice
       Value: Arroz
-    - Key: Foods/beef meat
+    - Key: Foods/Beef Meat
       Value: Vaca
-    - Key: Foods/chicken meat
+    - Key: Foods/Chicken Meat
       Value: Pollo

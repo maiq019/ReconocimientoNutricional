@@ -26,6 +26,8 @@ MonoBehaviour:
       Value: Exit
     - Key: Common/Statistics
       Value: Statistics
+    - Key: Common/Edit
+      Value: Edit
     - Key: Common/Login
       Value: Login
     - Key: Common/Login/Email
@@ -50,8 +52,16 @@ MonoBehaviour:
       Value: Spanish
     - Key: Common/Config/Logout
       Value: Log out
+    - Key: Common/Config/UserEmail
+      Value: 'Email: {0}'
     - Key: Common/Config/UserName
-      Value: 'Username: {0}'
+      Value: 'User: '
+    - Key: Common/Config/NewPassword
+      Value: 'New password:'
+    - Key: Common/Config/RepeatPassword
+      Value: 'Repeat password:'
+    - Key: Common/Config/PasswdError
+      Value: The new password doesn't match
     - Key: Common/Menu/IdentifyButton
       Value: Identify food
     - Key: Common/Menu/Record
@@ -94,18 +104,22 @@ MonoBehaviour:
       Value: Loading camera...
     - Key: Debug/LoadingHistoric
       Value: Loading historic...
+    - Key: Debug/LoadingConfig
+      Value: Loading config...
+    - Key: Debug/LoadingConfigExit
+      Value: Saving config...
     - Key: Debug/Logout
       Value: Loging out...
     - Key: Debug/ApiKeyError
       Value: Enter the cloud vision API key in the 'CamTextureToCloudVision' component
         of the 'SendButton' on the camera scene.
-    - Key: Foods/bread
+    - Key: Foods/Bread
       Value: Bread
-    - Key: Foods/pasta
+    - Key: Foods/Pasta
       Value: Pasta
-    - Key: Foods/rice
+    - Key: Foods/Rice
       Value: Rice
-    - Key: Foods/beef meat
+    - Key: Foods/Beef Meat
       Value: Beef
-    - Key: Foods/chicken meat
+    - Key: Foods/Chicken Meat
       Value: Chicken

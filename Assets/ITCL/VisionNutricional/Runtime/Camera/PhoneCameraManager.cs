@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ModestTree;
 using UnityEngine;
@@ -144,7 +146,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //Check for some camera detected.
             if (devices.IsEmpty())
             {
-                Logger.Error("No camera detected");
+                Log.Error("No camera detected");
                 CamAvailable = false;
                 return;
             }
@@ -152,13 +154,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //Check for back camera.
             foreach (WebCamDevice cam in devices)
             {
-                Logger.Debug("Found camera " + cam.name + !cam.isFrontFacing);
+                Log.Debug("Found camera " + cam.name + !cam.isFrontFacing);
                 if (!cam.isFrontFacing) BackCam = new WebCamTexture(cam.name, Screen.width, Screen.height);
             }
 
             if (BackCam == null)
             {
-                Logger.Error("Unable to find back camera");
+                Log.Error("Unable to find back camera");
                 return;
             }
 
@@ -191,7 +193,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             if (Input.GetKeyDown(KeyCode.Escape) && !IsMenuLoading)
             {
                 IsMenuLoading = true;
-                Logger.Debug("Back button pressed");
+                Log.Debug("Back button pressed");
                 CoroutineRunner.RunRoutine(MainMenuLoader);
             }
             
@@ -309,6 +311,29 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private void SendImageToCloudVision()
         {
             CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
+        }
+
+        private void TestCloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
+        {
+            //Checks for lack of responses.
+            if (responses.responses.Count <= 0) return;
+            //Checks the labels from the responses, this is the objects detected on the image.
+            if (responses.responses[0].labelAnnotations is { Count: > 0 })
+            {
+                //gets all the labels
+                List<CamTextureToCloudVision.EntityAnnotation> labels = responses.responses[0].labelAnnotations.ToList();
+                //Filters the label descriptions with a relevant score, > 70%
+                List<string> labelsDescriptions = (from label in labels where label.score > 0.7 select label.description).ToList();
+
+                if (!labelsDescriptions.Contains("Food"))
+                {
+                    Log.Debug("Didn't find a food in the image");
+                    return;
+                }
+                
+                
+            }
+            
         }
 
         /*

@@ -2,6 +2,7 @@ using System.Collections;
 using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
@@ -22,7 +23,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// <param name="debugText">Subtitle or extra info to appear on the loading screen.</param>
         /// <param name="wait">Seconds of waiting before the unloading of the loading screen after the next scene is loaded.</param>
         /// <returns></returns>
-        public static IEnumerator LoadSceneCoroutine(ISceneManager sceneManager, SceneReference scene, string titleText, string debugText, float wait = 0)
+        public static IEnumerator LoadSceneCoroutine(ISceneManager sceneManager, SceneReference? scene, string titleText, string debugText, float wait = 0)
         {
             StaticLogger.Debug("Started loading scene");
             yield return LoadingScreen.FadeIn();
@@ -34,7 +35,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             
             bool loaded = false;
 
-            sceneManager.LoadScene(scene,
+            sceneManager.LoadScene((SceneReference)scene,
                 _ =>
                 {
                 },

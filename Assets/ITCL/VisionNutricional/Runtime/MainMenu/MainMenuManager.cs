@@ -1,4 +1,6 @@
+using ITCL.VisionNutricional.Runtime.ConfigScreen;
 using ITCL.VisionNutricional.Runtime.Initialization;
+using ITCL.VisionNutricional.Runtime.Login;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
@@ -25,10 +27,20 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         [Inject] private ILocalizer localizer;
 
         /// <summary>
+        /// Reference to this scene.
+        /// </summary>
+        [SerializeField] private SceneReference ThisScene;
+
+        /// <summary>
+        /// Reference to the config button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton ConfigButtonSus;
+        
+        /// <summary>
         /// Reference to the config popup screen.
         /// </summary>
-        [SerializeField] private ConfigManager ConfigWindow;
-
+        [SerializeField] private SceneReference ConfigScene;
+        
         /// <summary>
         /// Scan for food button subscribable.
         /// </summary>
@@ -54,7 +66,7 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         /// </summary>
         private void OnEnable()
         { 
-            ConfigWindow.HideConfigScreen();
+            ConfigButtonSus += LoadConfigScene;
             ScanButtonSus += LoadCameraScene;
             HistoricButtonSus += LoadHistoricScene;
         }
@@ -70,13 +82,24 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         }
         
         /// <summary>
-        /// Loads the camera scene.
+        /// Loads the historic scene.
         /// </summary>
         private void LoadHistoricScene()
         {
             HistoricButtonSus -= LoadHistoricScene;
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, HistoricScene, localizer["Common/Title"], localizer["Debug/LoadingHistoric"]));
+        }
+        
+        /// <summary>
+        /// Loads the config scene.
+        /// </summary>
+        private void LoadConfigScene()
+        {
+            ConfigButtonSus -= LoadConfigScene;
+            Session.PreviousScene = ThisScene;
+            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
+                sceneManager, ConfigScene, localizer["Common/Title"], localizer["Debug/LoadingConfig"]));
         }
     }
 }

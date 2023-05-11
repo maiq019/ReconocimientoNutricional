@@ -307,7 +307,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             yield return new WaitForEndOfFrame();
         }
 
-
         /// <summary>
         /// A sample implementation.
         /// </summary>

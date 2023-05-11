@@ -1,4 +1,5 @@
 using WhateverDevs.Core.Runtime.Common;
+using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 
 namespace ITCL.VisionNutricional.Runtime.Login
 {
@@ -9,5 +10,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
         public static string UserName = null;
         
         public static string Passwd = null;
+
+        public static SceneReference? PreviousScene = null;
     }
 }

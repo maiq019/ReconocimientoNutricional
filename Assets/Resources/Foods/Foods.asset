@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Foods
   m_EditorClassIdentifier: 
   Foods:
-  - foodName: bread
+  - foodName: Bread
     calories: 265
     fat: 4
     saturatedFat: 0
@@ -21,7 +21,7 @@ MonoBehaviour:
     sugar: 3
     protein: 7
     salt: 0
-  - foodName: pasta
+  - foodName: Pasta
     calories: 221
     fat: 13
     saturatedFat: -1
@@ -29,7 +29,7 @@ MonoBehaviour:
     sugar: 17
     protein: 81
     salt: 5
-  - foodName: rice
+  - foodName: Rice
     calories: 121
     fat: 38
     saturatedFat: 9
@@ -37,7 +37,7 @@ MonoBehaviour:
     sugar: 5
     protein: 35
     salt: 12
-  - foodName: beef meat
+  - foodName: Beef Meat
     calories: 201
     fat: 81
     saturatedFat: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
     sugar: 0
     protein: 338
     salt: 0
-  - foodName: chicken meat
+  - foodName: Chicken Meat
     calories: 158
     fat: 10
     saturatedFat: 0

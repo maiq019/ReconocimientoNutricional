@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ITCL.VisionNutricional.Runtime.ConfigScreen;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ITCL.VisionNutricional.Runtime.Login;
 using ITCL.VisionNutricional.Runtime.MainMenu;
+using ModestTree;
 using TMPro;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
@@ -37,6 +39,11 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// Factory for the entry buttons.
         /// </summary>
         [Inject] private HistoricEntryManager.Factory buttonFactory;
+        
+        /// <summary>
+        /// Reference to this scene.
+        /// </summary>
+        [SerializeField] private SceneReference ThisScene;
 
         /// <summary>
         /// Main button subscribable.
@@ -47,6 +54,16 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// Reference to the next scene to load.
         /// </summary>
         [SerializeField] private SceneReference MainMenuScene;
+        
+        /// <summary>
+        /// Reference to the config button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton ConfigButtonSus;
+        
+        /// <summary>
+        /// Reference to the config popup screen.
+        /// </summary>
+        [SerializeField] private SceneReference ConfigScene;
 
         /// <summary>
         /// Reference to the search bar input field.
@@ -137,6 +154,16 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// Reference to the entry popup's close button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton CloseEntryPopupSus;
+        
+        /// <summary>
+        /// Flag to not load the menu twice.
+        /// </summary>
+        private bool IsMenuLoading;
+
+        private void Awake()
+        {
+            IsMenuLoading = false;
+        }
 
         /// <summary>
         /// Subscribes to the OnButtonClicked of the corresponding button.
@@ -144,14 +171,23 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         private void OnEnable()
         {
             SearchErrorHid.Show(false);
-            ConfigWindow.HideConfigScreen();
             EntryPopupHid.Show(false);
             StartCoroutine(LoadEntriesCoroutine());
 
             MainButtonSus += LoadMainMenu;
+            ConfigButtonSus += LoadConfigScene;
             SearchButtonSus += () => StartCoroutine(LoadEntriesCoroutine());
             DeleteEntrySus += DeleteEntry;
             CloseEntryPopupSus += () => EntryPopupHid.Show(false);
+        }
+
+        private void Update()
+        {
+            //Loads the main menu with the android back button.
+            if (!Input.GetKeyDown(KeyCode.Escape) || IsMenuLoading) return;
+            IsMenuLoading = true;
+            Log.Debug("Back button pressed");
+            LoadMainMenu();
         }
 
         /// <summary>
@@ -162,6 +198,17 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             MainButtonSus -= LoadMainMenu;
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, MainMenuScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]));
+        }
+        
+        /// <summary>
+        /// Loads the config scene.
+        /// </summary>
+        private void LoadConfigScene()
+        {
+            ConfigButtonSus -= LoadConfigScene;
+            Session.PreviousScene = ThisScene;
+            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
+                sceneManager, ConfigScene, localizer["Common/Title"], localizer["Debug/LoadingConfig"]));
         }
 
         /// <summary>
@@ -230,6 +277,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             return null;
         }
 
+        /*
         private List<string> GetTranslatedFoods()
         {
             List<string> translatedFoods = new();
@@ -244,7 +292,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             }
 
             return translatedFoods;
-        }
+        }*/
 
         /// <summary>
         /// Shows a popup with more info from the entry.
@@ -257,13 +305,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             DB.Food food = DB.SelectFoodByName(entry.foodName);
 
             FoodName.SetValue("Foods/" + food.foodName);
-            CaloriesValue.text = food.calories.ToString() + "Kcal";
-            FatValue.text = food.fat.ToString() + "g";
-            SatFatValue.text = food.saturatedFat.ToString() + "g";
-            CarbhydValue.text = food.carbHyd.ToString() + "g";
-            SugarValue.text = food.sugar.ToString() + "g";
-            ProteinValue.text = food.protein.ToString() + "g";
-            SaltValue.text = food.salt.ToString() + "g";
+            CaloriesValue.text = food.calories + "Kcal";
+            FatValue.text = food.fat + "g";
+            SatFatValue.text = food.saturatedFat + "g";
+            CarbhydValue.text = food.carbHyd + "g";
+            SugarValue.text = food.sugar + "g";
+            ProteinValue.text = food.protein + "g";
+            SaltValue.text = food.salt + "g";
             Date.text = entry.date;
 
             EntryPopupHid.Show();
