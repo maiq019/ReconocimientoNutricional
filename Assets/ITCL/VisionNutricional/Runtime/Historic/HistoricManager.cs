@@ -257,7 +257,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             DB.Food food = DB.SelectFoodByName(entry.foodName);
 
             FoodName.SetValue("Foods/" + food.foodName);
-            CaloriesValue.text = food.calories.ToString() + "g";
+            CaloriesValue.text = food.calories.ToString() + "Kcal";
             FatValue.text = food.fat.ToString() + "g";
             SatFatValue.text = food.saturatedFat.ToString() + "g";
             CarbhydValue.text = food.carbHyd.ToString() + "g";

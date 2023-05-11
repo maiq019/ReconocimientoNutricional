@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using ModestTree;
 using UnityEngine;
 using UnityEngine.Networking;
 using WhateverDevs.Core.Behaviours;
@@ -248,7 +249,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             //headers = new Dictionary<string, string> { { "Content-Type", "application/json; charset=UTF-8" } };
             
-            if (APIKey.IsNullEmptyOrWhiteSpace()) Logger.Error(localizer["Debug/ApiKeyError"]);
+            if (APIKey.IsNullEmptyOrWhiteSpace()) Log.Error(localizer["Debug/ApiKeyError"]); //Logger.Error(localizer["Debug/ApiKeyError"]);
             else StartCoroutine(SendImageToCloudVisionCoroutine(image));
         }
 
@@ -291,11 +292,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Logger.Debug("CONNECTION ERROR " + www.error);
+                //Logger.Error("CONNECTION ERROR " + www.error);
+                Log.Error("CONNECTION ERROR " + www.error);
             }
             else
             {
-                Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
+                //Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
+                Log.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
                 AnnotateImageResponses responses = JsonUtility.FromJson<AnnotateImageResponses>(www.result.ToString());
                 // SendMessage, BroadcastMessage or something like that.
                 OnCloudResponse?.Invoke(responses);
@@ -316,7 +319,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //Checks the label from the responses, this is the objects detected on the image.
             if (responses.responses[0].labelAnnotations is { Count: > 0 })
                 //Prints the firs of the list, the one with most score.
-                Logger.Debug("Description: " + responses.responses[0].labelAnnotations[0].description);
+                //Logger.Debug("Description: " + responses.responses[0].labelAnnotations[0].description);
+                Log.Debug("Description: " + responses.responses[0].labelAnnotations[0].description);
             
             //Checks the localized objects.
             if (responses.responses[0].localizedObjectAnnotations is not { Count: > 0 }) return;
@@ -327,12 +331,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 //if (entity.boundingPoly.name == AlgoEnLaBaseDeDatos)
                 entityRectVertices entityRect = new entityRectVertices();
                 entityRect.entityRect.AddRange(obj.boundingPoly.normalizedVertices.Select(vertice => new Vector2(vertice.x, vertice.y)));
-                Logger.Debug(obj.boundingPoly.name + " detected at " + entityRect.entityRect[0] + ", " + entityRect.entityRect[1] + ", " +
-                             entityRect.entityRect[2] + ", " + entityRect.entityRect[3] + ".");
+                //Logger.Debug(obj.boundingPoly.name + " detected at " + entityRect.entityRect[0] + ", " + entityRect.entityRect[1] + ", " +
+                             //entityRect.entityRect[2] + ", " + entityRect.entityRect[3] + ".");
+                Log.Debug(obj.boundingPoly.name + " detected at " + entityRect.entityRect[0] + ", " + entityRect.entityRect[1] + ", " +
+                          entityRect.entityRect[2] + ", " + entityRect.entityRect[3] + ".");
                 entityRects.Add(entityRect);
             }
         }
-
-        
     }
 }

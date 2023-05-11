@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using ModestTree;
 using Mono.Data.Sqlite;
 using UnityEngine;
 using WhateverDevs.Core.Runtime.Common;
@@ -118,7 +119,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             }
             catch (Exception e)
             {
-                StaticLogger.Error(e);
+                Log.Error(e.ToString());
             }
             
             _dbConnection.Close();
@@ -183,7 +184,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
 
                 dbCommand.Dispose();
@@ -230,7 +231,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
 
                 dbCommand.Dispose();
@@ -275,7 +276,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -320,7 +321,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -363,7 +364,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -402,7 +403,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -446,7 +447,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -497,7 +498,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -553,7 +554,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -600,7 +601,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -644,7 +645,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -688,7 +689,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -736,7 +737,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -780,7 +781,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -848,7 +849,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -900,7 +901,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Debug(e);
+                    Log.Debug(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -946,7 +947,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -992,7 +993,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -1040,7 +1041,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -1089,7 +1090,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -1138,7 +1139,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -1188,7 +1189,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 }
                 catch (Exception e)
                 {
-                    StaticLogger.Error(e);
+                    Log.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();

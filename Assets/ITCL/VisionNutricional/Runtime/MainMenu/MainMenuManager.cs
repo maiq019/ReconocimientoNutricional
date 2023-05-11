@@ -1,6 +1,5 @@
 using ITCL.VisionNutricional.Runtime.Initialization;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;

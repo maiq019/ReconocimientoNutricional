@@ -62,6 +62,8 @@ MonoBehaviour:
       Value: Ayuda
     - Key: Common/Historic/Search
       Value: Buscar comida
+    - Key: Common/Historic/per100g
+      Value: Por 100g
     - Key: Common/Historic/Calories
       Value: "Calor\xEDas"
     - Key: Common/Historic/Fat
