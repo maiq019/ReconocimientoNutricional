@@ -2186,7 +2186,7 @@ MonoBehaviour:
   TextInTheSameObject: 1
   TextReference: {fileID: 0}
   SetOnEnable: 1
-  LocalizationKey: Common/Menu/Record
+  LocalizationKey: Common/Historic
 --- !u!114 &1729841851 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 418533066190705693, guid: 03983614050ca62409a5078e45468b65,

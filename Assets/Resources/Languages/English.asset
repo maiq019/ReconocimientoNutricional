@@ -54,22 +54,35 @@ MonoBehaviour:
       Value: Log out
     - Key: Common/Config/UserEmail
       Value: 'Email: {0}'
+    - Key: Common/Config/UserName0
+      Value: 'User: {0}'
     - Key: Common/Config/UserName
-      Value: 'User: '
+      Value: 'User:'
     - Key: Common/Config/NewPassword
       Value: 'New password:'
     - Key: Common/Config/RepeatPassword
       Value: 'Repeat password:'
-    - Key: Common/Config/PasswdError
+    - Key: Common/Config/PasswdErrorNotEqual
       Value: The new password doesn't match
+    - Key: Common/Config/PasswdErrorLength
+      Value: Password must be at least 5 characters long
+    - Key: Common/Config/PasswdErrorCharacters
+      Value: The password must contain uppercase, lowercase, and numbers or special
+        characters
+    - Key: Common/Config/UserUpdated
+      Value: User updated
+    - Key: Common/Config/PasswdUpdated
+      Value: Password updated
+    - Key: Common/Config/UserPasswdUpdated
+      Value: User and password updated
     - Key: Common/Menu/IdentifyButton
       Value: Identify food
-    - Key: Common/Menu/Record
-      Value: Historic
     - Key: Common/Menu/Version
       Value: 'version: {0}'
     - Key: Common/Menu/Help
       Value: Help
+    - Key: Common/Historic
+      Value: Historic
     - Key: Common/Historic/Search
       Value: Search food
     - Key: Common/Historic/per100g

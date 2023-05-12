@@ -1521,7 +1521,7 @@ MonoBehaviour:
   TextInTheSameObject: 1
   TextReference: {fileID: 0}
   SetOnEnable: 1
-  LocalizationKey: Common/Menu/Record
+  LocalizationKey: Common/Historic
 --- !u!114 &513285291
 MonoBehaviour:
   m_ObjectHideFlags: 0

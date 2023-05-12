@@ -54,22 +54,35 @@ MonoBehaviour:
       Value: "Cerrar sesi\xF3n"
     - Key: Common/Config/UserEmail
       Value: 'Correo: {0}'
+    - Key: Common/Config/UserName0
+      Value: 'Usuario: {0}'
     - Key: Common/Config/UserName
-      Value: 'Usuario: '
+      Value: 'Usuario:'
     - Key: Common/Config/NewPassword
       Value: "Nueva contrase\xF1a:"
     - Key: Common/Config/RepeatPassword
       Value: "Repetir contrase\xF1a:"
-    - Key: Common/Config/PasswdError
+    - Key: Common/Config/PasswdErrorNotEqual
       Value: "La nueva contrase\xF1a no coincide"
+    - Key: Common/Config/PasswdErrorLength
+      Value: "La contrase\xF1a debe tener al menos 5 caracteres"
+    - Key: Common/Config/PasswdErrorCharacters
+      Value: "La contrase\xF1a debe tener may\xFAsculas, min\xFAsculas y n\xFAmeros
+        o caracteres especiales"
+    - Key: Common/Config/UserUpdated
+      Value: Usuario actualizado
+    - Key: Common/Config/PasswdUpdated
+      Value: "Contrase\xF1a actualizada"
+    - Key: Common/Config/UserPasswdUpdated
+      Value: "Usuario y contrase\xF1a actualizados"
     - Key: Common/Menu/IdentifyButton
       Value: Identificar comida
-    - Key: Common/Menu/Record
-      Value: Historial
     - Key: Common/Menu/Version
       Value: "versi\xF3n: {0}"
     - Key: Common/Menu/Help
       Value: Ayuda
+    - Key: Common/Historic
+      Value: Historial
     - Key: Common/Historic/Search
       Value: Buscar comida
     - Key: Common/Historic/per100g
