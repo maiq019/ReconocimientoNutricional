@@ -87,10 +87,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             public List<FaceAnnotation> faceAnnotations;
             public List<EntityAnnotation> landmarkAnnotations;
-            public List<EntityAnnotation> logoAnnotations;
             public List<EntityAnnotation> labelAnnotations;
-            public List<EntityAnnotation> textAnnotations;
             public List<EntityAnnotation> localizedObjectAnnotations;
+            public List<EntityAnnotation> logoAnnotations;
+            public SafeSearchAnnotation safeSearchAnnotation;
+            public List<EntityAnnotation> textAnnotations;
         }
 
         [Serializable]
@@ -118,6 +119,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             public string mid;
             public string locale;
+            public string name;
             public string description;
             public float score;
             public float confidence;
@@ -125,6 +127,18 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             public BoundingPoly boundingPoly;
             public List<LocationInfo> locations;
             public List<Property> properties;
+
+            public EntityAnnotation()
+            {
+            }
+
+            public EntityAnnotation(string description, string mid, float score, float topicality)
+            {
+                this.description = description;
+                this.mid = mid;
+                this.score = score;
+                this.topicality = topicality;
+            }
         }
 
         [Serializable]
@@ -133,6 +147,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             public List<Vertex> normalizedVertices;
             public string name;
             public float score;
+        }
+        
+        [Serializable]
+        public class Vertex
+        {
+            public float x;
+            public float y;
         }
 
         [Serializable]
@@ -151,12 +172,15 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         }
 
         [Serializable]
-        public class Vertex
+        public class SafeSearchAnnotation
         {
-            public float x;
-            public float y;
+            public Likelihood adult;
+            public Likelihood medical;
+            public Likelihood racy;
+            public Likelihood spoof;
+            public Likelihood violence;
         }
-
+        
         [Serializable]
         public class entityRectVertices
         {

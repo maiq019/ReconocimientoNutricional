@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using ModestTree;
 using Mono.Data.Sqlite;
 using UnityEngine;
@@ -745,6 +746,17 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             }
 
             return foodsInDB;
+        }
+        
+        /// <summary>
+        /// Return all food names in database.
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> SelectAllFoodNames()
+        {
+            List<Food> foodsInDB = SelectAllFoods();
+
+            return foodsInDB.Select(food => food.foodName).ToList();
         }
 
         /// <summary>

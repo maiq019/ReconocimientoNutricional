@@ -1,4 +1,3 @@
-using ITCL.VisionNutricional.Runtime.ConfigScreen;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ITCL.VisionNutricional.Runtime.Login;
 using UnityEngine;

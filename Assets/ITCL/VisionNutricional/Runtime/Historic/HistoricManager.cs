@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ITCL.VisionNutricional.Runtime.ConfigScreen;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ITCL.VisionNutricional.Runtime.Login;
-using ITCL.VisionNutricional.Runtime.MainMenu;
 using ModestTree;
 using TMPro;
 using UnityEngine;
@@ -84,11 +82,6 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// Content field where to place the exercise buttons.
         /// </summary>
         [SerializeField] private Transform Content;
-
-        /// <summary>
-        /// Reference to the config popup screen.
-        /// </summary>
-        [SerializeField] private ConfigManager ConfigWindow;
 
         /// <summary>
         /// Reference to the entry popup hidable.

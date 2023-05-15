@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ModestTree;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
+using WhateverDevs.Localization.Runtime.Ui;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 using Zenject;
 
@@ -31,11 +32,21 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Reference to the main menu scene to go back.
         /// </summary>
         [SerializeField] private SceneReference MainMenuScene;
+
+        /// <summary>
+        /// Reference to the cloud vision api manager object.
+        /// </summary>
+        [SerializeField] private GameObject CloudApiManager;
         
         /// <summary>
-        /// Reference to the cloud vision api manager.
+        /// Reference to the cloud vision api script.
         /// </summary>
-        [SerializeField] private CamTextureToCloudVision CloudApi;
+        private CamTextureToCloudVision CloudApi;
+
+        /// <summary>
+        /// Reference to the cloud receiver script.
+        /// </summary>
+        private CloudReceiver CloudRec;
 
         /// <summary>
         /// Flag to check if there is a camera.
@@ -90,11 +101,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SerializeField] private Button BackButton;
 
         /// <summary>
-        /// Hidable for the back button.
-        /// </summary>
-        private HidableUiElement BackButtonHid;
-
-        /// <summary>
         /// Subscribable for the back button.
         /// </summary>
         private EasySubscribableButton BackButtonSus;
@@ -129,13 +135,16 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         private void Awake()
         {
+            CloudApi = CloudApiManager.GetComponent<CamTextureToCloudVision>();
+            CloudRec = CloudApiManager.GetComponent<CloudReceiver>();
+
+
             MainMenuLoader = Loader.LoadSceneCoroutine(
                 sceneManager, MainMenuScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]);
 
             IsMenuLoading = false;
 
             ScreenShotButtonComponent = ScreenshotButtonVertical.GetComponent<ScreenShotButton>();
-            BackButtonHid = BackButton.GetComponent<HidableUiElement>();
             BackButtonSus = BackButton.GetComponent<EasySubscribableButton>();
             SendButtonHid = SendButton.GetComponent<HidableUiElement>();
             SendButtonSus = SendButton.GetComponent<EasySubscribableButton>();
@@ -175,8 +184,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //TouchManager.OnStartZoom += StartZoom;
             //TouchManager.OnStopZoom += StopZoom;
 
-            BackButtonSus += StartCamera;
-            SendButtonSus += SendImageToCloudVision;
+            BackButtonSus += BackButtonPress;
+            //SendButtonSus += SendImageToCloudVision;
+            SendButtonSus += SendImageFake;
         }
 
         private void OnDisable()
@@ -193,7 +203,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             if (Input.GetKeyDown(KeyCode.Escape) && !IsMenuLoading)
             {
                 IsMenuLoading = true;
-                Log.Debug("Back button pressed");
+                Log.Debug("Android back button pressed");
                 CoroutineRunner.RunRoutine(MainMenuLoader);
             }
             
@@ -278,7 +288,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 : new Vector3(0, 0, -BackCam.videoRotationAngle);
             Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
             Background.texture = capture;
-            ShowBackAndSendButton();
+            ShowSendButton();
         }
 
         private void ShowScreenshotButtonHorizontal(bool show = true)
@@ -286,7 +296,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             UIHide.Show();
             ScreenshotButtonVertical.Show(!show);
             ScreenshotButtonHorizontal.Show(show);
-            BackButtonHid.Show(!show);
             SendButtonHid.Show(!show);
         }
 
@@ -295,17 +304,29 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             UIHide.Show();
             ScreenshotButtonVertical.Show(show);
             ScreenshotButtonHorizontal.Show(!show);
-            BackButtonHid.Show(!show);
             SendButtonHid.Show(!show);
         }
 
-        private void ShowBackAndSendButton(bool show = true)
+        private void ShowSendButton(bool show = true)
         {
             UIHide.Show();
             ScreenshotButtonVertical.Show(!show);
             ScreenshotButtonHorizontal.Show(!show);
-            BackButtonHid.Show(show);
             SendButtonHid.Show(show);
+        }
+        
+        private void BackButtonPress()
+        {
+            if (BackCam.isPlaying)
+            {
+                BackButtonSus -= BackButtonPress;
+                IsMenuLoading = true;
+                CoroutineRunner.RunRoutine(MainMenuLoader);
+            }
+            else
+            {
+                StartCamera();
+            }
         }
 
         private void SendImageToCloudVision()
@@ -313,28 +334,19 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
         }
 
-        private void TestCloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
+        private void SendImageFake()
         {
-            //Checks for lack of responses.
-            if (responses.responses.Count <= 0) return;
-            //Checks the labels from the responses, this is the objects detected on the image.
-            if (responses.responses[0].labelAnnotations is { Count: > 0 })
-            {
-                //gets all the labels
-                List<CamTextureToCloudVision.EntityAnnotation> labels = responses.responses[0].labelAnnotations.ToList();
-                //Filters the label descriptions with a relevant score, > 70%
-                List<string> labelsDescriptions = (from label in labels where label.score > 0.7 select label.description).ToList();
+            CamTextureToCloudVision.Vertex vertice1 = new() { x=0f,y=0.590967f };
+            CamTextureToCloudVision.Vertex vertice2 = new() { x=0.34507558f,y=0.590967f };
+            CamTextureToCloudVision.Vertex vertice3 = new() { x=0.34507558f,y=0.8935118f };
+            CamTextureToCloudVision.Vertex vertice4 = new() { x=0f,y=0.8935118f };
 
-                if (!labelsDescriptions.Contains("Food"))
-                {
-                    Log.Debug("Didn't find a food in the image");
-                    return;
-                }
-                
-                
-            }
+            List<CamTextureToCloudVision.Vertex> vertexList = new List<CamTextureToCloudVision.Vertex>() { vertice1, vertice2, vertice3, vertice4 };
             
+            CloudRec.DrawObject(vertexList);
         }
+
+        
 
         /*
         private void StartZoom(Vector2 primaryPosition, Vector2 secondaryPosition)
