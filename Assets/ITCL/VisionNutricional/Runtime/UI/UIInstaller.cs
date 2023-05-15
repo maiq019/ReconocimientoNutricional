@@ -14,6 +14,10 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// Reference to the exercises manager.
         /// </summary>
         [SerializeField] private HistoricEntryManager Entry;
+
+        [SerializeField] private VerticalBar VBar;
+        
+        [SerializeField] private HorizontalBar HBar;
         
         /// <summary>
         /// Reference injections.
@@ -23,6 +27,18 @@ namespace ITCL.VisionNutricional.Runtime.UI
             Container.BindFactory<HistoricEntryManager,
                     HistoricEntryManager.Factory>()
                 .FromComponentInNewPrefab(Entry)
+                .AsSingle()
+                .Lazy();
+            
+            Container.BindFactory<VerticalBar,
+                    VerticalBar.Factory>()
+                .FromComponentInNewPrefab(VBar)
+                .AsSingle()
+                .Lazy();
+            
+            Container.BindFactory<HorizontalBar,
+                    HorizontalBar.Factory>()
+                .FromComponentInNewPrefab(HBar)
                 .AsSingle()
                 .Lazy();
         }

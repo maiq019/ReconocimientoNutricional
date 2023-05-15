@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ITCL.VisionNutricional.Runtime.DataBase;
+using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using TMPro;
 using UnityEngine;
+using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime.Ui;
+using Zenject;
 
 namespace ITCL.VisionNutricional.Runtime.Camera
 {
-    public class CloudReceiver : MonoBehaviour
+    public class CloudReceiver : WhateverBehaviour<CloudReceiver>
     {
         /// <summary>
         /// Reference to the food name localizer.
@@ -65,31 +68,27 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the hidable for the rectangle.
         /// </summary>
-        [SerializeField] private HidableUiElement RectangleHid;
+        [SerializeField] public HidableUiElement RectangleHid;
         
         /// <summary>
-        /// Image texture for the rectangle vertical line.
+        /// Factory for the vertical bar.
         /// </summary>
-        [SerializeField] private RectTransform VerticalLine1;
+        [Inject] private VerticalBar.Factory VerticalBarFactory;
         
         /// <summary>
-        /// Image texture for the rectangle vertical line.
+        /// Factory for the horizontal bar.
         /// </summary>
-        [SerializeField] private RectTransform VerticalLine2;
-        
+        [Inject] private HorizontalBar.Factory HorizontalBarFactory;
+
         /// <summary>
-        /// Image texture for the rectangle horizontal line.
+        /// Reference to the rectangle object transform.
         /// </summary>
-        [SerializeField] private RectTransform HorizontalLine1;
+        [SerializeField] private Transform Rectangle;
 
         [SerializeField] private float RectangleWidth = 100;
 
         [SerializeField] private float RectangleOffsize = 15;
         
-        /// <summary>
-        /// Image texture for the rectangle horizontal line.
-        /// </summary>
-        [SerializeField] private RectTransform HorizontalLine2;
 
         private void OnEnable()
         {
@@ -184,24 +183,18 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 if (vert.x < left) left = vert.x;
             }
             
-            
-
             //1-verticalAxis because vertical axis is inverted in unity.
-            VerticalLine1.sizeDelta = new Vector2(RectangleWidth, RectangleOffsize);
-            VerticalLine1.anchorMin = new Vector2(left,1-bot);
-            VerticalLine1.anchorMax = new Vector2(left,1-top);
-
-            VerticalLine2.sizeDelta = new Vector2(RectangleWidth, RectangleOffsize);
-            VerticalLine2.anchorMin = new Vector2(right,1-bot);
-            VerticalLine2.anchorMax = new Vector2(right,1-top);
-
-            HorizontalLine1.sizeDelta = new Vector2(RectangleOffsize, RectangleWidth);
-            HorizontalLine1.anchorMin = new Vector2(left,1-top);
-            HorizontalLine1.anchorMax = new Vector2(right,1-top);
+            VerticalBar leftSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
+            leftSide.Set(RectangleWidth, RectangleOffsize, left, 1-bot, 1-top);
             
-            HorizontalLine2.sizeDelta = new Vector2(RectangleOffsize, RectangleWidth);
-            HorizontalLine2.anchorMin = new Vector2(left,1-bot);
-            HorizontalLine2.anchorMax = new Vector2(right,1-bot);
+            VerticalBar rightSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
+            rightSide.Set(RectangleWidth, RectangleOffsize, right, 1-bot, 1-top);
+
+            HorizontalBar topSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
+            topSide.Set(RectangleWidth, RectangleOffsize, 1-top, left, right);
+            
+            HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
+            botSide.Set(RectangleWidth, RectangleOffsize, 1-bot, left, right);
         }
     }
 }

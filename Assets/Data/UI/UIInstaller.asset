@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: UIInstaller
   m_EditorClassIdentifier: 
   Entry: {fileID: 5086918356069954225, guid: 86e65952806862440a6ad1434d0daa98, type: 3}
+  VBar: {fileID: 3742903486831401859, guid: f947ddeb1105a0c4dbb1bf30853fc123, type: 3}
+  HBar: {fileID: 6040365759587757342, guid: c30b798c13b41334c89020ef335c5a38, type: 3}

@@ -268,6 +268,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private void StartCamera()
         {
             //Play the camera image on the scene background
+            CloudRec.RectangleHid.Show(false);
             BackCam.Play();
             Background.texture = BackCam;
         }
