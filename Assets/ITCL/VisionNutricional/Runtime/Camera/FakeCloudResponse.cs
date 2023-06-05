@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using WhateverDevs.Core.Behaviours;
@@ -263,7 +264,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
               new (description: "Food", mid: "/m/02wbm", score: 0.9756512f, topicality: 0.9756512f);
             labelAnnotations.Add(label1);
             
-            CamTextureToCloudVision.EntityAnnotation label2 =
+          CamTextureToCloudVision.EntityAnnotation label2 =
               new (description: "Sandwich", mid: "/m/0l515", score: 0.9156336f, topicality: 0.9156336f);
             labelAnnotations.Add(label2);
             
@@ -393,10 +394,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             localizedObjectAnnotations.Add(entity1);
             
             response.localizedObjectAnnotations = localizedObjectAnnotations;
-            
-            
+
+            List<CamTextureToCloudVision.AnnotateImageResponse> responseList = new() { response };
+              
             CamTextureToCloudVision.AnnotateImageResponses responses = new();
-            responses.responses.Add(response);
+            responses.responses = responseList;
             return responses;
         }
     }

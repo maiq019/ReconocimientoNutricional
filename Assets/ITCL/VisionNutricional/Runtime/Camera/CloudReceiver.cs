@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.UI;
@@ -56,6 +56,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SerializeField] private TMP_InputField SaltValue;
         
         /// <summary>
+        /// Reference to the hidable for the entry popup.
+        /// </summary>
+        [SerializeField] public HidableUiElement EntryPopupHid;
+        
+        /// <summary>
         /// Reference to the entry popup's cancel button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton CancelEntrySus;
@@ -71,6 +76,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SerializeField] public HidableUiElement RectangleHid;
         
         /// <summary>
+        /// Reference to the rectangle button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton RectangleSus;
+        
+        /// <summary>
         /// Factory for the vertical bar.
         /// </summary>
         [Inject] private VerticalBar.Factory VerticalBarFactory;
@@ -83,7 +93,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the rectangle object transform.
         /// </summary>
-        [SerializeField] private Transform Rectangle;
+        [SerializeField] private RectTransform Rectangle;
 
         [SerializeField] private float RectangleWidth = 100;
 
@@ -93,8 +103,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private void OnEnable()
         {
             RectangleHid.Show(false);
+            EntryPopupHid.Show(false);
+
+            CamTextureToCloudVision.OnCloudResponse += TestCloudResponse;
+            RectangleSus += ShowEntryPopup;
+            CancelEntrySus += ()=> EntryPopupHid.Show(false);
         }
 
+        [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
         private void TestCloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
         {
             //Checks for lack of responses.
@@ -114,50 +130,45 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 }
 
                 DB.Food foodFound = default;
-                List<string> commons = (List<string>)labelsDescriptions.Intersect(DB.SelectAllFoodNames());
+                List<string> commons = labelsDescriptions.Intersect(DB.SelectAllFoodNames()).ToList();
                 if (commons.Count > 0)
                 {
-                    if (commons.Count > 1) //More than one food corresponding in the database
-                    {
-                        
-                    }
-                    else
-                    {
-                        foodFound = DB.SelectFoodByName(commons[0]);
-                        FoodName.SetValue("Common/Camera/FoodFound", false, foodFound.foodName);
-                        CaloriesValue.text = foodFound.calories.ToString();
-                        FatValue.text = foodFound.fat.ToString();
-                        SatFatValue.text = foodFound.saturatedFat.ToString();
-                        CarbhydValue.text = foodFound.carbHyd.ToString();
-                        SugarValue.text = foodFound.sugar.ToString();
-                        ProteinValue.text = foodFound.protein.ToString();
-                        SaltValue.text = foodFound.salt.ToString();
-                    }
+                    Logger.Debug(commons.Count > 1 ? "More than one match in the database" : "Only one match in the database");
+
+                    foodFound = DB.SelectFoodByName(commons[0]);
+                    FoodName.SetValue("Common/Camera/FoodFound", false, foodFound.foodName);
+                    CaloriesValue.text = foodFound.calories.ToString() != "-1" ? foodFound.calories.ToString() : "";
+                    FatValue.text = foodFound.fat.ToString() != "-1" ? foodFound.fat.ToString() : "";
+                    SatFatValue.text = foodFound.saturatedFat.ToString() != "-1" ? foodFound.saturatedFat.ToString() : "";
+                    CarbhydValue.text = foodFound.carbHyd.ToString() != "-1" ? foodFound.carbHyd.ToString() : "";
+                    SugarValue.text = foodFound.sugar.ToString() != "-1" ? foodFound.sugar.ToString() : "";
+                    ProteinValue.text = foodFound.protein.ToString() != "-1" ? foodFound.protein.ToString() : "";
+                    SaltValue.text = foodFound.salt.ToString() != "-1" ? foodFound.salt.ToString() : "";
                 }
                 else //Didnt found correspondences in the database
                 {
-                    
+                    Logger.Debug("No matches on the database");
                 }
                 
 
                 //Gets the Food object found location
-                List<CamTextureToCloudVision.Vertex> objVertex = new();
-                List<CamTextureToCloudVision.EntityAnnotation> objects = responses.responses[0].localizedObjectAnnotations.ToList();
-                foreach (CamTextureToCloudVision.EntityAnnotation obj in objects.Where(obj => name.Equals(foodFound.foodName)))
+                List<CamTextureToCloudVision.Vertex> vertexList = new();
+                List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
+                foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects.Where(obj => name.Contains(foodFound.foodName)))
                 {
-                    objVertex = obj.boundingPoly.normalizedVertices;
+                    vertexList = obj.boundingPoly.normalizedVertices;
                 }
 
-                if (objVertex.IsEmpty())
+                if (vertexList.IsEmpty())
                 {
-                    foreach (CamTextureToCloudVision.EntityAnnotation obj in objects.Where(obj => name.Equals("Food")))
+                    foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects)
                     {
-                        objVertex = obj.boundingPoly.normalizedVertices;
+                        if (obj.name.Equals("Food")) vertexList = obj.boundingPoly.normalizedVertices;
                     }
                 }
                 
-                DrawObject(objVertex);
-                 
+                DrawObject(vertexList);
+                
             }
             
         }
@@ -183,7 +194,24 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 if (vert.x < left) left = vert.x;
             }
             
-            //1-verticalAxis because vertical axis is inverted in unity.
+            //1-verticalAxis because vertical axis is inverted.
+            Rectangle.sizeDelta = new Vector2(0, 0);
+            Rectangle.anchorMin = new Vector2(left, 1-bot);
+            Rectangle.anchorMax = new Vector2(right, 1-top);
+            
+            VerticalBar leftSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
+            leftSide.Set(RectangleWidth, RectangleOffsize, 0, 0, 1);
+            
+            VerticalBar rightSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
+            rightSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
+
+            HorizontalBar topSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
+            topSide.Set(RectangleWidth, RectangleOffsize, 0, 0, 1);
+            
+            HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
+            botSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
+            
+            /*
             VerticalBar leftSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
             leftSide.Set(RectangleWidth, RectangleOffsize, left, 1-bot, 1-top);
             
@@ -195,6 +223,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             
             HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
             botSide.Set(RectangleWidth, RectangleOffsize, 1-bot, left, right);
+            */
+        }
+
+        private void ShowEntryPopup()
+        {
+            EntryPopupHid.Show();
         }
     }
 }

@@ -109,6 +109,8 @@ MonoBehaviour:
       Value: Are you sure you want to delete this history entry? Can't be recovered
     - Key: Common/Historic/SearchError
       Value: The food was not found in the database
+    - Key: Common/Camera/FoodFound
+      Value: 'Food found: {0}'
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu

@@ -18,9 +18,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public class CamTextureToCloudVision : WhateverBehaviour<CamTextureToCloudVision>
     {
+        [SerializeField]
+        private FakeCloudResponse FakeCloudResponse;
         public delegate void CloudResponse(AnnotateImageResponses responses);
 
-        public event CloudResponse OnCloudResponse;
+        public static event CloudResponse OnCloudResponse;
 
         private const string URL = "https://vision.googleapis.com/v1/images:annotate?key=";
         public string APIKey = "";
@@ -329,6 +331,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             }
 
             yield return new WaitForEndOfFrame();
+        }
+
+        protected internal void SendImageToCloudVisionTest()
+        {
+            OnCloudResponse?.Invoke(FakeCloudResponse.SandwichResponse());
         }
 
         /// <summary>

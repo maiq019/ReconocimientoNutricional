@@ -53,3 +53,11 @@ MonoBehaviour:
     sugar: 0
     protein: 23
     salt: 0
+  - foodName: Sandwich
+    calories: 240
+    fat: 11
+    saturatedFat: 88
+    carbHyd: 217
+    sugar: 34
+    protein: 1287
+    salt: -1

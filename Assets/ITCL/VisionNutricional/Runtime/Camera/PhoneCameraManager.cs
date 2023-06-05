@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ModestTree;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
-using WhateverDevs.Localization.Runtime.Ui;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 using Zenject;
 
@@ -186,7 +184,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             BackButtonSus += BackButtonPress;
             //SendButtonSus += SendImageToCloudVision;
-            SendButtonSus += SendImageFake;
+            SendButtonSus += SendImageFake2;
         }
 
         private void OnDisable()
@@ -335,7 +333,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
         }
 
-        private void SendImageFake()
+        private void DrawRectangleTest()
         {
             CamTextureToCloudVision.Vertex vertice1 = new() { x=0f,y=0.590967f };
             CamTextureToCloudVision.Vertex vertice2 = new() { x=0.34507558f,y=0.590967f };
@@ -345,6 +343,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             List<CamTextureToCloudVision.Vertex> vertexList = new List<CamTextureToCloudVision.Vertex>() { vertice1, vertice2, vertice3, vertice4 };
             
             CloudRec.DrawObject(vertexList);
+        }
+
+        private void SendImageFake2()
+        {
+            CloudApi.SendImageToCloudVisionTest();
         }
 
         
