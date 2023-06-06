@@ -183,8 +183,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //TouchManager.OnStopZoom += StopZoom;
 
             BackButtonSus += BackButtonPress;
-            //SendButtonSus += SendImageToCloudVision;
-            SendButtonSus += SendImageFake2;
+            SendButtonSus += SendImageToCloudVision;
+            //SendButtonSus += SendImageFake2;
         }
 
         private void OnDisable()

@@ -24,7 +24,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         public static event CloudResponse OnCloudResponse;
 
-        private const string URL = "https://vision.googleapis.com/v1/images:annotate?key=";
+        private const string URL = "https://vision.googleapis.com/v1/images:annotate"; //"?key=";
         public string APIKey = "";
         [SerializeField] private FeatureType Feature_Type;
         [SerializeField] private int MaxResults = 20;
@@ -62,20 +62,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             public string type;
             public int maxResults;
-        }
-
-        [Serializable]
-        public class ImageContext
-        {
-            public LatLongRect latLongRect;
-            public List<string> languageHints;
-        }
-
-        [Serializable]
-        public class LatLongRect
-        {
-            public LatLng minLatLng;
-            public LatLng maxLatLng;
         }
 
         [Serializable]
@@ -222,45 +208,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             IMAGE_PROPERTIES
         }
 
-        public enum LandmarkType
-        {
-            UNKNOWN_LANDMARK,
-            LEFT_EYE,
-            RIGHT_EYE,
-            LEFT_OF_LEFT_EYEBROW,
-            RIGHT_OF_LEFT_EYEBROW,
-            LEFT_OF_RIGHT_EYEBROW,
-            RIGHT_OF_RIGHT_EYEBROW,
-            MIDPOINT_BETWEEN_EYES,
-            NOSE_TIP,
-            UPPER_LIP,
-            LOWER_LIP,
-            MOUTH_LEFT,
-            MOUTH_RIGHT,
-            MOUTH_CENTER,
-            NOSE_BOTTOM_RIGHT,
-            NOSE_BOTTOM_LEFT,
-            NOSE_BOTTOM_CENTER,
-            LEFT_EYE_TOP_BOUNDARY,
-            LEFT_EYE_RIGHT_CORNER,
-            LEFT_EYE_BOTTOM_BOUNDARY,
-            LEFT_EYE_LEFT_CORNER,
-            RIGHT_EYE_TOP_BOUNDARY,
-            RIGHT_EYE_RIGHT_CORNER,
-            RIGHT_EYE_BOTTOM_BOUNDARY,
-            RIGHT_EYE_LEFT_CORNER,
-            LEFT_EYEBROW_UPPER_MIDPOINT,
-            RIGHT_EYEBROW_UPPER_MIDPOINT,
-            LEFT_EAR_TRAGION,
-            RIGHT_EAR_TRAGION,
-            LEFT_EYE_PUPIL,
-            RIGHT_EYE_PUPIL,
-            FOREHEAD_GLABELLA,
-            CHIN_GNATHION,
-            CHIN_LEFT_GONION,
-            CHIN_RIGHT_GONION
-        };
-
         public enum Likelihood
         {
             UNKNOWN,
@@ -270,11 +217,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             LIKELY,
             VERY_LIKELY
         }
-
+        
         protected internal void SendImageToCloudVision(Texture2D image)
         {
-            //headers = new Dictionary<string, string> { { "Content-Type", "application/json; charset=UTF-8" } };
-            
             if (APIKey.IsNullEmptyOrWhiteSpace()) Log.Error(localizer["Debug/ApiKeyError"]); //Logger.Error(localizer["Debug/ApiKeyError"]);
             else StartCoroutine(SendImageToCloudVisionCoroutine(image));
         }
@@ -284,36 +229,43 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             if (APIKey.IsNullEmptyOrWhiteSpace()) yield return null;
             
             byte[] jpg = texture2D.EncodeToJPG();
-            string base64 = Convert.ToBase64String(jpg);
+            string base64Image = Convert.ToBase64String(jpg);
 
-            AnnotateImageRequests requests = new AnnotateImageRequests { requests = new List<AnnotateImageRequest>() };
+            AnnotateImageRequests requests = new () { requests = new List<AnnotateImageRequest>() };
 
-            AnnotateImageRequest request = new AnnotateImageRequest
+            AnnotateImageRequest request = new ()
             {
-                image = new Image { content = base64 },
+                image = new Image { content = base64Image },
                 features = new List<Feature>()
             };
 
-            Feature feature = new Feature
+            Feature feature = new ()
             {
                 type = Feature_Type.ToString(),
-                maxResults = this.MaxResults
+                maxResults = MaxResults
             };
 
             request.features.Add(feature);
             requests.requests.Add(request);
 
             string jsonData = JsonUtility.ToJson(requests, false);
-
             if (jsonData == string.Empty) yield return null;
 
-            //byte[] postData = System.Text.Encoding.Default.GetBytes(jsonData);
             WWWForm postData = new WWWForm();
             postData.AddField("requests", jsonData);
+            
+            //byte[] postData = System.Text.Encoding.Default.GetBytes(jsonData);
 
-            string url = URL + APIKey;
-            //using(WWW www = new WWW(url, postData, headers)) {
-            using UnityWebRequest www = UnityWebRequest.Post(url, postData);
+            string url = URL;// + APIKey;
+            
+            UnityWebRequest www = UnityWebRequest.Post(url, postData);
+            
+            //UnityWebRequest www = new (url, "POST");
+            //byte[] requestsRaw = Encoding.UTF8.GetBytes(jsonData);
+            //www.uploadHandler = new UploadHandlerRaw(requestsRaw);
+
+            www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
+            www.SetRequestHeader("APIKey", APIKey);
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -329,7 +281,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 // SendMessage, BroadcastMessage or something like that.
                 OnCloudResponse?.Invoke(responses);
             }
-
+            
             yield return new WaitForEndOfFrame();
         }
 
