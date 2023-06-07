@@ -24,7 +24,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         public static event CloudResponse OnCloudResponse;
 
-        private const string URL = "https://vision.googleapis.com/v1/images:annotate"; //"?key=";
+        private const string URL = "https://vision.googleapis.com/v1/images:annotate?key=";
         public string APIKey = "";
         [SerializeField] private FeatureType Feature_Type;
         [SerializeField] private int MaxResults = 20;
@@ -199,6 +199,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         public enum FeatureType
         {
             TYPE_UNSPECIFIED,
+            OBJECT_LOCALIZATION,
             FACE_DETECTION,
             LANDMARK_DETECTION,
             LOGO_DETECTION,
@@ -239,33 +240,41 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 features = new List<Feature>()
             };
 
+            Feature objectFeature = new()
+            {
+                type = "OBJECT_LOCALIZATION",
+                maxResults = MaxResults
+            };
+
             Feature feature = new ()
             {
                 type = Feature_Type.ToString(),
                 maxResults = MaxResults
             };
 
+            request.features.Add(objectFeature);
             request.features.Add(feature);
             requests.requests.Add(request);
 
             string jsonData = JsonUtility.ToJson(requests, false);
             if (jsonData == string.Empty) yield return null;
 
-            WWWForm postData = new WWWForm();
-            postData.AddField("requests", jsonData);
+            //WWWForm postData = new WWWForm();
+            //postData.AddField("requests", jsonData);
+            //postData.AddField("requests", JsonUtility.ToJson(request, false));
             
             //byte[] postData = System.Text.Encoding.Default.GetBytes(jsonData);
 
-            string url = URL;// + APIKey;
+            string url = URL + APIKey;
             
-            UnityWebRequest www = UnityWebRequest.Post(url, postData);
+            UnityWebRequest www = UnityWebRequest.Post(url, jsonData);
             
             //UnityWebRequest www = new (url, "POST");
             //byte[] requestsRaw = Encoding.UTF8.GetBytes(jsonData);
             //www.uploadHandler = new UploadHandlerRaw(requestsRaw);
-
+            
+            
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
-            www.SetRequestHeader("APIKey", APIKey);
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)

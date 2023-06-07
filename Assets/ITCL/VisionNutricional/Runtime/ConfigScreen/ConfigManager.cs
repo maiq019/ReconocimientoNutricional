@@ -3,7 +3,6 @@ using ITCL.VisionNutricional.Runtime.Initialization;
 using ITCL.VisionNutricional.Runtime.Login;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;

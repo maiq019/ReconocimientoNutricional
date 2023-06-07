@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Globalization;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;

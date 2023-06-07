@@ -2,8 +2,6 @@ using System.Collections;
 using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 
@@ -35,17 +33,16 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             
             bool loaded = false;
 
-            sceneManager.LoadScene((SceneReference)scene,
-                _ =>
-                {
-                },
-                success =>
-                {
-                    if (!success)
-                        Log.Error("There was an error loading the next scene.");
-                    else
-                        loaded = true;
-                });
+            if (scene != null)
+                sceneManager.LoadScene((SceneReference)scene,
+                    _ => { },
+                    success =>
+                    {
+                        if (!success)
+                            Log.Error("There was an error loading the next scene.");
+                        else
+                            loaded = true;
+                    });
 
             yield return new WaitUntil(() => loaded);
 

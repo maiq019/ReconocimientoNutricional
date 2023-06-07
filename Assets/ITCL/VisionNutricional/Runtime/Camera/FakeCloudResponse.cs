@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using WhateverDevs.Core.Behaviours;
@@ -397,8 +396,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             List<CamTextureToCloudVision.AnnotateImageResponse> responseList = new() { response };
               
-            CamTextureToCloudVision.AnnotateImageResponses responses = new();
-            responses.responses = responseList;
+            CamTextureToCloudVision.AnnotateImageResponses responses = new ()
+            {
+              responses = responseList
+            };
+            
             return responses;
         }
     }

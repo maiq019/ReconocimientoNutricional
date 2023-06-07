@@ -8140,7 +8140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FakeCloudResponse: {fileID: 1317276156}
   APIKey: AIzaSyBBZfFNEB6ZGKF5eYiNnGJmRuN1OpqxHSo
-  Feature_Type: 4
+  Feature_Type: 5
   MaxResults: 20
 --- !u!4 &1886171920
 Transform:
