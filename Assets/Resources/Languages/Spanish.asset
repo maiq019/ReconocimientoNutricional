@@ -139,3 +139,5 @@ MonoBehaviour:
       Value: Vaca
     - Key: Foods/Chicken Meat
       Value: Pollo
+    - Key: Foods/Sandwich
+      Value: Sandwich

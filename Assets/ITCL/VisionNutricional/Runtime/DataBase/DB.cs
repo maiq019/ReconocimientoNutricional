@@ -126,20 +126,20 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             _dbConnection.Close();
         }
         
-        public static void DeleteDatabase()
+        public static void ClearDatabase()
         {
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 
-                dbCommand.CommandText = "DROP TABLE Users";
+                dbCommand.CommandText = "DROP TABLE IF EXISTS Users";
                 dbCommand.ExecuteScalar();
                 
-                dbCommand.CommandText = "DROP TABLE Foods";
+                dbCommand.CommandText = "DROP TABLE IF EXISTS Foods";
                 dbCommand.ExecuteScalar();
                 
-                dbCommand.CommandText = "DROP TABLE Historic";
+                dbCommand.CommandText = "DROP TABLE IF EXISTS Historic";
                 dbCommand.ExecuteScalar();
                 
                 _dbConnection.Close();

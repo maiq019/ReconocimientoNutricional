@@ -138,3 +138,5 @@ MonoBehaviour:
       Value: Beef
     - Key: Foods/Chicken Meat
       Value: Chicken
+    - Key: Foods/Sandwich
+      Value: Sandwich

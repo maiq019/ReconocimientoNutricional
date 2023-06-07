@@ -43,14 +43,14 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             CoroutineRunner.RunRoutine(FillDbCoroutine());
             
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
-                sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 2));
+                sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 1));
         }
 
         private IEnumerator FillDbCoroutine()
         {
             DB.CreateDataBase();
             yield return new WaitForEndOfFrame();
-            DB.DeleteDatabase();
+            //DB.ClearDatabase();
             DB.CreateDatabaseTables();
             yield return new WaitForEndOfFrame();
             DB.InsertUser("user0@gmail.com", "user0", "0000");

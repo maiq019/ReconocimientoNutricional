@@ -69,16 +69,31 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Reference to the entry popup's register button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton RegisterEntryPopupSus;
+        
+        /// <summary>
+        /// Reference to the rectangle object transform.
+        /// </summary>
+        [SerializeField] private GameObject Rectangle;
+
+        /// <summary>
+        /// Reference to the text identifier of the rectangle.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro RectangleText;
 
         /// <summary>
         /// Reference to the hidable for the rectangle.
         /// </summary>
-        [SerializeField] public HidableUiElement RectangleHid;
+        public HidableUiElement RectangleHid;
         
         /// <summary>
         /// Reference to the rectangle button subscribable.
         /// </summary>
-        [SerializeField] private EasySubscribableButton RectangleSus;
+        private EasySubscribableButton RectangleSus;
+        
+        /// <summary>
+        /// Reference to the rectangle object transform.
+        /// </summary>
+        private RectTransform RectangleRectTransform;
         
         /// <summary>
         /// Factory for the vertical bar.
@@ -89,16 +104,24 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Factory for the horizontal bar.
         /// </summary>
         [Inject] private HorizontalBar.Factory HorizontalBarFactory;
-
+        
         /// <summary>
-        /// Reference to the rectangle object transform.
+        /// Width of the rectangle bars.
         /// </summary>
-        [SerializeField] private RectTransform Rectangle;
-
         [SerializeField] private float RectangleWidth = 100;
 
+        /// <summary>
+        /// Offset of the rectangle bars.
+        /// </summary>
         [SerializeField] private float RectangleOffsize = 15;
-        
+
+
+        private void Awake()
+        {
+            RectangleSus = Rectangle.GetComponent<EasySubscribableButton>();
+            RectangleHid = Rectangle.GetComponent<HidableUiElement>();
+            RectangleRectTransform = Rectangle.GetComponent<RectTransform>();
+        }
 
         private void OnEnable()
         {
@@ -150,11 +173,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                     Logger.Debug("No matches on the database");
                 }
                 
-
                 //Gets the Food object found location
                 List<CamTextureToCloudVision.Vertex> vertexList = new();
                 List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
-                foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects.Where(obj => name.Contains(foodFound.foodName)))
+                foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects.Where(_ => name.Contains(foodFound.foodName)))
                 {
                     vertexList = obj.boundingPoly.normalizedVertices;
                 }
@@ -167,7 +189,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                     }
                 }
                 
-                DrawObject(vertexList);
+                DrawObject(vertexList, foodFound.foodName);
                 
             }
             
@@ -177,9 +199,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Places the lines around the list of vertices provided, forming a rectangle. 
         /// </summary>
         /// <param name="vertices">List of vertices in a 2d space.</param>
-        public void DrawObject(List<CamTextureToCloudVision.Vertex> vertices)
+        /// <param name="foodName">Name of the food drawn.</param>
+        private void DrawObject(List<CamTextureToCloudVision.Vertex> vertices, string foodName)
         {
             RectangleHid.Show();
+
+            RectangleText.SetValue("Foods/" + foodName);
                 
             float top = 1f;
             float bot = 0f;
@@ -195,20 +220,20 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             }
             
             //1-verticalAxis because vertical axis is inverted.
-            Rectangle.sizeDelta = new Vector2(0, 0);
-            Rectangle.anchorMin = new Vector2(left, 1-bot);
-            Rectangle.anchorMax = new Vector2(right, 1-top);
+            RectangleRectTransform.sizeDelta = new Vector2(0, 0);
+            RectangleRectTransform.anchorMin = new Vector2(left, 1-bot);
+            RectangleRectTransform.anchorMax = new Vector2(right, 1-top);
             
-            VerticalBar leftSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
+            VerticalBar leftSide = VerticalBarFactory.CreateUiGameObject(RectangleRectTransform);
             leftSide.Set(RectangleWidth, RectangleOffsize, 0, 0, 1);
             
-            VerticalBar rightSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
+            VerticalBar rightSide = VerticalBarFactory.CreateUiGameObject(RectangleRectTransform);
             rightSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
 
-            HorizontalBar topSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
+            HorizontalBar topSide = HorizontalBarFactory.CreateUiGameObject(RectangleRectTransform);
             topSide.Set(RectangleWidth, RectangleOffsize, 0, 0, 1);
             
-            HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
+            HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(RectangleRectTransform);
             botSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
             
             /*

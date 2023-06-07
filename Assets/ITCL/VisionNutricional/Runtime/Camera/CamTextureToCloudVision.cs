@@ -142,6 +142,16 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             public float x;
             public float y;
+
+            public Vertex()
+            {
+            }
+
+            public Vertex(float x, float y)
+            {
+                this.x = x;
+                this.y = y;
+            }
         }
 
         [Serializable]

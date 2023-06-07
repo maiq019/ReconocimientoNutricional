@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ModestTree;
 using UnityEngine;
@@ -81,8 +80,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         [SerializeField] private HidableUiElement ScreenshotButtonVertical;
 
-        private ScreenShotButton ScreenShotButtonComponent;
-
         /// <summary>
         /// Hidable for the horizontal screenshot button.
         /// </summary>
@@ -142,7 +139,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             IsMenuLoading = false;
 
-            ScreenShotButtonComponent = ScreenshotButtonVertical.GetComponent<ScreenShotButton>();
+            ScreenshotButtonVertical.GetComponent<ScreenShotButton>();
             BackButtonSus = BackButton.GetComponent<EasySubscribableButton>();
             SendButtonHid = SendButton.GetComponent<HidableUiElement>();
             SendButtonSus = SendButton.GetComponent<EasySubscribableButton>();
@@ -183,7 +180,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //TouchManager.OnStopZoom += StopZoom;
 
             BackButtonSus += BackButtonPress;
-            SendButtonSus += SendImageToCloudVision;
+            //SendButtonSus += () => CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
+            SendButtonSus += () => CloudApi.SendImageToCloudVisionTest();
             //SendButtonSus += SendImageFake2;
         }
 
@@ -200,9 +198,15 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //Loads the main menu with the android back button.
             if (Input.GetKeyDown(KeyCode.Escape) && !IsMenuLoading)
             {
-                IsMenuLoading = true;
-                Log.Debug("Android back button pressed");
-                CoroutineRunner.RunRoutine(MainMenuLoader);
+                if (BackCam.isPlaying)
+                {
+                    IsMenuLoading = true;
+                    CoroutineRunner.RunRoutine(MainMenuLoader);
+                }
+                else
+                {
+                    StartCamera();
+                }
             }
             
             //Checks if there is a camera, if it is playing and if there is not a screenshot being taken.
@@ -327,31 +331,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 StartCamera();
             }
         }
-
-        private void SendImageToCloudVision()
-        {
-            CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
-        }
-
-        private void DrawRectangleTest()
-        {
-            CamTextureToCloudVision.Vertex vertice1 = new() { x=0f,y=0.590967f };
-            CamTextureToCloudVision.Vertex vertice2 = new() { x=0.34507558f,y=0.590967f };
-            CamTextureToCloudVision.Vertex vertice3 = new() { x=0.34507558f,y=0.8935118f };
-            CamTextureToCloudVision.Vertex vertice4 = new() { x=0f,y=0.8935118f };
-
-            List<CamTextureToCloudVision.Vertex> vertexList = new List<CamTextureToCloudVision.Vertex>() { vertice1, vertice2, vertice3, vertice4 };
-            
-            CloudRec.DrawObject(vertexList);
-        }
-
-        private void SendImageFake2()
-        {
-            CloudApi.SendImageToCloudVisionTest();
-        }
-
         
-
         /*
         private void StartZoom(Vector2 primaryPosition, Vector2 secondaryPosition)
         {
