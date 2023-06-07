@@ -549,28 +549,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 433972228}
   m_CullTransparentMesh: 1
---- !u!1 &463506128 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 389646471464458782, guid: 03983614050ca62409a5078e45468b65,
-    type: 3}
-  m_PrefabInstance: {fileID: 389646471005147342}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &463506132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 463506128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8317c2454c5e03a429ad6e8f55b56e70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TextInTheSameObject: 1
-  TextReference: {fileID: 0}
-  SetOnEnable: 1
-  LocalizationKey: Common/Menu/IdentifyButton
 --- !u!1 &468844570
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,12 +1060,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1440, y: 2560}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1132,8 +1110,8 @@ RectTransform:
   - {fileID: 1359728537}
   - {fileID: 952857590}
   - {fileID: 1729841848}
-  - {fileID: 566084558}
   - {fileID: 1853909848}
+  - {fileID: 566084558}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2155,6 +2133,11 @@ PrefabInstance:
       propertyPath: m_text
       value: Historial
       objectReference: {fileID: 0}
+    - target: {fileID: 5263806356150558172, guid: 03983614050ca62409a5078e45468b65,
+        type: 3}
+      propertyPath: LocalizationKey
+      value: Common/Historic
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03983614050ca62409a5078e45468b65, type: 3}
 --- !u!224 &1729841848 stripped
@@ -2163,28 +2146,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1729841847}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1729841849 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 389646471464458782, guid: 03983614050ca62409a5078e45468b65,
-    type: 3}
-  m_PrefabInstance: {fileID: 1729841847}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1729841850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1729841849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8317c2454c5e03a429ad6e8f55b56e70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TextInTheSameObject: 1
-  TextReference: {fileID: 0}
-  SetOnEnable: 1
-  LocalizationKey: Common/Historic
 --- !u!114 &1729841851 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 418533066190705693, guid: 03983614050ca62409a5078e45468b65,
@@ -2216,7 +2177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1853909848
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2231,7 +2192,7 @@ RectTransform:
   m_Children:
   - {fileID: 221752568}
   m_Father: {fileID: 1040506285}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1, y: 0.3}
   m_AnchorMax: {x: 0.9, y: 0.8}
@@ -2428,6 +2389,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSize
       value: 86.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5263806356150558172, guid: 03983614050ca62409a5078e45468b65,
+        type: 3}
+      propertyPath: LocalizationKey
+      value: Common/Menu/IdentifyButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03983614050ca62409a5078e45468b65, type: 3}

@@ -26,9 +26,19 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
         [Inject] private ILocalizer localizer;
         
         /// <summary>
+        /// Reference to the main menu scene.
+        /// </summary>
+        [SerializeField] private SceneReference MainMenuScene;
+        
+        /// <summary>
         /// Reference to the Login screen.
         /// </summary>
         [SerializeField] private SceneReference LoginScene;
+        
+        /// <summary>
+        /// Config Main button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton ConfigToMainButtonSus;
 
         /// <summary>
         /// Config back button subscribable.
@@ -118,7 +128,8 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
             UserEmail.SetValue("Common/Config/UserEmail", false, Session.Email);
             UpdateUserErrorHid.Show(false);
             ApplyUserButtonSus += UpdateUser;
-            
+
+            ConfigToMainButtonSus += LoadMainMenu;
             ConfigBackButtonSus += Back; //() => EditUserScreenHid.Shown ? HideUpdateUser() : LoadPreviousScene();
             UserName.SetValue("Common/Config/UserName0", false, Session.UserName);
             EditUserButtonSus += ShowUpdateUser;
@@ -137,7 +148,17 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
             Session.UserName = null;
             Session.Passwd = null;
             CoroutineRunner.RunRoutine(
-                Loader.LoadSceneCoroutine(sceneManager, LoginScene, localizer["Common/title"], localizer["Debug/Logout"]));
+                Loader.LoadSceneCoroutine(sceneManager, LoginScene, localizer["Common/Title"], localizer["Debug/Logout"]));
+        }
+        
+        /// <summary>
+        /// Loads the scene selected as main menu.
+        /// </summary>
+        private void LoadMainMenu()
+        {
+            ConfigToMainButtonSus -= LoadMainMenu;
+            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
+                sceneManager, MainMenuScene, localizer["Common/Title"], localizer["Debug/LoadingMainMenu"]));
         }
 
         /// <summary>
@@ -147,7 +168,7 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
         { 
             ConfigBackButtonSus -= LoadPreviousScene;
             CoroutineRunner.RunRoutine(
-                Loader.LoadSceneCoroutine(sceneManager, Session.PreviousScene, localizer["Common/title"], ""));
+                Loader.LoadSceneCoroutine(sceneManager, Session.PreviousScene, localizer["Common/Title"], ""));
         }
 
         /// <summary>

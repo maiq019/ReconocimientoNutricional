@@ -70,6 +70,11 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
             HistoricButtonSus += LoadHistoricScene;
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+        }
+
         /// <summary>
         /// Loads the camera scene.
         /// </summary>

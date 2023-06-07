@@ -248,13 +248,16 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             string input = SearchInput.text.Replace("\u200B", "");
             if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input)) return DB.SelectAllEntriesFromUser(Session.Email);
 
+            List<DB.HistoricEntry> results = new();
+
             //Search for coincidences in database
             List<DB.Food> foodsInDb = DB.SelectAllFoods();
             foreach (DB.Food food in foodsInDb.Where(food => input.IndexOf(food.foodName, StringComparison.OrdinalIgnoreCase) >= 0))
             {
-                return DB.SelectAllEntriesFromUserAndFood(Session.Email, food.foodName);
+                results = DB.SelectAllEntriesFromUserAndFood(Session.Email, food.foodName);
             }
-
+            if (results.Count > 0) return results;
+            
             //Search for coincidences in all languages
             List<string> foodsInLocalizer = foodsInDb.Select(food => "Foods/" + food.foodName).ToList();
             foreach (string foodInDb in from key in foodsInLocalizer
@@ -262,8 +265,9 @@ namespace ITCL.VisionNutricional.Runtime.Historic
                      where input.IndexOf(localizer.GetText(key, language), StringComparison.OrdinalIgnoreCase) >= 0
                      select key.Replace("Foods/", ""))
             {
-                return DB.SelectAllEntriesFromUserAndFood(Session.Email, foodInDb);
+                results = DB.SelectAllEntriesFromUserAndFood(Session.Email, foodInDb);
             }
+            if (results.Count > 0) return results;
 
             SearchErrorHid.Show();
 
