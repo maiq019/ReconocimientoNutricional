@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ITCL.VisionNutricional.Runtime.DataBase;
+using ITCL.VisionNutricional.Runtime.Login;
 using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using TMPro;
@@ -61,6 +63,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SerializeField] public HidableUiElement EntryPopupHid;
         
         /// <summary>
+        /// Reference to the hidable for the entry format error.
+        /// </summary>
+        [SerializeField] public HidableUiElement FormatErrorHid;
+        
+        /// <summary>
         /// Reference to the entry popup's cancel button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton CancelEntrySus;
@@ -115,6 +122,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         [SerializeField] private float RectangleOffsize = 15;
 
+        /// <summary>
+        /// Reference to the food found name.
+        /// </summary>
+        private string FoundFoodName;
+
 
         private void Awake()
         {
@@ -127,14 +139,16 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             RectangleHid.Show(false);
             EntryPopupHid.Show(false);
+            FormatErrorHid.Show(false);
 
-            CamTextureToCloudVision.OnCloudResponse += TestCloudResponse;
-            RectangleSus += ShowEntryPopup;
+            CamTextureToCloudVision.OnCloudResponse += CloudResponse;
+            RectangleSus += ()=> EntryPopupHid.Show();
             CancelEntrySus += ()=> EntryPopupHid.Show(false);
+            RegisterEntryPopupSus += RegisterEntry;
         }
 
         [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
-        private void TestCloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
+        private void CloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
         {
             //Checks for lack of responses.
             if (responses.responses.Count <= 0) return;
@@ -159,7 +173,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                     Logger.Debug(commons.Count > 1 ? "More than one match in the database" : "Only one match in the database");
 
                     foodFound = DB.SelectFoodByName(commons[0]);
-                    FoodName.SetValue("Common/Camera/FoodFound", false, foodFound.foodName);
+                    FoodName.SetValue("Common/Camera/EntryPopup/FoodFound", false, foodFound.foodName);
                     CaloriesValue.text = foodFound.calories.ToString() != "-1" ? foodFound.calories.ToString() : "";
                     FatValue.text = foodFound.fat.ToString() != "-1" ? foodFound.fat.ToString() : "";
                     SatFatValue.text = foodFound.saturatedFat.ToString() != "-1" ? foodFound.saturatedFat.ToString() : "";
@@ -205,6 +219,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             RectangleHid.Show();
 
             RectangleText.SetValue("Foods/" + foodName);
+            FoundFoodName = foodName;
                 
             float top = 1f;
             float bot = 0f;
@@ -251,9 +266,38 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             */
         }
 
-        private void ShowEntryPopup()
+        /// <summary>
+        /// Saves the food entry into the database.
+        /// </summary>
+        private void RegisterEntry()
         {
-            EntryPopupHid.Show();
+            FormatErrorHid.Show(false);
+            try
+            {
+                DB.Food foodEntry = new()
+                {
+                    foodName = FoundFoodName,
+                    calories = float.Parse(CaloriesValue.text), //string.IsNullOrEmpty(CaloriesValue.text) ? 0 : float.Parse(CaloriesValue.text),
+                    fat = float.Parse(FatValue.text), //string.IsNullOrEmpty(FatValue.text) ? 0 : float.Parse(FatValue.text),
+                    saturatedFat = float.Parse(SatFatValue.text), //string.IsNullOrEmpty(SatFatValue.text) ? 0 : float.Parse(SatFatValue.text),
+                    carbHyd = float.Parse(CarbhydValue.text), //string.IsNullOrEmpty(CarbhydValue.text) ? 0 : float.Parse(CarbhydValue.text),
+                    sugar = float.Parse(SugarValue.text), //string.IsNullOrEmpty(SugarValue.text) ? 0 : float.Parse(SugarValue.text),
+                    protein = float.Parse(ProteinValue.text), //string.IsNullOrEmpty(ProteinValue.text) ? 0 : float.Parse(ProteinValue.text),
+                    salt = float.Parse(SaltValue.text) //string.IsNullOrEmpty(SaltValue.text) ? 0 : float.Parse(SaltValue.text)
+                };
+                
+                DB.InsertIntoHistoric(Session.Email, foodEntry);
+                
+                EntryPopupHid.Show(false);
+            }
+            catch (FormatException)
+            {
+                FormatErrorHid.Show();
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.ToString());
+            }
         }
     }
 }

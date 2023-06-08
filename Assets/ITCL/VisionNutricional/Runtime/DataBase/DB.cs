@@ -46,6 +46,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         {
             public string userEmail;
             public string foodName;
+            public float calories;
+            public float fat; 
+            public float saturatedFat;
+            public float carbHyd;
+            public float sugar;
+            public float protein;
+            public float salt;
             public string date;
         }
 
@@ -72,7 +79,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         {
             const string usersQuery = "CREATE TABLE IF NOT EXISTS Users (email TEXT PRIMARY KEY, "
                                                                     + "userName TEXT NOT NULL, "
-                                                                    + "password TEXT NOT NULL) STRICT";
+                                                                    + "password TEXT NOT NULL)";
             Command(usersQuery);
             
             const string foodsQuery =
@@ -83,12 +90,19 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                                             + "carbhyd REAL, "
                                             + "sugar REAL, "
                                             + "protein REAL, "
-                                            + "salt REAL) STRICT";
+                                            + "salt REAL)";
             Command(foodsQuery);
 
             const string historicQuery =
                 "CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
                                                 + "foodName TEXT NOT NULL, "
+                                                + "calories REAL, "
+                                                + "fat REAL, "
+                                                + "saturatedFat REAL, "
+                                                + "carbhyd REAL, "
+                                                + "sugar REAL, "
+                                                + "protein REAL, "
+                                                + "salt REAL, "
                                                 + "_date TEXT NOT NULL, "
                                                 + "FOREIGN KEY(userEmail) REFERENCES Users(email), "
                                                 + "FOREIGN KEY(foodName) REFERENCES Foods(foodName), "
@@ -533,7 +547,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 _dbConnection.Open();
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
                 dbCommand.CommandText = "INSERT OR IGNORE INTO Foods (foodName, calories, fat, saturatedFat, carbhyd, sugar, protein, salt) VALUES ('" 
-                                        + fName+"', "+calories+", "+fat+", "+saturatedFat+", "+carbHyd+", "+sugar+", "+protein+", "+salt+")";
+                                        +fName+"', "+calories+", "+fat+", "+saturatedFat+", "+carbHyd+", "+sugar+", "+protein+", "+salt+")";
                 
                 try
                 {
@@ -879,11 +893,11 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// Inserts a new entry in the historic.
         /// </summary>
         /// <param name="userEmail">email identifier from the user.</param>
-        /// <param name="foodName">Name identifier from the food.</param>
+        /// <param name="food">Food struct identifier from the food.</param>
         /// <returns>HistoricEntry struct.</returns>
-        public static HistoricEntry InsertIntoHistoric(string userEmail, string foodName)
+        public static HistoricEntry InsertIntoHistoric(string userEmail, Food food)
         {
-            HistoricEntry entry = new HistoricEntry();
+            HistoricEntry entry = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -892,11 +906,21 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 cmd.CommandText = "PRAGMA foreign_keys = ON";
                 cmd.ExecuteNonQuery();
                 
+                string foodName = food.foodName;
+                float calories = food.calories;
+                float fat = food.fat;
+                float saturatedFat = food.saturatedFat;
+                float carbHyd = food.carbHyd;
+                float sugar = food.sugar;
+                float protein = food.protein;
+                float salt = food.salt;
+                
                 CultureInfo spanishCultureInfo = CultureInfo.CreateSpecificCulture("es-ES");
                 string date = DateTime.Now.ToString(spanishCultureInfo);
                 
                 IDbCommand dbCommand = _dbConnection.CreateCommand();
-                dbCommand.CommandText = "INSERT OR IGNORE INTO Historic (userEmail, foodName, _date) VALUES ('" + userEmail + "', '" + foodName + "', '" + date + "')";
+                dbCommand.CommandText = "INSERT INTO Historic (userEmail, foodName, calories, fat, saturatedFat, carbHyd, sugar, protein, salt, _date) VALUES ('" 
+                                        +userEmail+"', '"+foodName+"', "+calories+", "+fat+", "+saturatedFat+", "+carbHyd+", " +sugar +", "+protein+", "+salt+", '"+date+"')";
                 
                 try
                 {
@@ -906,14 +930,21 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                     {
                         entry.userEmail = dataReader.GetString(0);
                         entry.foodName = dataReader.GetString(1);
-                        entry.date = dataReader .GetString(2);
+                        entry.calories = dataReader.GetFloat(2);
+                        entry.fat = dataReader.GetFloat(3);
+                        entry.saturatedFat = dataReader.GetFloat(4);
+                        entry.carbHyd = dataReader.GetFloat(5);
+                        entry.sugar = dataReader.GetFloat(6);
+                        entry.protein = dataReader.GetFloat(7);
+                        entry.salt = dataReader.GetFloat(8);
+                        entry.date = dataReader .GetString(9);
                     }
 
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
-                    Log.Debug(e.ToString());
+                    StaticLogger.Error(e.ToString());
                 }
                 
                 dbCommand.Dispose();
@@ -946,16 +977,23 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 
                 try
                 {
-                    IDataReader reader = dbCommand.ExecuteReader();
+                    IDataReader dataReader = dbCommand.ExecuteReader();
                 
-                    while (reader.Read())
+                    while (dataReader.Read())
                     {
-                        entry.userEmail = reader.GetString(0);
-                        entry.foodName = reader.GetString(1);
-                        entry.date = reader.GetString(2);
+                        entry.userEmail = dataReader.GetString(0);
+                        entry.foodName = dataReader.GetString(1);
+                        entry.calories = dataReader.GetFloat(2);
+                        entry.fat = dataReader.GetFloat(3);
+                        entry.saturatedFat = dataReader.GetFloat(4);
+                        entry.carbHyd = dataReader.GetFloat(5);
+                        entry.sugar = dataReader.GetFloat(6);
+                        entry.protein = dataReader.GetFloat(7);
+                        entry.salt = dataReader.GetFloat(8);
+                        entry.date = dataReader .GetString(9);
                     }
 
-                    reader.Close();
+                    dataReader.Close();
                 }
                 catch (Exception e)
                 {
@@ -992,16 +1030,23 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 
                 try
                 {
-                    IDataReader reader = dbCommand.ExecuteReader();
+                    IDataReader dataReader = dbCommand.ExecuteReader();
                 
-                    while (reader.Read())
+                    while (dataReader.Read())
                     {
-                        entry.userEmail = reader.GetString(0);
-                        entry.foodName = reader.GetString(1);
-                        entry.date = reader.GetString(2);
+                        entry.userEmail = dataReader.GetString(0);
+                        entry.foodName = dataReader.GetString(1);
+                        entry.calories = dataReader.GetFloat(2);
+                        entry.fat = dataReader.GetFloat(3);
+                        entry.saturatedFat = dataReader.GetFloat(4);
+                        entry.carbHyd = dataReader.GetFloat(5);
+                        entry.sugar = dataReader.GetFloat(6);
+                        entry.protein = dataReader.GetFloat(7);
+                        entry.salt = dataReader.GetFloat(8);
+                        entry.date = dataReader .GetString(9);
                     }
 
-                    reader.Close();
+                    dataReader.Close();
                 }
                 catch (Exception e)
                 {
@@ -1044,7 +1089,14 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         {
                             userEmail = dataReader.GetString(0),
                             foodName = dataReader.GetString(1),
-                            date = dataReader.GetString(2)
+                            calories = dataReader.GetFloat(2),
+                            fat = dataReader.GetFloat(3),
+                            saturatedFat = dataReader.GetFloat(4),
+                            carbHyd = dataReader.GetFloat(5),
+                            sugar = dataReader.GetFloat(6),
+                            protein = dataReader.GetFloat(7),
+                            salt = dataReader.GetFloat(8),
+                            date = dataReader .GetString(9)
                         };
                         entriesInDB.Add(entryAux);
                     }
@@ -1093,7 +1145,14 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         {
                             userEmail = dataReader.GetString(0),
                             foodName = dataReader.GetString(1),
-                            date = dataReader.GetString(2)
+                            calories = dataReader.GetFloat(2),
+                            fat = dataReader.GetFloat(3),
+                            saturatedFat = dataReader.GetFloat(4),
+                            carbHyd = dataReader.GetFloat(5),
+                            sugar = dataReader.GetFloat(6),
+                            protein = dataReader.GetFloat(7),
+                            salt = dataReader.GetFloat(8),
+                            date = dataReader .GetString(9)
                         };
                         entriesInDB.Add(entryAux);
                     }
@@ -1142,7 +1201,14 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         {
                             userEmail = dataReader.GetString(0),
                             foodName = dataReader.GetString(1),
-                            date = dataReader.GetString(2)
+                            calories = dataReader.GetFloat(2),
+                            fat = dataReader.GetFloat(3),
+                            saturatedFat = dataReader.GetFloat(4),
+                            carbHyd = dataReader.GetFloat(5),
+                            sugar = dataReader.GetFloat(6),
+                            protein = dataReader.GetFloat(7),
+                            salt = dataReader.GetFloat(8),
+                            date = dataReader .GetString(9)
                         };
                         entriesInDB.Add(entryAux);
                     }
@@ -1192,7 +1258,14 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         {
                             userEmail = dataReader.GetString(0),
                             foodName = dataReader.GetString(1),
-                            date = dataReader.GetString(2)
+                            calories = dataReader.GetFloat(2),
+                            fat = dataReader.GetFloat(3),
+                            saturatedFat = dataReader.GetFloat(4),
+                            carbHyd = dataReader.GetFloat(5),
+                            sugar = dataReader.GetFloat(6),
+                            protein = dataReader.GetFloat(7),
+                            salt = dataReader.GetFloat(8),
+                            date = dataReader .GetString(9)
                         };
                         entriesInDB.Add(entryAux);
                     }

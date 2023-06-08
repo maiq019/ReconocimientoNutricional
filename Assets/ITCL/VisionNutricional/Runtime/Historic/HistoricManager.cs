@@ -299,16 +299,14 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             EntryDisplayed = entry;
 
-            DB.Food food = DB.SelectFoodByName(entry.foodName);
-
-            FoodName.SetValue("Foods/" + food.foodName);
-            CaloriesValue.text = food.calories + "Kcal";
-            FatValue.text = food.fat + "g";
-            SatFatValue.text = food.saturatedFat + "g";
-            CarbhydValue.text = food.carbHyd + "g";
-            SugarValue.text = food.sugar + "g";
-            ProteinValue.text = food.protein + "g";
-            SaltValue.text = food.salt + "g";
+            FoodName.SetValue("Foods/" + entry.foodName);
+            CaloriesValue.text = entry.calories + "Kcal";
+            FatValue.text = entry.fat + "g";
+            SatFatValue.text = entry.saturatedFat + "g";
+            CarbhydValue.text = entry.carbHyd + "g";
+            SugarValue.text = entry.sugar + "g";
+            ProteinValue.text = entry.protein + "g";
+            SaltValue.text = entry.salt + "g";
             Date.text = entry.date;
 
             EntryPopupHid.Show();

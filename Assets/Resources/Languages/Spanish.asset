@@ -110,8 +110,10 @@ MonoBehaviour:
         recuperar"
     - Key: Common/Historic/SearchError
       Value: No se ha encontrado la comida en la base de datos
-    - Key: Common/Camera/FoodFound
+    - Key: Common/Camera/EntryPopup/FoodFound
       Value: 'Comida encontrada: {0}'
+    - Key: Common/Camera/EntryPopup/FormatError
+      Value: "Por favor introduce los valores vac\xEDos en la tabla."
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu

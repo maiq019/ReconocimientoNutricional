@@ -50,16 +50,16 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         {
             DB.CreateDataBase();
             yield return new WaitForEndOfFrame();
-            //DB.ClearDatabase();
+            DB.ClearDatabase();
             DB.CreateDatabaseTables();
             yield return new WaitForEndOfFrame();
             DB.InsertUser("user0@gmail.com", "user0", "0000");
             DB.InsertUser("user1@gmail.com", "user1", "1111");
 
             foreach (DB.Food food in FoodsAsset.Foods) DB.InsertFood(food);
-            
-            DB.InsertIntoHistoric("user0@gmail.com", "Bread");
-            DB.InsertIntoHistoric("user0@gmail.com", "Rice");
+
+            DB.InsertIntoHistoric("user0@gmail.com", DB.SelectFoodByName("Bread"));
+            DB.InsertIntoHistoric("user0@gmail.com", DB.SelectFoodByName("Rice"));
             
             yield return new WaitForEndOfFrame();
         }
