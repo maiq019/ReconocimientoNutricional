@@ -2,6 +2,7 @@ using System.Collections;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ModestTree;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
@@ -78,12 +79,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Hidable for the vertical screenshot button.
         /// </summary>
-        [SerializeField] private HidableUiElement ScreenshotButtonVertical;
-
-        /// <summary>
-        /// Hidable for the horizontal screenshot button.
-        /// </summary>
-        [SerializeField] private HidableUiElement ScreenshotButtonHorizontal;
+        [FormerlySerializedAs("ScreenshotButtonVertical")] [SerializeField] private HidableUiElement ScreenshotButton;
 
         /// <summary>
         /// Flag to know when a screenshot is being captured.
@@ -139,7 +135,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             IsMenuLoading = false;
 
-            ScreenshotButtonVertical.GetComponent<ScreenShotButton>();
+            ScreenshotButton.GetComponent<ScreenShotButton>();
             BackButtonSus = BackButton.GetComponent<EasySubscribableButton>();
             SendButtonHid = SendButton.GetComponent<HidableUiElement>();
             SendButtonSus = SendButton.GetComponent<EasySubscribableButton>();
@@ -172,6 +168,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             StartCamera();
             //Camera flag changed.
             CamAvailable = true;
+            
+            Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
         }
 
         private void OnEnable()
@@ -209,6 +207,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 }
             }
             
+            /*
             //Checks if there is a camera, if it is playing and if there is not a screenshot being taken.
             if (!CamAvailable || !BackCam.isPlaying || TakingScreenshot) return;
 
@@ -245,8 +244,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             }
 
             Background.rectTransform.localEulerAngles = new Vector3(0, 0, -BackCam.videoRotationAngle);
+            */
         }
-
+    
+        /*
         /// <summary>
         /// Consult warp for the mirrored indicator from the camera.
         /// </summary>
@@ -263,7 +264,15 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             return CameraVertical;
         }
-
+        */
+        
+        private void ShowScreenshotButton(bool show = true)
+        {
+            UIHide.Show();
+            ScreenshotButton.Show(show);
+            SendButtonHid.Show(!show);
+        }
+        
         /// <summary>
         /// Starts the camera recording and its necessaries coroutines.
         /// </summary>
@@ -273,6 +282,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CloudRec.RectangleHid.Show(false);
             BackCam.Play();
             Background.texture = BackCam;
+            ShowScreenshotButton();
         }
 
         /// <summary>
@@ -282,6 +292,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         public void StopCamera(Texture2D capture)
         {
             BackCam.Stop();
+            /*
             if (IsCameraVerticallyMirrored())
                 Background.rectTransform.localScale = IsCameraVertical() ? new Vector3(1, -1, 1) : new Vector3(-1, -1, 1);
             else Background.rectTransform.localScale = new Vector3(1, 1, 1);
@@ -290,31 +301,17 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 ? new Vector3(0, 0, -BackCam.videoRotationAngle + 90)
                 : new Vector3(0, 0, -BackCam.videoRotationAngle);
             Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+            */
+            
             Background.texture = capture;
+            Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
             ShowSendButton();
         }
-
-        private void ShowScreenshotButtonHorizontal(bool show = true)
-        {
-            UIHide.Show();
-            ScreenshotButtonVertical.Show(!show);
-            ScreenshotButtonHorizontal.Show(show);
-            SendButtonHid.Show(!show);
-        }
-
-        private void ShowScreenshotButtonVertical(bool show = true)
-        {
-            UIHide.Show();
-            ScreenshotButtonVertical.Show(show);
-            ScreenshotButtonHorizontal.Show(!show);
-            SendButtonHid.Show(!show);
-        }
-
+        
         private void ShowSendButton(bool show = true)
         {
             UIHide.Show();
-            ScreenshotButtonVertical.Show(!show);
-            ScreenshotButtonHorizontal.Show(!show);
+            ScreenshotButton.Show(!show);
             SendButtonHid.Show(show);
         }
         

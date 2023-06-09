@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using UnityEngine;
@@ -41,34 +40,38 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// </summary>
         private void OnEnable()
         {
-            if (Application.platform != RuntimePlatform.Android) return;
-
-            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+            if (Application.platform == RuntimePlatform.Android)
             {
-                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+                CoroutineRunner.RunRoutine(PermissionsAndDBCoroutine());
             }
-            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            else
             {
-                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+                DB.CreateDataBase();
+                CoroutineRunner.RunRoutine(FillDbCoroutine());
             }
-            if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
-            {
-                Permission.RequestUserPermission(Permission.Camera);
-            }
-            
-            CoroutineRunner.RunRoutine(DBCoroutine());
             
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 1));
         }
 
-        private IEnumerator DBCoroutine()
+        private IEnumerator PermissionsAndDBCoroutine()
         {
             while (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
             {
                 Permission.RequestUserPermission(Permission.ExternalStorageWrite);
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(1);
             }
+            while (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+                yield return new WaitForSeconds(1);
+            }
+            while (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+            {
+                Permission.RequestUserPermission(Permission.Camera);
+                yield return new WaitForSeconds(1);
+            }
+            
             DB.CreateDataBase();
             CoroutineRunner.RunRoutine(FillDbCoroutine());
         }

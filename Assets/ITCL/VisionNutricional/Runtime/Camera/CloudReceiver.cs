@@ -250,20 +250,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             
             HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(RectangleRectTransform);
             botSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
-            
-            /*
-            VerticalBar leftSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
-            leftSide.Set(RectangleWidth, RectangleOffsize, left, 1-bot, 1-top);
-            
-            VerticalBar rightSide = VerticalBarFactory.CreateUiGameObject(Rectangle);
-            rightSide.Set(RectangleWidth, RectangleOffsize, right, 1-bot, 1-top);
-
-            HorizontalBar topSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
-            topSide.Set(RectangleWidth, RectangleOffsize, 1-top, left, right);
-            
-            HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(Rectangle);
-            botSide.Set(RectangleWidth, RectangleOffsize, 1-bot, left, right);
-            */
         }
 
         /// <summary>
