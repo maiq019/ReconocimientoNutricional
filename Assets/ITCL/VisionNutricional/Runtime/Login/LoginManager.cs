@@ -96,18 +96,6 @@ namespace ITCL.VisionNutricional.Runtime.Login
         }
 
         /// <summary>
-        /// Checks and asks for storage permission.
-        /// </summary>
-        private void Start()
-        {
-            if (Application.platform != RuntimePlatform.Android) return;
-            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
-            {
-                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
-            }
-        }
-
-        /// <summary>
         /// Exits the app with the android back button.
         /// </summary>
         private void Update()

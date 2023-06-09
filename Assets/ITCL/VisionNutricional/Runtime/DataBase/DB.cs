@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using ModestTree;
 using Mono.Data.Sqlite;
@@ -16,7 +17,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DB : Loggable<DB>
     {
-        private const string DBName = "Database";
+        private const string DBName = "NutricionDatabase";
         private static string _dbUri;
         private static IDbConnection _dbConnection;
         
@@ -63,8 +64,8 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         public static IDbConnection CreateDataBase()
         {
             // Open a connection to the database.
-            string filepath = Application.persistentDataPath + "/" + DBName;
-            _dbUri = "URI=file:" + filepath + ".sqlite";
+            string filepath = Application.persistentDataPath + "/" + DBName+ ".sqlite";
+            _dbUri = "URI=file:" + filepath;
             _dbConnection = new SqliteConnection(_dbUri);
 
             return _dbConnection;

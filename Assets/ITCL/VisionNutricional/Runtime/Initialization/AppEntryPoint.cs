@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using UnityEngine;
+using UnityEngine.Android;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Localization.Runtime;
@@ -39,11 +41,36 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// </summary>
         private void OnEnable()
         {
-            DB.CreateDataBase();
-            CoroutineRunner.RunRoutine(FillDbCoroutine());
+            if (Application.platform != RuntimePlatform.Android) return;
+
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+            }
+            if (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageRead))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageRead);
+            }
+            if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+            {
+                Permission.RequestUserPermission(Permission.Camera);
+            }
+            
+            CoroutineRunner.RunRoutine(DBCoroutine());
             
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 1));
+        }
+
+        private IEnumerator DBCoroutine()
+        {
+            while (!Permission.HasUserAuthorizedPermission(Permission.ExternalStorageWrite))
+            {
+                Permission.RequestUserPermission(Permission.ExternalStorageWrite);
+                yield return new WaitForSeconds(2);
+            }
+            DB.CreateDataBase();
+            CoroutineRunner.RunRoutine(FillDbCoroutine());
         }
 
         private IEnumerator FillDbCoroutine()
@@ -53,8 +80,8 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             DB.ClearDatabase();
             DB.CreateDatabaseTables();
             yield return new WaitForEndOfFrame();
-            DB.InsertUser("user0@gmail.com", "user0", "0000");
-            DB.InsertUser("user1@gmail.com", "user1", "1111");
+            DB.InsertUser("user0@gmail.com", "user0", "Aa000");
+            DB.InsertUser("user1@gmail.com", "user1", "Aa111");
 
             foreach (DB.Food food in FoodsAsset.Foods) DB.InsertFood(food);
 
