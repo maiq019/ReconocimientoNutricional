@@ -65,17 +65,17 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         public static IEnumerator CreateDataBase()
         {
             // Open a connection to the database.
-            string filepath = Application.persistentDataPath + "/" + DBName + ".sqlite"; //.s3db";
+            string filepath = Application.persistentDataPath + "/" + DBName + ".s3db"; //.sqlite";
             
             if (!File.Exists(filepath))
             {
-                WWW loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
+                /*WWW loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
 
                 while (!loadDb.isDone) { }
                 
-                File.WriteAllBytes(filepath, loadDb.bytes);
+                File.WriteAllBytes(filepath, loadDb.bytes);*/
                 
-                /*UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".s3db");
+                UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".s3db");
 
                 if (loadDb.result != UnityWebRequest.Result.Success)
                 {
@@ -85,7 +85,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 {
                     StaticLogger.Debug("Loading database");
                     File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
-                }*/
+                }
             }
 
             yield return new WaitForEndOfFrame();

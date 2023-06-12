@@ -168,9 +168,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             StartCamera();
             //Camera flag changed.
             CamAvailable = true;
-            
-            Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
-            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
         }
 
         private void OnEnable()
@@ -193,15 +190,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             //Loads the main menu with the android back button.
             if (!Input.GetKeyDown(KeyCode.Escape) || IsMenuLoading) return;
-            if (BackCam.isPlaying)
-            {
-                IsMenuLoading = true;
-                CoroutineRunner.RunRoutine(MainMenuLoader);
-            }
-            else
-            {
-                StartCamera();
-            }
+            BackButtonPress();
         }
 
         private void ShowScreenshotButton(bool show = true)
@@ -218,10 +207,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             //Play the camera image on the scene background
             CloudRec.RectangleHid.Show(false);
-            BackCam.Play();
             Background.texture = BackCam;
             Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
             Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
+            BackCam.Play();
             ShowScreenshotButton();
         }
 
@@ -258,6 +247,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             {
                 StartCamera();
             }
+            CloudRec.EntryPopupHid.Show(false);
         }
         
         /*

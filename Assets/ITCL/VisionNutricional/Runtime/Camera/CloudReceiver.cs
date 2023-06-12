@@ -143,6 +143,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             CamTextureToCloudVision.OnCloudResponse += CloudResponse;
             RectangleSus += ()=> EntryPopupHid.Show();
+            RectangleSus+= () => FormatErrorHid.Show(false);
             CancelEntrySus += ()=> EntryPopupHid.Show(false);
             RegisterEntryPopupSus += RegisterEntry;
         }
@@ -162,7 +163,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
                 if (!labelsDescriptions.Contains("Food"))
                 {
-                    Log.Debug("Didn't find a food in the image");
+                    Logger.Debug("Didn't find a food in the image");
                     return;
                 }
 
@@ -185,6 +186,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 else //Didnt found correspondences in the database
                 {
                     Logger.Debug("No matches on the database");
+                    
                 }
                 
                 //Gets the Food object found location
@@ -205,6 +207,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 
                 DrawObject(vertexList, foodFound.foodName);
                 
+            }
+            else
+            {
+                Logger.Debug("Didn't find anything in the image");
             }
             
         }

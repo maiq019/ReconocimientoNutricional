@@ -5,7 +5,6 @@ using System.Linq;
 using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ITCL.VisionNutricional.Runtime.Login;
-using ModestTree;
 using TMPro;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
@@ -179,7 +178,6 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             //Loads the main menu with the android back button.
             if (!Input.GetKeyDown(KeyCode.Escape) || IsMenuLoading) return;
             IsMenuLoading = true;
-            Log.Debug("Back button pressed");
             LoadMainMenu();
         }
 
