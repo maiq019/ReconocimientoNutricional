@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using ModestTree;
 using Mono.Data.Sqlite;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -80,10 +81,12 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 if (loadDb.result != UnityWebRequest.Result.Success)
                 {
                     StaticLogger.Error("Database connection error" + loadDb.error);
+                    Log.Error("Database connection error" + loadDb.error);
                 }
                 else
                 {
                     StaticLogger.Debug("Loading database");
+                    Log.Debug("Loading database");
                     File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
                 }
             }
@@ -196,7 +199,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>Inserted user.</returns>
         public static User InsertUser(string email, string userName, string password)
         {
-            User user = new User();
+            User user = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -230,7 +233,6 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return user;
         }
         
@@ -277,7 +279,6 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return user;
         }
         
@@ -289,7 +290,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>Deleted user.</returns>
         public static User DeleteUser(string email, string password)
         {
-            User user = new User();
+            User user = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -311,18 +312,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         user.userName = dataReader.GetString(1);
                         user.password = dataReader.GetString(2);
                     }
-                    
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return user;
         }
         
@@ -356,18 +354,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         user.userName = dataReader.GetString(1);
                         user.password = dataReader.GetString(2);
                     }
-                    
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return user;
         }
 
@@ -377,7 +372,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of users.</returns>
         public static List<User> SelectAllUsers()
         {
-            List<User> usersInDB = new List<User>();
+            List<User> usersInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -399,18 +394,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         usersInDB.Add(userAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return usersInDB;
         }
         
@@ -421,7 +413,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>User with that email.</returns>
         public static User SelectUserByEmail(string email)
         {
-            User user = new User();
+            User user = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -438,18 +430,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         user.userName = dataReader.GetString(1);
                         user.password = dataReader.GetString(2);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return user;
         }
         
@@ -460,7 +449,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of the users in the database with that userName.</returns>
         public static List<User> SelectUserByName(string user)
         {
-            List<User> usersInDB = new List<User>();
+            List<User> usersInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -482,18 +471,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         usersInDB.Add(userAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return usersInDB;
         }
         
@@ -507,7 +493,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>Updated user.</returns>
         public static User UpdateOneUser(string email, string password, string newUserName, string newPassword)
         {
-            User user = new User();
+            User user = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -533,18 +519,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         user.userName = dataReader.GetString(1);
                         user.password = dataReader.GetString(2);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return user;
         }
 
@@ -566,7 +549,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>Inserted food.</returns>
         public static Food InsertFood(string fName, float calories, float fat, float saturatedFat, float carbHyd, float sugar, float protein, float salt)
         {
-            Food food = new Food();
+            Food food = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -589,18 +572,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         food.protein = dataReader.GetFloat(6);
                         food.salt = dataReader.GetFloat(7);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return food;
         }
         
@@ -636,18 +616,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         food.protein = dataReader.GetFloat(6);
                         food.salt = dataReader.GetFloat(7);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return food;
         }
         
@@ -658,7 +635,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>Deleted food.</returns>
         public static Food DeleteFood(string foodName)
         {
-            Food food = new Food();
+            Food food = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -680,18 +657,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         food.protein = dataReader.GetFloat(6);
                         food.salt = dataReader.GetFloat(7);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return food;
         }
         
@@ -724,18 +698,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         food.protein = dataReader.GetFloat(6);
                         food.salt = dataReader.GetFloat(7);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return food;
         }
         
@@ -745,7 +716,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of foods.</returns>
         public static List<Food> SelectAllFoods()
         {
-            List<Food> foodsInDB = new List<Food>();
+            List<Food> foodsInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -772,18 +743,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         foodsInDB.Add(foodAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return foodsInDB;
         }
         
@@ -805,7 +773,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>The food with that name.</returns>
         public static Food SelectFoodByName(string foodName)
         {
-            Food food = new Food();
+            Food food = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -827,18 +795,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         food.protein = dataReader.GetFloat(6);
                         food.salt = dataReader.GetFloat(7);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return food;
         }
 
@@ -856,7 +821,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>Updated food.</returns>
         public static Food UpdateOneFood(string foodName, float newCalories, float newFat, float newSatFat, float newCarbhyd, float newSugar, float newProtein, float newSalt)
         {
-            Food food = new Food();
+            Food food = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -895,18 +860,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         food.protein = dataReader.GetFloat(6);
                         food.salt = dataReader.GetFloat(7);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return food;
         }
 
@@ -964,18 +926,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         entry.salt = dataReader.GetFloat(8);
                         entry.date = dataReader .GetString(9);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entry;
         }
         
@@ -988,7 +947,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of historic entries.</returns>
         public static HistoricEntry DeleteEntry(string userEmail, string foodName, string date)
         {
-            HistoricEntry entry = new HistoricEntry();
+            HistoricEntry entry = new();
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
                 _dbConnection.Open();
@@ -1017,18 +976,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         entry.salt = dataReader.GetFloat(8);
                         entry.date = dataReader .GetString(9);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entry;
         }
 
@@ -1070,18 +1026,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         entry.salt = dataReader.GetFloat(8);
                         entry.date = dataReader .GetString(9);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entry;
         }
         
@@ -1091,7 +1044,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of entries.</returns>
         public static List<HistoricEntry> SelectAllEntries()
         {
-            List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
+            List<HistoricEntry> entriesInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -1125,18 +1078,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         entriesInDB.Add(entryAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entriesInDB;
         }
         
@@ -1147,7 +1097,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of historic entries.</returns>
         public static List<HistoricEntry> SelectAllEntriesFromUser(string userEmail)
         {
-            List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
+            List<HistoricEntry> entriesInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -1181,18 +1131,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         entriesInDB.Add(entryAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entriesInDB;
         }
         
@@ -1203,7 +1150,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns>List of historic entries.</returns>
         public static List<HistoricEntry> SelectAllEntriesWithFood(string foodName)
         {
-            List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
+            List<HistoricEntry> entriesInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -1237,18 +1184,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         entriesInDB.Add(entryAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entriesInDB;
         }
         
@@ -1260,7 +1204,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns></returns>
         public static List<HistoricEntry> SelectAllEntriesFromUserAndFood(string userEmail, string foodName)
         {
-            List<HistoricEntry> entriesInDB = new List<HistoricEntry>();
+            List<HistoricEntry> entriesInDB = new();
 
             using (_dbConnection = new SqliteConnection(_dbUri))
             {
@@ -1294,18 +1238,15 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         };
                         entriesInDB.Add(entryAux);
                     }
-
                     dataReader.Close();
                 }
                 catch (Exception e)
                 {
                     StaticLogger.Error(e.ToString());
                 }
-                
                 dbCommand.Dispose();
                 _dbConnection.Close();
             }
-
             return entriesInDB;
         }
 

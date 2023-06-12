@@ -209,6 +209,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CloudRec.RectangleHid.Show(false);
             Background.texture = BackCam;
             Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+            Background.rectTransform.anchorMin = new Vector2(-700, -700);
+            Background.rectTransform.anchorMax = new Vector2(600, 600);
             Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
             BackCam.Play();
             ShowScreenshotButton();
