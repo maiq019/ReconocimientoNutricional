@@ -69,16 +69,23 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
             
             if (!File.Exists(filepath))
             {
-                UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
+                WWW loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
+
+                while (!loadDb.isDone) { }
+                
+                File.WriteAllBytes(filepath, loadDb.bytes);
+                
+                /*UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".s3db");
 
                 if (loadDb.result != UnityWebRequest.Result.Success)
                 {
-                    StaticLogger.Error("database connection error" + loadDb.error);
+                    StaticLogger.Error("Database connection error" + loadDb.error);
                 }
                 else
                 {
+                    StaticLogger.Debug("Loading database");
                     File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
-                }
+                }*/
             }
 
             yield return new WaitForEndOfFrame();

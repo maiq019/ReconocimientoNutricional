@@ -170,13 +170,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CamAvailable = true;
             
             Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
         }
 
         private void OnEnable()
         {
-            //TouchManager.OnStartZoom += StartZoom;
-            //TouchManager.OnStopZoom += StopZoom;
-
             BackButtonSus += BackButtonPress;
             //SendButtonSus += () => CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
             SendButtonSus += () => CloudApi.SendImageToCloudVisionTest();
@@ -194,78 +192,18 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private void Update()
         {
             //Loads the main menu with the android back button.
-            if (Input.GetKeyDown(KeyCode.Escape) && !IsMenuLoading)
+            if (!Input.GetKeyDown(KeyCode.Escape) || IsMenuLoading) return;
+            if (BackCam.isPlaying)
             {
-                if (BackCam.isPlaying)
-                {
-                    IsMenuLoading = true;
-                    CoroutineRunner.RunRoutine(MainMenuLoader);
-                }
-                else
-                {
-                    StartCamera();
-                }
+                IsMenuLoading = true;
+                CoroutineRunner.RunRoutine(MainMenuLoader);
             }
-            
-            /*
-            //Checks if there is a camera, if it is playing and if there is not a screenshot being taken.
-            if (!CamAvailable || !BackCam.isPlaying || TakingScreenshot) return;
-
-            //Checks and fixes if the device is upside-down.
-            CameraInverted = BackCam.videoVerticallyMirrored;
-            Background.rectTransform.localScale = IsCameraVerticallyMirrored()
-                ? new Vector3(1, -1, 1)
-                : new Vector3(1, 1, 1);
-
-            //Checks and adjust if the device is vertical or horizontal.
-            switch (BackCam.videoRotationAngle)
+            else
             {
-                case 90:
-                case -90:
-                    CameraVertical = true;
-                    ShowScreenshotButtonVertical();
-                    Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
-                    break;
-                case 0:
-                    CameraVertical = false;
-                    ShowScreenshotButtonHorizontal();
-                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
-                    break;
-                case 180:
-                case -180:
-                    CameraVertical = false;
-                    CameraInverted = true;
-                    ShowScreenshotButtonHorizontal();
-                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
-                    break;
-                default:
-                    Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
-                    break;
+                StartCamera();
             }
-
-            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -BackCam.videoRotationAngle);
-            */
-        }
-    
-        /*
-        /// <summary>
-        /// Consult warp for the mirrored indicator from the camera.
-        /// </summary>
-        private bool IsCameraVerticallyMirrored()
-        {
-            return CameraInverted;
         }
 
-        /// <summary>
-        /// Consult warp for the vertical indicator of the camera.
-        /// </summary>
-        /// <returns></returns>
-        private bool IsCameraVertical()
-        {
-            return CameraVertical;
-        }
-        */
-        
         private void ShowScreenshotButton(bool show = true)
         {
             UIHide.Show();
@@ -282,6 +220,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CloudRec.RectangleHid.Show(false);
             BackCam.Play();
             Background.texture = BackCam;
+            Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
             ShowScreenshotButton();
         }
 
@@ -292,19 +232,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         public void StopCamera(Texture2D capture)
         {
             BackCam.Stop();
-            /*
-            if (IsCameraVerticallyMirrored())
-                Background.rectTransform.localScale = IsCameraVertical() ? new Vector3(1, -1, 1) : new Vector3(-1, -1, 1);
-            else Background.rectTransform.localScale = new Vector3(1, 1, 1);
-
-            Background.rectTransform.localEulerAngles = IsCameraVertical()
-                ? new Vector3(0, 0, -BackCam.videoRotationAngle + 90)
-                : new Vector3(0, 0, -BackCam.videoRotationAngle);
-            Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
-            */
             
             Background.texture = capture;
-            Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
+            Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+            Background.rectTransform.localEulerAngles = new Vector3(0, 0, 0);
             ShowSendButton();
         }
         
