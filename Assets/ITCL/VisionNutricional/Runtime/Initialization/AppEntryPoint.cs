@@ -40,16 +40,8 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// </summary>
         private void OnEnable()
         {
-            if (Application.platform == RuntimePlatform.Android)
-            {
-                CoroutineRunner.RunRoutine(PermissionsAndDBCoroutine());
-            }
-            else
-            {
-                DB.CreateDataBase();
-                CoroutineRunner.RunRoutine(FillDbCoroutine());
-            }
-            
+            CoroutineRunner.RunRoutine(Application.platform == RuntimePlatform.Android ? PermissionsAndDBCoroutine() : FillDbCoroutine());
+
             CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
                 sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 1));
         }
@@ -72,13 +64,12 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
                 yield return new WaitForSeconds(1);
             }
             
-            DB.CreateDataBase();
             CoroutineRunner.RunRoutine(FillDbCoroutine());
         }
 
         private IEnumerator FillDbCoroutine()
         {
-            DB.CreateDataBase();
+            yield return DB.CreateDataBase();
             yield return new WaitForEndOfFrame();
             DB.ClearDatabase();
             DB.CreateDatabaseTables();

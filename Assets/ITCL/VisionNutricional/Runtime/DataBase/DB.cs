@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Mono.Data.Sqlite;
 using UnityEngine;
+using UnityEngine.Networking;
 using WhateverDevs.Core.Runtime.Common;
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -60,19 +62,30 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// Creates the database connection.
         /// </summary>
         /// <returns></returns>
-        public static IDbConnection CreateDataBase()
+        public static IEnumerator CreateDataBase()
         {
             // Open a connection to the database.
-            string filepath = Application.persistentDataPath + "/" + DBName+ ".sqlite";
-            _dbUri = "URI=file:" + filepath;
-
+            string filepath = Application.persistentDataPath + "/" + DBName + ".sqlite"; //.s3db";
+            
             if (!File.Exists(filepath))
             {
-                File.Create(filepath);
+                UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
+
+                if (loadDb.result != UnityWebRequest.Result.Success)
+                {
+                    StaticLogger.Error("database connection error" + loadDb.error);
+                }
+                else
+                {
+                    File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
+                }
             }
+
+            yield return new WaitForEndOfFrame();
+            
+            _dbUri = "URI=file:" + filepath;
             
             _dbConnection = new SqliteConnection(_dbUri);
-            return _dbConnection;
         }
         
         public static IDbConnection GetDB() => _dbConnection;
