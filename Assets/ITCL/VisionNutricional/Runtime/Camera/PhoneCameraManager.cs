@@ -2,7 +2,6 @@ using System.Collections;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using ModestTree;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
@@ -10,6 +9,7 @@ using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
 using WhateverDevs.SceneManagement.Runtime.SceneManagement;
 using Zenject;
+using static UnityEngine.Screen;
 
 namespace ITCL.VisionNutricional.Runtime.Camera
 {
@@ -79,7 +79,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Hidable for the vertical screenshot button.
         /// </summary>
-        [FormerlySerializedAs("ScreenshotButtonVertical")] [SerializeField] private HidableUiElement ScreenshotButton;
+        [SerializeField] private HidableUiElement ScreenshotButton;
+
+        /// <summary>
+        /// Reference to the screenshot script.
+        /// </summary>
+        [SerializeField] private ScreenShotButton ScreenshotScript;
 
         /// <summary>
         /// Flag to know when a screenshot is being captured.
@@ -155,7 +160,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             foreach (WebCamDevice cam in devices)
             {
                 Log.Debug("Found camera " + cam.name + !cam.isFrontFacing);
-                if (!cam.isFrontFacing) BackCam = new WebCamTexture(cam.name, Screen.width, Screen.height);
+                if (!cam.isFrontFacing) BackCam = new WebCamTexture(cam.name, width, height);
             }
 
             if (BackCam == null)
@@ -173,8 +178,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private void OnEnable()
         {
             BackButtonSus += BackButtonPress;
-            //SendButtonSus += () => CloudApi.SendImageToCloudVision(ScreenShotButtonComponent.screenshot);
-            SendButtonSus += () => CloudApi.SendImageToCloudVisionTest();
+            SendButtonSus += () => CloudApi.SendImageToCloudVision(ScreenshotScript.screenshot);
+            //SendButtonSus += () => CloudApi.SendImageToCloudVisionTest();
             //SendButtonSus += SendImageFake2;
         }
 
@@ -207,13 +212,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             //Play the camera image on the scene background
             CloudRec.RectangleHid.Show(false);
-            Background.texture = BackCam;
-            Background.rectTransform.sizeDelta = new Vector2(Screen.height, Screen.width);
-            Background.rectTransform.anchorMin = new Vector2(-700, -700);
-            Background.rectTransform.anchorMax = new Vector2(600, 600);
-            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
             BackCam.Play();
+            //Background.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            //Background.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            Background.rectTransform.sizeDelta = new Vector2(height, width);
+            Background.rectTransform.localEulerAngles = new Vector3(0, 0, -90);
             ShowScreenshotButton();
+            Background.texture = BackCam;
         }
 
         /// <summary>
@@ -225,7 +230,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             BackCam.Stop();
             
             Background.texture = capture;
-            Background.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+            Background.rectTransform.sizeDelta = new Vector2(width, height);
             Background.rectTransform.localEulerAngles = new Vector3(0, 0, 0);
             ShowSendButton();
         }

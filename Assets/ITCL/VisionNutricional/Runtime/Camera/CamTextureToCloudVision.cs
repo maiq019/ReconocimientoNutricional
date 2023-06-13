@@ -231,7 +231,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         
         protected internal void SendImageToCloudVision(Texture2D image)
         {
-            if (APIKey.IsNullEmptyOrWhiteSpace()) Log.Error(localizer["Debug/ApiKeyError"]); //Logger.Error(localizer["Debug/ApiKeyError"]);
+            if (APIKey.IsNullEmptyOrWhiteSpace()) Logger.Error(localizer["Debug/ApiKeyError"]); //Logger.Error(localizer["Debug/ApiKeyError"]);
             else StartCoroutine(SendImageToCloudVisionCoroutine(image));
         }
 
@@ -290,12 +290,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             if (www.result != UnityWebRequest.Result.Success)
             {
                 //Logger.Error("CONNECTION ERROR " + www.error);
-                Log.Error("CONNECTION ERROR " + www.error);
+                Logger.Error("CONNECTION ERROR " + www.error);
             }
             else
             {
                 //Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
-                Log.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
+                Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
                 AnnotateImageResponses responses = JsonUtility.FromJson<AnnotateImageResponses>(www.result.ToString());
                 // SendMessage, BroadcastMessage or something like that.
                 OnCloudResponse?.Invoke(responses);

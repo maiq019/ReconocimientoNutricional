@@ -82,11 +82,13 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 {
                     StaticLogger.Error("Database connection error" + loadDb.error);
                     Log.Error("Database connection error" + loadDb.error);
+                    StaticLogger.Error("Database connection error" + loadDb.error);
                 }
                 else
                 {
                     StaticLogger.Debug("Loading database");
                     Log.Debug("Loading database");
+                    StaticLogger.Debug("Loading database");
                     File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
                 }
             }
