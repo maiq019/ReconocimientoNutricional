@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -10,6 +11,7 @@ using TMPro;
 using UnityEngine;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Ui;
+using WhateverDevs.Localization.Runtime;
 using WhateverDevs.Localization.Runtime.Ui;
 using Zenject;
 
@@ -18,9 +20,83 @@ namespace ITCL.VisionNutricional.Runtime.Camera
     public class CloudReceiver : WhateverBehaviour<CloudReceiver>
     {
         /// <summary>
+        /// Reference to the localizer.
+        /// </summary>
+        [Inject] private ILocalizer localizer;
+        
+        #region RectangleButton
+        /// <summary>
+        /// Reference to the rectangle object transform.
+        /// </summary>
+        [SerializeField] private GameObject Rectangle;
+
+        /// <summary>
+        /// Reference to the text identifier of the rectangle.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro RectangleText;
+
+        /// <summary>
+        /// Reference to the hidable for the rectangle.
+        /// </summary>
+        public HidableUiElement RectangleHid;
+        
+        /// <summary>
+        /// Reference to the rectangle button subscribable.
+        /// </summary>
+        private EasySubscribableButton RectangleSus;
+        
+        /// <summary>
+        /// Reference to the rectangle object transform.
+        /// </summary>
+        private RectTransform RectangleRectTransform;
+        
+        /// <summary>
+        /// Factory for the vertical bar.
+        /// </summary>
+        [Inject] private VerticalBar.Factory VerticalBarFactory;
+        
+        /// <summary>
+        /// Factory for the horizontal bar.
+        /// </summary>
+        [Inject] private HorizontalBar.Factory HorizontalBarFactory;
+        
+        /// <summary>
+        /// Width of the rectangle bars.
+        /// </summary>
+        [SerializeField] private float RectangleWidth = 100;
+
+        /// <summary>
+        /// Offset of the rectangle bars.
+        /// </summary>
+        [SerializeField] private float RectangleOffsize = 15;
+        
+        #endregion
+        
+        #region EntryPopup
+        /// <summary>
         /// Reference to the food name localizer.
         /// </summary>
         [SerializeField] private LocalizedTextMeshPro FoodName;
+
+        /// <summary>
+        /// Reference to the food selection button.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton FoodSelectionButton;
+
+        /// <summary>
+        /// Reference to the food name selector hidable.
+        /// </summary>
+        [SerializeField] private HidableUiElement FoodSelectionHid;
+        
+        /// <summary>
+        /// Factory for the entry buttons.
+        /// </summary>
+        [Inject] private SelectableFood.Factory SelectableButtonFactory;
+        
+        /// <summary>
+        /// Content field where to place the name buttons.
+        /// </summary>
+        [SerializeField] private Transform Content;
 
         /// <summary>
         /// Reference to the calories value.
@@ -76,56 +152,22 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// Reference to the entry popup's register button subscribable.
         /// </summary>
         [SerializeField] private EasySubscribableButton RegisterEntryPopupSus;
-        
-        /// <summary>
-        /// Reference to the rectangle object transform.
-        /// </summary>
-        [SerializeField] private GameObject Rectangle;
 
-        /// <summary>
-        /// Reference to the text identifier of the rectangle.
-        /// </summary>
-        [SerializeField] private LocalizedTextMeshPro RectangleText;
+        #endregion
 
-        /// <summary>
-        /// Reference to the hidable for the rectangle.
-        /// </summary>
-        public HidableUiElement RectangleHid;
+        [SerializeField] public HidableUiElement MessageHide;
         
-        /// <summary>
-        /// Reference to the rectangle button subscribable.
-        /// </summary>
-        private EasySubscribableButton RectangleSus;
+        [SerializeField] private LocalizedTextMeshPro Message;
         
-        /// <summary>
-        /// Reference to the rectangle object transform.
-        /// </summary>
-        private RectTransform RectangleRectTransform;
-        
-        /// <summary>
-        /// Factory for the vertical bar.
-        /// </summary>
-        [Inject] private VerticalBar.Factory VerticalBarFactory;
-        
-        /// <summary>
-        /// Factory for the horizontal bar.
-        /// </summary>
-        [Inject] private HorizontalBar.Factory HorizontalBarFactory;
-        
-        /// <summary>
-        /// Width of the rectangle bars.
-        /// </summary>
-        [SerializeField] private float RectangleWidth = 100;
-
-        /// <summary>
-        /// Offset of the rectangle bars.
-        /// </summary>
-        [SerializeField] private float RectangleOffsize = 15;
-
         /// <summary>
         /// Reference to the food found name.
         /// </summary>
-        private string FoundFoodName;
+        protected internal string FoundFoodName;
+
+        /// <summary>
+        /// Flag to know if a food has been found in the database.
+        /// </summary>
+        private bool FoodFound = false;
 
 
         private void Awake()
@@ -137,20 +179,32 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         private void OnEnable()
         {
+            MessageHide.Show(false);
             RectangleHid.Show(false);
             EntryPopupHid.Show(false);
             FormatErrorHid.Show(false);
-
+            FoodSelectionHid.Show(false);
+            
+            
             CamTextureToCloudVision.OnCloudResponse += CloudResponse;
-            RectangleSus += ()=> EntryPopupHid.Show();
-            RectangleSus+= () => FormatErrorHid.Show(false);
+            RectangleSus += RectangleClicked;
+            
+            FoodSelectionButton += () => FoodSelectionHid.Show();
+            
             CancelEntrySus += ()=> EntryPopupHid.Show(false);
             RegisterEntryPopupSus += RegisterEntry;
         }
 
+        /// <summary>
+        /// Responsible for the interpretation of the cloud api response.
+        /// </summary>
+        /// <param name="responses">Cloud api responses.</param>
         [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
         private void CloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
         {
+            MessageHide.Show(false);
+            List<CamTextureToCloudVision.Vertex> vertexList = new();
+            
             //Checks for lack of responses.
             if (responses.responses.Count <= 0) return;
             //Checks the labels from the responses, this is the objects detected on the image.
@@ -182,37 +236,74 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                     SugarValue.text = foodFound.sugar.ToString() != "-1" ? foodFound.sugar.ToString() : "";
                     ProteinValue.text = foodFound.protein.ToString() != "-1" ? foodFound.protein.ToString() : "";
                     SaltValue.text = foodFound.salt.ToString() != "-1" ? foodFound.salt.ToString() : "";
+                    
+                    //Gets the Food object found location
+                    List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
+                    foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects.Where(_ => name.Contains(foodFound.foodName)))
+                    {
+                        vertexList = obj.boundingPoly.normalizedVertices;
+                    }
+
+                    if (vertexList.IsEmpty())
+                    {
+                        foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects)
+                        {
+                            if (obj.name.Equals("Food")) vertexList = obj.boundingPoly.normalizedVertices;
+                        }
+                    }
+
+                    FoodFound = true;
+                    DrawObject(vertexList, foodFound.foodName);
                 }
                 else //Didnt found correspondences in the database
                 {
                     Logger.Debug("No matches on the database");
+                    MessageHide.Show();
+                    Message.SetValue("Common/Camera/NoMatch");
                     
-                }
-                
-                //Gets the Food object found location
-                List<CamTextureToCloudVision.Vertex> vertexList = new();
-                List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
-                foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects.Where(_ => name.Contains(foodFound.foodName)))
-                {
-                    vertexList = obj.boundingPoly.normalizedVertices;
-                }
+                    
 
-                if (vertexList.IsEmpty())
-                {
-                    foreach (CamTextureToCloudVision.EntityAnnotation obj in localizedObjects)
-                    {
-                        if (obj.name.Equals("Food")) vertexList = obj.boundingPoly.normalizedVertices;
-                    }
+                    StartCoroutine(FillSelectableNamesCoroutine(labelsDescriptions));
+                    
+                    //Gets the first object location
+                    List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
+                    vertexList = localizedObjects[0].boundingPoly.normalizedVertices;
+                    FoodFound = false;
+                    DrawObject(vertexList, localizer["Common/Camera/SelectFood"]);
                 }
-                
-                DrawObject(vertexList, foodFound.foodName);
-                
             }
             else
             {
                 Logger.Debug("Didn't find anything in the image");
             }
-            
+        }
+
+        /// <summary>
+        /// Coroutine that creates and sets buttons to select the food found name.
+        /// </summary>
+        /// <param name="nameList"></param>
+        /// <returns></returns>
+        private IEnumerator FillSelectableNamesCoroutine(List<string> nameList)
+        {
+            foreach (string foodName in nameList)
+            {
+                SelectableFood selectable = SelectableButtonFactory.CreateUiGameObject(Content);
+                yield return new WaitForEndOfFrame();
+                selectable.SetFood(foodName);
+                        
+                selectable.ButtonSus.OnButtonClicked += () => SelectFoodName(foodName);
+            }
+        }
+
+        /// <summary>
+        /// Auxiliary function to set the selected food name.
+        /// </summary>
+        /// <param name="foodName"></param>
+        private void SelectFoodName(string foodName)
+        {
+            FoundFoodName = foodName;
+            FoodName.SetValue(FoundFoodName);
+            FoodSelectionHid.Show(false);
         }
 
         /// <summary>
@@ -220,11 +311,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         /// <param name="vertices">List of vertices in a 2d space.</param>
         /// <param name="foodName">Name of the food drawn.</param>
+        /// <param name="found">Flag for the display name of the food.</param>
         private void DrawObject(List<CamTextureToCloudVision.Vertex> vertices, string foodName)
         {
             RectangleHid.Show();
 
-            RectangleText.SetValue("Foods/" + foodName);
+            if (FoodFound) RectangleText.SetValue("Foods/" + foodName);
+            else RectangleText.SetValue(foodName);
+            
             FoundFoodName = foodName;
                 
             float top = 1f;
@@ -256,6 +350,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             
             HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(RectangleRectTransform);
             botSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
+        }
+
+        private void RectangleClicked()
+        {
+            if (FoodFound) FoodName.SetValue("Foods/"+FoundFoodName);
+            else FoodName.SetValue("Common/Camera/SelectFood");
+            EntryPopupHid.Show();
+            FormatErrorHid.Show(false);
         }
 
         /// <summary>

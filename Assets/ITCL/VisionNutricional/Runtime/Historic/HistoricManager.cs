@@ -35,7 +35,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <summary>
         /// Factory for the entry buttons.
         /// </summary>
-        [Inject] private HistoricEntryManager.Factory buttonFactory;
+        [Inject] private HistoricEntryManager.Factory ButtonFactory;
         
         /// <summary>
         /// Reference to this scene.
@@ -78,7 +78,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         [SerializeField] private HidableUiElement SearchErrorHid;
 
         /// <summary>
-        /// Content field where to place the exercise buttons.
+        /// Content field where to place the entry buttons.
         /// </summary>
         [SerializeField] private Transform Content;
 
@@ -218,7 +218,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
 
             foreach (DB.HistoricEntry entry in entries)
             {
-                HistoricEntryManager button = buttonFactory.CreateUiGameObject(Content);
+                HistoricEntryManager button = ButtonFactory.CreateUiGameObject(Content);
                 yield return new WaitForEndOfFrame();
                 button.SetData(entry);
 

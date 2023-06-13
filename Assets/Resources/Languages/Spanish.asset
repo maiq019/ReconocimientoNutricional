@@ -114,6 +114,11 @@ MonoBehaviour:
       Value: 'Comida encontrada: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
       Value: "Por favor introduce los valores vac\xEDos en la tabla."
+    - Key: Common/Camera/NoMatch
+      Value: No se ha encontrado ninguna coincidencia con la base de datos, puede
+        registrar una nueva comida
+    - Key: Common/Camera/SelectFood
+      Value: 'Seleccionar comida:'
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu
@@ -133,8 +138,8 @@ MonoBehaviour:
         del 'SendButton' en la escena de camara.
     - Key: Foods/Bread
       Value: Pan
-    - Key: Foods/Pasta
-      Value: Pasta
+    - Key: Foods/Spaghetti
+      Value: Espagueti
     - Key: Foods/Rice
       Value: Arroz
     - Key: Foods/Beef Meat

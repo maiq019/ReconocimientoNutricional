@@ -113,6 +113,10 @@ MonoBehaviour:
       Value: 'Food found: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
       Value: Please insert the empty values in the table.
+    - Key: Common/Camera/NoMatch
+      Value: No database match found, you can register a new food
+    - Key: Common/Camera/SelectFood
+      Value: 
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu
@@ -132,8 +136,8 @@ MonoBehaviour:
         of the 'SendButton' on the camera scene.
     - Key: Foods/Bread
       Value: Bread
-    - Key: Foods/Pasta
-      Value: Pasta
+    - Key: Foods/Spaghetti
+      Value: Spaghetti
     - Key: Foods/Rice
       Value: Rice
     - Key: Foods/Beef Meat

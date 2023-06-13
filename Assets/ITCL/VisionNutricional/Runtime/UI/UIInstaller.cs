@@ -1,3 +1,4 @@
+using ITCL.VisionNutricional.Runtime.Camera;
 using ITCL.VisionNutricional.Runtime.Historic;
 using UnityEngine;
 using Zenject;
@@ -18,6 +19,8 @@ namespace ITCL.VisionNutricional.Runtime.UI
         [SerializeField] private VerticalBar VBar;
         
         [SerializeField] private HorizontalBar HBar;
+
+        [SerializeField] private SelectableFood SelectableF;
         
         /// <summary>
         /// Reference injections.
@@ -39,6 +42,12 @@ namespace ITCL.VisionNutricional.Runtime.UI
             Container.BindFactory<HorizontalBar,
                     HorizontalBar.Factory>()
                 .FromComponentInNewPrefab(HBar)
+                .AsSingle()
+                .Lazy();
+            
+            Container.BindFactory<SelectableFood,
+                    SelectableFood.Factory>()
+                .FromComponentInNewPrefab(SelectableF)
                 .AsSingle()
                 .Lazy();
         }
