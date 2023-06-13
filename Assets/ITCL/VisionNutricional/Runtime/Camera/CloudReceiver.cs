@@ -381,6 +381,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 };
                 
                 DB.InsertIntoHistoric(Session.Email, foodEntry);
+
+                if (!FoodFound) DB.InsertFood(foodEntry);
                 
                 EntryPopupHid.Show(false);
             }
