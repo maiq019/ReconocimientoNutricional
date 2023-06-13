@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using ModestTree;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -232,72 +233,70 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         protected internal void SendImageToCloudVision(Texture2D image)
         {
             if (APIKey.IsNullEmptyOrWhiteSpace()) Logger.Error(localizer["Debug/ApiKeyError"]); //Logger.Error(localizer["Debug/ApiKeyError"]);
-            else StartCoroutine(SendImageToCloudVisionCoroutine(image));
+            else
+            {
+                byte[] jpg = image.EncodeToJPG();
+                string base64Image = Convert.ToBase64String(jpg);
+
+                AnnotateImageRequests requests = new () { requests = new List<AnnotateImageRequest>() };
+
+                AnnotateImageRequest request = new ()
+                {
+                    image = new Image { content = base64Image },
+                    features = new List<Feature>()
+                };
+
+                Feature objectFeature = new()
+                {
+                    type = "OBJECT_LOCALIZATION",
+                    maxResults = MaxResults
+                };
+
+                Feature feature = new ()
+                {
+                    type = Feature_Type.ToString(),
+                    maxResults = MaxResults
+                };
+
+                request.features.Add(objectFeature);
+                request.features.Add(feature);
+                requests.requests.Add(request);
+
+                string jsonData = JsonUtility.ToJson(requests, false);
+                if (jsonData == string.Empty) return;
+                
+                System.IO.File.WriteAllText(Application.persistentDataPath+"Data.json", jsonData);
+                
+                StartCoroutine(SendImageToCloudVisionCoroutine(jsonData));
+            }
         }
 
-        private IEnumerator SendImageToCloudVisionCoroutine(Texture2D texture2D)
+        private IEnumerator SendImageToCloudVisionCoroutine(string data)
         {
             if (APIKey.IsNullEmptyOrWhiteSpace()) yield return null;
-            
-            byte[] jpg = texture2D.EncodeToJPG();
-            string base64Image = Convert.ToBase64String(jpg);
-
-            AnnotateImageRequests requests = new () { requests = new List<AnnotateImageRequest>() };
-
-            AnnotateImageRequest request = new ()
-            {
-                image = new Image { content = base64Image },
-                features = new List<Feature>()
-            };
-
-            Feature objectFeature = new()
-            {
-                type = "OBJECT_LOCALIZATION",
-                maxResults = MaxResults
-            };
-
-            Feature feature = new ()
-            {
-                type = Feature_Type.ToString(),
-                maxResults = MaxResults
-            };
-
-            request.features.Add(objectFeature);
-            request.features.Add(feature);
-            requests.requests.Add(request);
-
-            string jsonData = JsonUtility.ToJson(requests, false);
-            if (jsonData == string.Empty) yield return null;
-
-            //WWWForm postData = new WWWForm();
-            //postData.AddField("requests", jsonData);
-            //postData.AddField("requests", JsonUtility.ToJson(request, false));
-            
-            //byte[] postData = System.Text.Encoding.Default.GetBytes(jsonData);
 
             string url = URL + APIKey;
-            
-            UnityWebRequest www = UnityWebRequest.Post(url, jsonData);
-            
-            //UnityWebRequest www = new (url, "POST");
-            //byte[] requestsRaw = Encoding.UTF8.GetBytes(jsonData);
-            //www.uploadHandler = new UploadHandlerRaw(requestsRaw);
-            
+
+            UnityWebRequest www = new(url, UnityWebRequest.kHttpVerbPOST);
             
             www.SetRequestHeader("Content-Type", "application/json; charset=UTF-8");
+
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(data);
+
+            www.uploadHandler = new UploadHandlerRaw(jsonBytes);
+
+            www.downloadHandler = new DownloadHandlerBuffer();
+
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                //Logger.Error("CONNECTION ERROR " + www.error);
-                Logger.Error("CONNECTION ERROR " + www.error);
+                Logger.Error("API CONNECTION ERROR " + www.error);
             }
             else
             {
-                //Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
                 Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
-                AnnotateImageResponses responses = JsonUtility.FromJson<AnnotateImageResponses>(www.result.ToString());
-                // SendMessage, BroadcastMessage or something like that.
+                AnnotateImageResponses responses = JsonUtility.FromJson<AnnotateImageResponses>(www.downloadHandler.text);
                 OnCloudResponse?.Invoke(responses);
             }
             

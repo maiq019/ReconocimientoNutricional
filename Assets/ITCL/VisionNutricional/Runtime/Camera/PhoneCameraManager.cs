@@ -47,11 +47,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         private CloudReceiver CloudRec;
 
         /// <summary>
-        /// Flag to check if there is a camera.
-        /// </summary>
-        private bool CamAvailable;
-
-        /// <summary>
         /// Reference to the back camera image.
         /// </summary>
         private WebCamTexture BackCam;
@@ -151,36 +146,31 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             //Check for some camera detected.
             if (devices.IsEmpty())
             {
-                Log.Error("No camera detected");
-                CamAvailable = false;
+                Logger.Error("No camera detected");
                 return;
             }
 
             //Check for back camera.
             foreach (WebCamDevice cam in devices)
             {
-                Log.Debug("Found camera " + cam.name + !cam.isFrontFacing);
+                Logger.Debug("Found camera " + cam.name + !cam.isFrontFacing);
                 if (!cam.isFrontFacing) BackCam = new WebCamTexture(cam.name, width, height);
             }
 
             if (BackCam == null)
             {
-                Log.Error("Unable to find back camera");
+                Logger.Error("Unable to find back camera");
                 return;
             }
 
             //Starts the back camera found.
             StartCamera();
-            //Camera flag changed.
-            CamAvailable = true;
         }
 
         private void OnEnable()
         {
             BackButtonSus += BackButtonPress;
             SendButtonSus += () => CloudApi.SendImageToCloudVision(ScreenshotScript.screenshot);
-            //SendButtonSus += () => CloudApi.SendImageToCloudVisionTest();
-            //SendButtonSus += SendImageFake2;
         }
 
         private void OnDisable()

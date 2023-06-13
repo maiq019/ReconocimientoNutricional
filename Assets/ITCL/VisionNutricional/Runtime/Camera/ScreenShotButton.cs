@@ -25,20 +25,19 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             yield return new WaitForEndOfFrame();
             //Creates and applies the screenshot texture.
-            Texture2D capture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-            capture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-            capture.Apply();
-            Log.Debug("Capture texture created");
+            screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+            screenshot.Apply();
+            Logger.Debug("Capture texture created");
             //Stops the camera.
-            Camera.StopCamera(capture);
-            screenshot = capture;
+            Camera.StopCamera(screenshot);
             //Finish the screenshot process.
             Camera.TakingScreenshot = false;
             
             yield return new WaitForEndOfFrame();
             //Save the screenshot
             string screenshotName = "Screenshot_Nutrision_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
-            NativeGallery.Permission per = NativeGallery.SaveImageToGallery(capture, "Nutrision", screenshotName);
+            NativeGallery.Permission per = NativeGallery.SaveImageToGallery(screenshot, "Nutrision", screenshotName);
             switch (per)
             {
                 case NativeGallery.Permission.Denied:
