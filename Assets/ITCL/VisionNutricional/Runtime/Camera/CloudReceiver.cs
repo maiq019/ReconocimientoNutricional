@@ -162,12 +162,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the food found name.
         /// </summary>
-        protected internal string FoundFoodName;
+        private string FoundFoodName;
 
         /// <summary>
         /// Flag to know if a food has been found in the database.
         /// </summary>
-        private bool FoodFound = false;
+        private bool FoodFound;
 
 
         private void Awake()
@@ -218,10 +218,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 if (!labelsDescriptions.Contains("Food"))
                 {
                     Logger.Debug("Didn't find a food in the image");
+                    MessageHide.Show();
+                    Message.SetValue("Common/Camera/NoFood");
                     return;
                 }
 
-                DB.Food foodFound = default;
+                DB.Food foodFound;
                 List<string> commons = labelsDescriptions.Intersect(DB.SelectAllFoodNames()).ToList();
                 if (commons.Count > 0)
                 {
@@ -311,7 +313,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         /// <param name="vertices">List of vertices in a 2d space.</param>
         /// <param name="foodName">Name of the food drawn.</param>
-        /// <param name="found">Flag for the display name of the food.</param>
         private void DrawObject(List<CamTextureToCloudVision.Vertex> vertices, string foodName)
         {
             RectangleHid.Show();
@@ -356,8 +357,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             if (FoodFound) FoodName.SetValue("Foods/"+FoundFoodName);
             else FoodName.SetValue("Common/Camera/SelectFood");
-            EntryPopupHid.Show();
+            FoodSelectionHid.Show(false);
             FormatErrorHid.Show(false);
+            EntryPopupHid.Show();
         }
 
         /// <summary>

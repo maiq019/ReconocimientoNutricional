@@ -23,27 +23,27 @@ MonoBehaviour:
     salt: 0
   - foodName: Spaghetti
     calories: 221
-    fat: 13
+    fat: 1.3
     saturatedFat: -1
-    carbHyd: 432
-    sugar: 17
-    protein: 81
-    salt: 5
+    carbHyd: 43.2
+    sugar: 1.7
+    protein: 8.1
+    salt: 0.05
   - foodName: Rice
     calories: 121
-    fat: 38
-    saturatedFat: 9
+    fat: 0.38
+    saturatedFat: 0.09
     carbHyd: 25
-    sugar: 5
-    protein: 35
-    salt: 12
+    sugar: 0.05
+    protein: 305
+    salt: 0.012
   - foodName: Beef Meat
     calories: 201
-    fat: 81
+    fat: 8.1
     saturatedFat: 0
     carbHyd: 0
     sugar: 0
-    protein: 338
+    protein: 33.8
     salt: 0
   - foodName: Chicken Meat
     calories: 158
@@ -56,8 +56,8 @@ MonoBehaviour:
   - foodName: Sandwich
     calories: 240
     fat: 11
-    saturatedFat: 88
-    carbHyd: 217
-    sugar: 34
-    protein: 1287
+    saturatedFat: 0.88
+    carbHyd: 21.7
+    sugar: 3.4
+    protein: 12.87
     salt: -1

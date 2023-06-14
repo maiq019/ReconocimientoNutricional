@@ -21,7 +21,8 @@
         "Mono.Data.Sqlite.dll",
         "Sirenix.OdinInspector.Attributes.dll",
         "Zenject-usage.dll",
-        "Sirenix.Utilities.dll"
+        "Sirenix.Utilities.dll",
+        "Mono.Data.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

@@ -109,10 +109,14 @@ MonoBehaviour:
       Value: Are you sure you want to delete this history entry? Can't be recovered
     - Key: Common/Historic/SearchError
       Value: The food was not found in the database
+    - Key: Common/Historic/GraphButton
+      Value: View graph
     - Key: Common/Camera/EntryPopup/FoodFound
       Value: 'Food found: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
       Value: Please insert the empty values in the table.
+    - Key: Common/Camera/NoFood
+      Value: No food was found in the image, try to focus the food better
     - Key: Common/Camera/NoMatch
       Value: No database match found, you can register a new food
     - Key: Common/Camera/SelectFood

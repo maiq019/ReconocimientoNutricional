@@ -71,9 +71,9 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         {
             yield return DB.CreateDataBase();
             yield return new WaitForEndOfFrame();
-            DB.ClearDatabase();
-            DB.CreateDatabaseTables();
-            yield return new WaitForEndOfFrame();
+            //DB.ClearDatabase();
+            //DB.CreateDatabaseTables();
+            //yield return new WaitForEndOfFrame();
             DB.InsertUser("user0@gmail.com", "user0", "Aa000");
             DB.InsertUser("user1@gmail.com", "user1", "Aa111");
 

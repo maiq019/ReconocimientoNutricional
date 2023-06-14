@@ -17,3 +17,4 @@ MonoBehaviour:
   HBar: {fileID: 6040365759587757342, guid: c30b798c13b41334c89020ef335c5a38, type: 3}
   SelectableF: {fileID: 2933902349686025944, guid: fc797a79a1ed55b49beedc489456ab0e,
     type: 3}
+  GPoint: {fileID: 2072489918890351036, guid: b7806baf2fad99640a971948d86cf607, type: 3}

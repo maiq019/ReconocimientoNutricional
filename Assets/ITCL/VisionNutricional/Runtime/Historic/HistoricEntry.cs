@@ -8,7 +8,7 @@ using WhateverDevs.Localization.Runtime.Ui;
 
 namespace ITCL.VisionNutricional.Runtime.Historic
 {
-    public class HistoricEntryManager : WhateverBehaviour<HistoricEntryManager>
+    public class HistoricEntry : WhateverBehaviour<HistoricEntry>
     {
         /// <summary>
         /// Reference to the button subscribable.
@@ -49,7 +49,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         }
 
         // ReSharper disable once ClassNeverInstantiated.Global
-        public class Factory : GameObjectFactory<HistoricEntryManager>
+        public class Factory : GameObjectFactory<HistoricEntry>
         {
         }
     }

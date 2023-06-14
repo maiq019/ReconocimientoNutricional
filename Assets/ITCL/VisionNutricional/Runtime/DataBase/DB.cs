@@ -19,7 +19,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DB : Loggable<DB>
     {
-        private const string DBName = "NutricionDatabase";
+        private const string DBName = "NutricionDatabase.s3db";
         private static string _dbUri;
         private static IDbConnection _dbConnection;
         
@@ -65,39 +65,40 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// <returns></returns>
         public static IEnumerator CreateDataBase()
         {
-            // Open a connection to the database.
-            string filepath = Application.persistentDataPath + "/" + DBName + ".s3db"; //.sqlite";
+            string filepath = Application.persistentDataPath + "/" + DBName;
             
             if (!File.Exists(filepath))
             {
                 /*WWW loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
-
                 while (!loadDb.isDone) { }
-                
                 File.WriteAllBytes(filepath, loadDb.bytes);*/
                 
-                UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".s3db");
-
+#if UNITY_ANDROID
+                
+                //UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName);
+                UnityWebRequest loadDb = new(Application.streamingAssetsPath + "/" + DBName);
+                yield return loadDb;
                 if (loadDb.result != UnityWebRequest.Result.Success)
                 {
                     StaticLogger.Error("Database connection error" + loadDb.error);
                     Log.Error("Database connection error" + loadDb.error);
-                    StaticLogger.Error("Database connection error" + loadDb.error);
                 }
                 else
                 {
                     StaticLogger.Debug("Loading database");
                     Log.Debug("Loading database");
-                    StaticLogger.Debug("Loading database");
                     File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
                 }
+#endif
             }
 
             yield return new WaitForEndOfFrame();
-            
+
             _dbUri = "URI=file:" + filepath;
             
             _dbConnection = new SqliteConnection(_dbUri);
+
+            CreateDatabaseTables();
         }
         
         public static IDbConnection GetDB() => _dbConnection;
@@ -107,41 +108,47 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         /// </summary>
         public static void CreateDatabaseTables()
         {
-            const string usersQuery = "CREATE TABLE IF NOT EXISTS Users (email TEXT PRIMARY KEY, "
-                                                                    + "userName TEXT NOT NULL, "
-                                                                    + "password TEXT NOT NULL)";
-            Command(usersQuery);
-            
-            const string foodsQuery =
-                "CREATE TABLE IF NOT EXISTS Foods (foodName TEXT PRIMARY KEY, "
-                                            + "calories REAL, "
-                                            + "fat REAL, "
-                                            + "saturatedFat REAL, "
-                                            + "carbhyd REAL, "
-                                            + "sugar REAL, "
-                                            + "protein REAL, "
-                                            + "salt REAL)";
-            Command(foodsQuery);
+            using (_dbConnection = new SqliteConnection(_dbUri))
+            {
+                _dbConnection.Open();
 
-            const string historicQuery =
-                "CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
-                                                + "foodName TEXT NOT NULL, "
-                                                + "calories REAL, "
-                                                + "fat REAL, "
-                                                + "saturatedFat REAL, "
-                                                + "carbhyd REAL, "
-                                                + "sugar REAL, "
-                                                + "protein REAL, "
-                                                + "salt REAL, "
-                                                + "_date TEXT NOT NULL, "
-                                                + "FOREIGN KEY(userEmail) REFERENCES Users(email), "
-                                                + "FOREIGN KEY(foodName) REFERENCES Foods(foodName), "
-                                                + "PRIMARY KEY(userEmail, foodName, _date))";
-                /*"CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
-                                                + "foodName TEXT NOT NULL, "
-                                                + "_date DATE NOT NULL, "
-                                                + "PRIMARY KEY(userEmail, foodName, _date))";*/
-            Command(historicQuery);
+                IDbCommand cmd = _dbConnection.CreateCommand();
+                cmd.CommandText = "PRAGMA foreign_keys = ON";
+                cmd.ExecuteNonQuery();
+
+                IDbCommand dbCommand = _dbConnection.CreateCommand();
+                dbCommand.CommandText = "CREATE TABLE IF NOT EXISTS Users (email TEXT PRIMARY KEY, "
+                                        + "userName TEXT NOT NULL, "
+                                        + "password TEXT NOT NULL)";
+                dbCommand.ExecuteScalar();
+
+                dbCommand.CommandText = "CREATE TABLE IF NOT EXISTS Foods (foodName TEXT PRIMARY KEY, "
+                                        + "calories REAL, "
+                                        + "fat REAL, "
+                                        + "saturatedFat REAL, "
+                                        + "carbhyd REAL, "
+                                        + "sugar REAL, "
+                                        + "protein REAL, "
+                                        + "salt REAL)";
+                dbCommand.ExecuteScalar();
+
+                dbCommand.CommandText = "CREATE TABLE IF NOT EXISTS Historic (userEmail TEXT NOT NULL, "
+                                        + "foodName TEXT NOT NULL, "
+                                        + "calories REAL, "
+                                        + "fat REAL, "
+                                        + "saturatedFat REAL, "
+                                        + "carbhyd REAL, "
+                                        + "sugar REAL, "
+                                        + "protein REAL, "
+                                        + "salt REAL, "
+                                        + "_date TEXT NOT NULL, "
+                                        + "FOREIGN KEY(userEmail) REFERENCES Users(email), "
+                                        + "FOREIGN KEY(foodName) REFERENCES Foods(foodName), "
+                                        + "PRIMARY KEY(userEmail, foodName, _date))";
+                dbCommand.ExecuteScalar();
+
+                _dbConnection.Close();
+            }
         }
 
         /// <summary>

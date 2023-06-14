@@ -4,7 +4,6 @@ using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Initialization;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Android;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;

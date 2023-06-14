@@ -110,10 +110,15 @@ MonoBehaviour:
         recuperar"
     - Key: Common/Historic/SearchError
       Value: No se ha encontrado la comida en la base de datos
+    - Key: Common/Historic/GraphButton
+      Value: "Ver gr\xE1fica"
     - Key: Common/Camera/EntryPopup/FoodFound
       Value: 'Comida encontrada: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
       Value: "Por favor introduce los valores vac\xEDos en la tabla."
+    - Key: Common/Camera/NoFood
+      Value: No se ha encontrado ninguna comida en la imagen, intente enfocar mejor
+        la comida
     - Key: Common/Camera/NoMatch
       Value: No se ha encontrado ninguna coincidencia con la base de datos, puede
         registrar una nueva comida

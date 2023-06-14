@@ -35,7 +35,12 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <summary>
         /// Factory for the entry buttons.
         /// </summary>
-        [Inject] private HistoricEntryManager.Factory ButtonFactory;
+        [Inject] private HistoricEntry.Factory ButtonFactory;
+        
+        /// <summary>
+        /// Content field where to place the entry buttons.
+        /// </summary>
+        [SerializeField] private Transform Content;
         
         /// <summary>
         /// Reference to this scene.
@@ -77,11 +82,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// </summary>
         [SerializeField] private HidableUiElement SearchErrorHid;
 
-        /// <summary>
-        /// Content field where to place the entry buttons.
-        /// </summary>
-        [SerializeField] private Transform Content;
-
+        #region EntryPopup
+        
         /// <summary>
         /// Reference to the entry popup hidable.
         /// </summary>
@@ -147,6 +149,13 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// </summary>
         [SerializeField] private EasySubscribableButton CloseEntryPopupSus;
         
+        #endregion
+
+        /// <summary>
+        /// Reference to the graph button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton GraphButtonSus;
+        
         /// <summary>
         /// Flag to not load the menu twice.
         /// </summary>
@@ -171,6 +180,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             SearchButtonSus += () => StartCoroutine(LoadEntriesCoroutine());
             DeleteEntrySus += DeleteEntry;
             CloseEntryPopupSus += () => EntryPopupHid.Show(false);
+            GraphButtonSus += () => EntryPopupHid.Show(false);
         }
 
         private void Update()
@@ -218,7 +228,7 @@ namespace ITCL.VisionNutricional.Runtime.Historic
 
             foreach (DB.HistoricEntry entry in entries)
             {
-                HistoricEntryManager button = ButtonFactory.CreateUiGameObject(Content);
+                HistoricEntry button = ButtonFactory.CreateUiGameObject(Content);
                 yield return new WaitForEndOfFrame();
                 button.SetData(entry);
 

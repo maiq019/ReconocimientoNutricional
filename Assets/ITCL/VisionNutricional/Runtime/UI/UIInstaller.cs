@@ -14,21 +14,23 @@ namespace ITCL.VisionNutricional.Runtime.UI
         /// <summary>
         /// Reference to the exercises manager.
         /// </summary>
-        [SerializeField] private HistoricEntryManager Entry;
+        [SerializeField] private HistoricEntry Entry;
 
         [SerializeField] private VerticalBar VBar;
         
         [SerializeField] private HorizontalBar HBar;
 
         [SerializeField] private SelectableFood SelectableF;
+
+        [SerializeField] private GraphPoint GPoint;
         
         /// <summary>
         /// Reference injections.
         /// </summary>
         public override void InstallBindings()
         {
-            Container.BindFactory<HistoricEntryManager,
-                    HistoricEntryManager.Factory>()
+            Container.BindFactory<HistoricEntry,
+                    HistoricEntry.Factory>()
                 .FromComponentInNewPrefab(Entry)
                 .AsSingle()
                 .Lazy();
@@ -48,6 +50,12 @@ namespace ITCL.VisionNutricional.Runtime.UI
             Container.BindFactory<SelectableFood,
                     SelectableFood.Factory>()
                 .FromComponentInNewPrefab(SelectableF)
+                .AsSingle()
+                .Lazy();
+            
+            Container.BindFactory<GraphPoint,
+                    GraphPoint.Factory>()
+                .FromComponentInNewPrefab(GPoint)
                 .AsSingle()
                 .Lazy();
         }
