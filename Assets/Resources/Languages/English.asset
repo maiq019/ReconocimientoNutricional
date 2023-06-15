@@ -111,6 +111,14 @@ MonoBehaviour:
       Value: The food was not found in the database
     - Key: Common/Historic/GraphButton
       Value: View graph
+    - Key: Common/Historic/Graph/Display
+      Value: 'Display:'
+    - Key: Common/Historic/Graph/Day
+      Value: Today
+    - Key: Common/Historic/Graph/Month
+      Value: This month
+    - Key: Common/Historic/Graph/EntriesCount
+      Value: Showing data from {0} entries.
     - Key: Common/Camera/EntryPopup/FoodFound
       Value: 'Food found: {0}'
     - Key: Common/Camera/EntryPopup/FormatError

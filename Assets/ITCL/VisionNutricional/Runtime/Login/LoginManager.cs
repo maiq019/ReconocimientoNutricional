@@ -89,8 +89,8 @@ namespace ITCL.VisionNutricional.Runtime.Login
         private void DirtyLogin()
         {
             Session.Email = "user0@gmail.com";
-            Session.UserName = "user0";
-            Session.Passwd = "0000";
+            Session.UserName = "admin";
+            Session.Passwd = "Aa000";
             LoadMainMenu();
         }
 

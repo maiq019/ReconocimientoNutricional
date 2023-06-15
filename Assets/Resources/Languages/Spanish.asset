@@ -112,6 +112,14 @@ MonoBehaviour:
       Value: No se ha encontrado la comida en la base de datos
     - Key: Common/Historic/GraphButton
       Value: "Ver gr\xE1fica"
+    - Key: Common/Historic/Graph/Display
+      Value: 'Mostrar:'
+    - Key: Common/Historic/Graph/Day
+      Value: Hoy
+    - Key: Common/Historic/Graph/Month
+      Value: Este mes
+    - Key: Common/Historic/Graph/EntriesCount
+      Value: Mostrando datos de {0} entradas.
     - Key: Common/Camera/EntryPopup/FoodFound
       Value: 'Comida encontrada: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
