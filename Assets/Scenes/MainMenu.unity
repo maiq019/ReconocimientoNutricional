@@ -1835,7 +1835,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ThisScene:
     SceneName: MainMenu
-  ExitButtonSus: {fileID: 0}
+  ExitButtonSus: {fileID: 268859459}
   ConfigButtonSus: {fileID: 1623152167}
   ConfigScene:
     SceneName: Config
