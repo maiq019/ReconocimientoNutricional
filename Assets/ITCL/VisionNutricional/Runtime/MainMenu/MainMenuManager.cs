@@ -29,6 +29,11 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         /// Reference to this scene.
         /// </summary>
         [SerializeField] private SceneReference ThisScene;
+        
+        /// <summary>
+        /// Reference to the exit button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton ExitButtonSus;
 
         /// <summary>
         /// Reference to the config button subscribable.
@@ -64,7 +69,8 @@ namespace ITCL.VisionNutricional.Runtime.MainMenu
         /// Subscribes to the OnButtonClicked of the corresponding button.
         /// </summary>
         private void OnEnable()
-        { 
+        {
+            ExitButtonSus += Application.Quit;
             ConfigButtonSus += LoadConfigScene;
             ScanButtonSus += LoadCameraScene;
             HistoricButtonSus += LoadHistoricScene;

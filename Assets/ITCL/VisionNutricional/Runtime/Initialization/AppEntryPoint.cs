@@ -24,7 +24,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// Reference to the localizer.
         /// </summary>
         [Inject] private ILocalizer localizer;
-        
+
         /// <summary>
         /// Reference to the next scene to load.
         /// </summary>
@@ -34,13 +34,13 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// Reference to the foods asset.
         /// </summary>
         [SerializeField] private ScriptableFood FoodsAsset;
+        
 
         /// <summary>
         /// Loads the selected first scene, the login.
         /// </summary>
         private void Start() => CoroutineRunner.RunRoutine(InitLoad());
         
-
         private IEnumerator InitLoad()
         {
             yield return Application.platform == RuntimePlatform.Android ? PermissionsAndDBCoroutine() : FillDbCoroutine();

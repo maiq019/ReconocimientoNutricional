@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 315200140}
   - component: {fileID: 315200142}
   - component: {fileID: 315200141}
+  - component: {fileID: 315200143}
   m_Layer: 5
   m_Name: TitleText
   m_TagString: Untagged
@@ -347,6 +348,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 315200139}
   m_CullTransparentMesh: 1
+--- !u!114 &315200143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315200139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8317c2454c5e03a429ad6e8f55b56e70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextInTheSameObject: 1
+  TextReference: {fileID: 0}
+  SetOnEnable: 1
+  LocalizationKey: Common/Title
 --- !u!1 &362634306
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0f0763081760c468aeb371cd90d52a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TitleLocalizer: {fileID: 0}
   NextScene:
     SceneName: Login
   FoodsAsset: {fileID: 11400000, guid: 1e74481fbd4c70b4cb975f0eaf556783, type: 2}
