@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d8efa0267562f42a910be51ddccf55, type: 3}
   m_Name: Version
   m_EditorClassIdentifier: 
-  GameVersion: 0
+  GameVersion: 1
   MayorVersion: 0
-  MinorVersion: 1
-  Date: 20230621124115
-  Stability: 0
+  MinorVersion: 0
+  Date: 20230621135925
+  Stability: 1
