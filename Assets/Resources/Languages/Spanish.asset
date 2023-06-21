@@ -15,7 +15,7 @@ MonoBehaviour:
   Language:
     SerializedList:
     - Key: Common/Title
-      Value: "Nutrisi\xF3n Aumentada"
+      Value: Reconocimiento nutricional
     - Key: Common/Accept
       Value: Aceptar
     - Key: Common/Back
@@ -134,6 +134,8 @@ MonoBehaviour:
         registrar una nueva comida
     - Key: Common/Camera/SelectFood
       Value: 'Seleccionar comida:'
+    - Key: Common/Camera/EntryDone
+      Value: La comida ha sido registrada.
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu

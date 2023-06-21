@@ -15,7 +15,7 @@ MonoBehaviour:
   Language:
     SerializedList:
     - Key: Common/Title
-      Value: Enhanced Nutrition
+      Value: Nutrition recognition
     - Key: Common/Accept
       Value: Accept
     - Key: Common/Back
@@ -130,7 +130,9 @@ MonoBehaviour:
     - Key: Common/Camera/NoMatch
       Value: No database match found, you can register a new food
     - Key: Common/Camera/SelectFood
-      Value: 
+      Value: 'Select food:'
+    - Key: Common/Camera/EntryDone
+      Value: The food has been registered.
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu
