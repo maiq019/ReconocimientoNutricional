@@ -123,6 +123,8 @@ MonoBehaviour:
       Value: 'Food found: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
       Value: Please insert the empty values in the table.
+    - Key: Common/Camera/EntryPopup/ValueError
+      Value: The values can't add up to more than 100g
     - Key: Common/Camera/NoFood
       Value: No food was found in the image, try to focus the food better
     - Key: Common/Camera/NoMatch

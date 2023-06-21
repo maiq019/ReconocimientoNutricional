@@ -5,7 +5,6 @@ using ITCL.VisionNutricional.Runtime.DataBase;
 using ITCL.VisionNutricional.Runtime.Login;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime.Ui;

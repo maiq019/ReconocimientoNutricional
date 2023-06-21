@@ -244,7 +244,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             {
                 StartCamera();
             }
-            CloudRec.MessageHide.Show(false);
+            CloudRec.ErrorMessageHide.Show(false);
             CloudRec.EntryPopupHid.Show(false);
         }
         

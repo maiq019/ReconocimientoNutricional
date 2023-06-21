@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using ModestTree;
 using Mono.Data.Sqlite;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,7 +18,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
     // ReSharper disable once ClassNeverInstantiated.Global
     public class DB : Loggable<DB>
     {
-        private const string DBName = "NutricionDatabase.s3db";
+        private const string DBName = "NutricionDatabase.sqlite";
         private static string _dbUri;
         private static IDbConnection _dbConnection;
         
@@ -67,36 +66,35 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
         {
             string filepath = Application.persistentDataPath + "/" + DBName;
             
+            /*
             if (!File.Exists(filepath))
             {
-                /*WWW loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName + ".sqlite");
-                while (!loadDb.isDone) { }
-                File.WriteAllBytes(filepath, loadDb.bytes);*/
-                
+                StaticLogger.Warn("File not exist");
+
 #if UNITY_ANDROID
-                
-                //UnityWebRequest loadDb = new("jar:file://" + Application.dataPath + "!/assets/" + DBName);
                 UnityWebRequest loadDb = new(Application.streamingAssetsPath + "/" + DBName);
-                yield return loadDb;
+                loadDb.downloadHandler = new DownloadHandlerBuffer();
+                yield return loadDb.isDone;
                 if (loadDb.result != UnityWebRequest.Result.Success)
                 {
+                    StaticLogger.Error(loadDb.result);
                     StaticLogger.Error("Database connection error" + loadDb.error);
-                    Log.Error("Database connection error" + loadDb.error);
                 }
                 else
                 {
+                    File.Create(filepath);
                     StaticLogger.Debug("Loading database");
-                    Log.Debug("Loading database");
                     File.WriteAllBytes(filepath, loadDb.downloadHandler.data);
                 }
 #endif
-            }
+            }*/
 
             yield return new WaitForEndOfFrame();
 
             _dbUri = "URI=file:" + filepath;
             
             _dbConnection = new SqliteConnection(_dbUri);
+            StaticLogger.Debug("Db connection created");
 
             CreateDatabaseTables();
         }

@@ -38,12 +38,14 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
         /// <summary>
         /// Loads the selected first scene, the login.
         /// </summary>
-        private void OnEnable()
-        {
-            CoroutineRunner.RunRoutine(Application.platform == RuntimePlatform.Android ? PermissionsAndDBCoroutine() : FillDbCoroutine());
+        private void Start() => CoroutineRunner.RunRoutine(InitLoad());
+        
 
-            CoroutineRunner.RunRoutine(Loader.LoadSceneCoroutine(
-                sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 1));
+        private IEnumerator InitLoad()
+        {
+            yield return Application.platform == RuntimePlatform.Android ? PermissionsAndDBCoroutine() : FillDbCoroutine();
+            
+            yield return Loader.LoadSceneCoroutine(sceneManager, NextScene, localizer["Common/Title"], localizer["Debug/Loading"], 1);
         }
 
         private IEnumerator PermissionsAndDBCoroutine()
@@ -64,7 +66,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
                 yield return new WaitForSeconds(1);
             }
             
-            CoroutineRunner.RunRoutine(FillDbCoroutine());
+            yield return FillDbCoroutine();
         }
 
         private IEnumerator FillDbCoroutine()
@@ -74,12 +76,12 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
             //DB.ClearDatabase();
             //DB.CreateDatabaseTables();
             //yield return new WaitForEndOfFrame();
-            //DB.InsertUser("admin@gmail.com", "admin", "Aa000");
+            DB.InsertUser("user0@gmail.com", "admin", "Aa000");
 
             foreach (DB.Food food in FoodsAsset.Foods) DB.InsertFood(food);
 
-            //DB.InsertIntoHistoric("user0@gmail.com", DB.SelectFoodByName("Bread"));
-            //DB.InsertIntoHistoric("user0@gmail.com", DB.SelectFoodByName("Rice"));
+            DB.InsertIntoHistoric("user0@gmail.com", DB.SelectFoodByName("Bread"));
+            DB.InsertIntoHistoric("user0@gmail.com", DB.SelectFoodByName("Rice"));
             
             yield return new WaitForEndOfFrame();
         }

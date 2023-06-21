@@ -288,6 +288,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             www.downloadHandler = new DownloadHandlerBuffer();
 
             yield return www.SendWebRequest();
+            
+            Logger.Debug("Sending API web request");
 
             if (www.result != UnityWebRequest.Result.Success)
             {
@@ -297,10 +299,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             {
                 Logger.Debug(www.result.ToString().Replace("\n", "").Replace(" ", ""));
                 AnnotateImageResponses responses = JsonUtility.FromJson<AnnotateImageResponses>(www.downloadHandler.text);
+                Logger.Debug("Responses translated");
                 OnCloudResponse?.Invoke(responses);
             }
-            
-            yield return new WaitForEndOfFrame();
         }
 
         protected internal void SendImageToCloudVisionTest()

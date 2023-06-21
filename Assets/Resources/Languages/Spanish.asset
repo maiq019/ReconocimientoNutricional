@@ -124,6 +124,8 @@ MonoBehaviour:
       Value: 'Comida encontrada: {0}'
     - Key: Common/Camera/EntryPopup/FormatError
       Value: "Por favor introduce los valores vac\xEDos en la tabla."
+    - Key: Common/Camera/EntryPopup/ValueError
+      Value: "Los valores no pueden sumar m\xE1s de 100g"
     - Key: Common/Camera/NoFood
       Value: No se ha encontrado ninguna comida en la imagen, intente enfocar mejor
         la comida

@@ -9,6 +9,7 @@ using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
@@ -141,7 +142,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the hidable for the entry format error.
         /// </summary>
-        [SerializeField] public HidableUiElement FormatErrorHid;
+        [FormerlySerializedAs("FormatErrorHid")] [SerializeField] public HidableUiElement EntryErrorHid;
+
+        /// <summary>
+        /// Reference to the entry intro error localizer.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro EntryErrorLocalizer;
         
         /// <summary>
         /// Reference to the entry popup's cancel button subscribable.
@@ -155,9 +161,25 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         #endregion
 
-        [SerializeField] public HidableUiElement MessageHide;
+        /// <summary>
+        /// Reference to the capture error message hidable.
+        /// </summary>
+        [SerializeField] public HidableUiElement ErrorMessageHide;
         
-        [SerializeField] private LocalizedTextMeshPro Message;
+        /// <summary>
+        /// Reference to the capture error message localizer.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro ErrorMessageLocalizer;
+        
+        /// <summary>
+        /// Reference to the capture success message hidable.
+        /// </summary>
+        [SerializeField] public HidableUiElement SuccessMessageHide;
+        
+        /// <summary>
+        /// Reference to the capture success message localizer.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro SuccessMessageLocalizer;
         
         /// <summary>
         /// Reference to the food found name.
@@ -179,10 +201,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         private void OnEnable()
         {
-            MessageHide.Show(false);
+            ErrorMessageHide.Show(false);
+            SuccessMessageHide.Show(false);
             RectangleHid.Show(false);
             EntryPopupHid.Show(false);
-            FormatErrorHid.Show(false);
+            EntryErrorHid.Show(false);
             FoodSelectionHid.Show(false);
             
             
@@ -202,7 +225,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
         private void CloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
         {
-            MessageHide.Show(false);
+            ErrorMessageHide.Show(false);
+            SuccessMessageHide.Show(false);
             List<CamTextureToCloudVision.Vertex> vertexList = new();
             
             //Checks for lack of responses.
@@ -218,8 +242,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 if (!labelsDescriptions.Contains("Food"))
                 {
                     Logger.Debug("Didn't find a food in the image");
-                    MessageHide.Show();
-                    Message.SetValue("Common/Camera/NoFood");
+                    ErrorMessageHide.Show();
+                    ErrorMessageLocalizer.SetValue("Common/Camera/NoFood");
                     return;
                 }
 
@@ -260,8 +284,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 else //Didnt found correspondences in the database
                 {
                     Logger.Debug("No matches on the database");
-                    MessageHide.Show();
-                    Message.SetValue("Common/Camera/NoMatch");
+                    ErrorMessageHide.Show();
+                    ErrorMessageLocalizer.SetValue("Common/Camera/NoMatch");
                     
                     
 
@@ -358,7 +382,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             if (FoodFound) FoodName.SetValue("Foods/"+FoundFoodName);
             else FoodName.SetValue("Common/Camera/SelectFood");
             FoodSelectionHid.Show(false);
-            FormatErrorHid.Show(false);
+            EntryErrorHid.Show(false);
             EntryPopupHid.Show();
         }
 
@@ -367,30 +391,51 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         private void RegisterEntry()
         {
-            FormatErrorHid.Show(false);
+            EntryErrorHid.Show(false);
             try
             {
+                float calories = float.Parse(CaloriesValue.text); //string.IsNullOrEmpty(CaloriesValue.text) ? 0 : float.Parse(CaloriesValue.text),
+                float fat = float.Parse(FatValue.text); //string.IsNullOrEmpty(FatValue.text) ? 0 : float.Parse(FatValue.text),
+                float saturatedFat = float.Parse(SatFatValue.text); //string.IsNullOrEmpty(SatFatValue.text) ? 0 : float.Parse(SatFatValue.text),
+                float carbHyd = float.Parse(CarbhydValue.text); //string.IsNullOrEmpty(CarbhydValue.text) ? 0 : float.Parse(CarbhydValue.text),
+                float sugar = float.Parse(SugarValue.text); //string.IsNullOrEmpty(SugarValue.text) ? 0 : float.Parse(SugarValue.text),
+                float protein = float.Parse(ProteinValue.text); //string.IsNullOrEmpty(ProteinValue.text) ? 0 : float.Parse(ProteinValue.text),
+                float salt = float.Parse(SaltValue.text); //string.IsNullOrEmpty(SaltValue.text) ? 0 : float.Parse(SaltValue.text)
+                
                 DB.Food foodEntry = new()
                 {
                     foodName = FoundFoodName,
-                    calories = float.Parse(CaloriesValue.text), //string.IsNullOrEmpty(CaloriesValue.text) ? 0 : float.Parse(CaloriesValue.text),
-                    fat = float.Parse(FatValue.text), //string.IsNullOrEmpty(FatValue.text) ? 0 : float.Parse(FatValue.text),
-                    saturatedFat = float.Parse(SatFatValue.text), //string.IsNullOrEmpty(SatFatValue.text) ? 0 : float.Parse(SatFatValue.text),
-                    carbHyd = float.Parse(CarbhydValue.text), //string.IsNullOrEmpty(CarbhydValue.text) ? 0 : float.Parse(CarbhydValue.text),
-                    sugar = float.Parse(SugarValue.text), //string.IsNullOrEmpty(SugarValue.text) ? 0 : float.Parse(SugarValue.text),
-                    protein = float.Parse(ProteinValue.text), //string.IsNullOrEmpty(ProteinValue.text) ? 0 : float.Parse(ProteinValue.text),
-                    salt = float.Parse(SaltValue.text) //string.IsNullOrEmpty(SaltValue.text) ? 0 : float.Parse(SaltValue.text)
+                    calories = calories,
+                    fat = fat,
+                    saturatedFat = saturatedFat,
+                    carbHyd = carbHyd,
+                    sugar = sugar,
+                    protein = protein,
+                    salt = salt
                 };
-                
-                DB.InsertIntoHistoric(Session.Email, foodEntry);
 
-                if (!FoodFound) DB.InsertFood(foodEntry);
-                
-                EntryPopupHid.Show(false);
+                if (calories + fat + saturatedFat + carbHyd + sugar + protein + salt > 100)
+                {
+                    EntryErrorLocalizer.SetValue("Common/Camera/EntryPopup/ValueError");
+                    EntryErrorHid.Show();
+                }
+                else
+                {
+                    if (!FoodFound) DB.InsertFood(foodEntry);
+                    
+                    DB.InsertIntoHistoric(Session.Email, foodEntry);
+                    
+                    EntryPopupHid.Show(false);
+                    
+                    SuccessMessageLocalizer.SetValue("Common/Camera/EntryDone");
+                    SuccessMessageHide.Show();
+                    
+                }
             }
             catch (FormatException)
             {
-                FormatErrorHid.Show();
+                EntryErrorLocalizer.SetValue("Common/Camera/EntryPopup/FormatError");
+                EntryErrorHid.Show();
             }
             catch (Exception e)
             {

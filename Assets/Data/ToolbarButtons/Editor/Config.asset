@@ -16,7 +16,7 @@ MonoBehaviour:
   EnableSaveButton: 1
   EnableProjectFolderButton: 0
   EnablePackageManagerButton: 1
-  EnableProjectSettingsButton: 0
+  EnableProjectSettingsButton: 1
   EnableBuildButton: 1
   EnablePlayButton: 1
   InitializationScene: {fileID: 102900000, guid: 57b7dcd11e1b7be46a6ffa64a107a5b7,

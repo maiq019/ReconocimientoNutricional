@@ -35,7 +35,7 @@ MonoBehaviour:
     saturatedFat: 0.09
     carbHyd: 25
     sugar: 0.05
-    protein: 305
+    protein: 3.5
     salt: 0.012
   - foodName: Beef Meat
     calories: 201
