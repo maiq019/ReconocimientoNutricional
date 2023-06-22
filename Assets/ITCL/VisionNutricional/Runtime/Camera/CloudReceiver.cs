@@ -229,9 +229,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             FoodSelectionHid.Show(false);
             
             ConfirmFoodInsertHid.Show(false);
-            CancelFoodInsertSus += () => ConfirmFoodInsertHid.Show(false);
-            
-            
+
             CamTextureToCloudVision.OnCloudResponse += CloudResponse;
             RectangleSus += RectangleClicked;
 
@@ -451,28 +449,28 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 {
                     EntryErrorLocalizer.SetValue("Common/Camera/EntryPopup/ValueError");
                     EntryErrorHid.Show();
+                    return;
                 }
-                else
+                
+                   
+                if (!FoodFound)
                 {
-                    if (!FoodFound)
+                    ConfirmFoodInsertWarnLocalizer.SetValue("Common/Camera/EntryPopup/ConfirmFoodInsert", false, FoundFoodName);
+                    ConfirmFoodInsertSus += () =>
                     {
-                        ConfirmFoodInsertWarnLocalizer.SetValue("Common/Camera/EntryPopup/ConfirmFoodInsert", false, FoundFoodName);
-                        ConfirmFoodInsertSus += () =>
-                        {
-                            DB.InsertFood(foodEntry);
-                            ConfirmFoodInsertHid.Show(false);
-                        };
-                        ConfirmFoodInsertHid.Show();
-                    }
-                    
-                    DB.InsertIntoHistoric(Session.Email, foodEntry);
-                    
-                    EntryPopupHid.Show(false);
-                    
-                    SuccessMessageLocalizer.SetValue("Common/Camera/EntryDone");
-                    StartCoroutine(nameof(ShowSuccessMessage));
-
+                        DB.InsertFood(foodEntry);
+                        ConfirmFoodInsertHid.Show(false);
+                        ConfirmEntryInsert(foodEntry);
+                    };
+                    CancelFoodInsertSus += () =>
+                    {
+                        ConfirmFoodInsertHid.Show(false);
+                        ConfirmEntryInsert(foodEntry);
+                    };
+                    ConfirmFoodInsertHid.Show();
                 }
+                else ConfirmEntryInsert(foodEntry);
+                
             }
             catch (FormatException)
             {
@@ -491,6 +489,16 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             SuccessMessageHide.Show();
             yield return new WaitForSeconds(3);
             SuccessMessageHide.Show(false);
+        }
+
+        private void ConfirmEntryInsert(DB.Food foodEntry)
+        {
+            DB.InsertIntoHistoric(Session.Email, foodEntry);
+                    
+            EntryPopupHid.Show(false);
+                    
+            SuccessMessageLocalizer.SetValue("Common/Camera/EntryDone");
+            StartCoroutine(nameof(ShowSuccessMessage));
         }
     }
 }

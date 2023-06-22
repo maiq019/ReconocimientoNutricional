@@ -2917,7 +2917,7 @@ GameObject:
   - component: {fileID: 448081484}
   - component: {fileID: 448081485}
   m_Layer: 5
-  m_Name: MessageEntryDone
+  m_Name: EntryDoneMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2937,7 +2937,7 @@ RectTransform:
   m_Children:
   - {fileID: 386008549}
   m_Father: {fileID: 886969269}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1, y: 0.2}
   m_AnchorMax: {x: 0.9, y: 0.25}
@@ -2968,8 +2968,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82723d9df8cfd0d48bfec2464b5be910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleInteractable: 0
-  ToggleBlockRaycasts: 0
+  ToggleInteractable: 1
+  ToggleBlockRaycasts: 1
 --- !u!1 &465059991
 GameObject:
   m_ObjectHideFlags: 0
@@ -3361,7 +3361,7 @@ RectTransform:
   m_Children:
   - {fileID: 1241442096}
   m_Father: {fileID: 886969269}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.24, y: 0.4}
   m_AnchorMax: {x: 0.81, y: 0.71}
@@ -4078,7 +4078,7 @@ PrefabInstance:
     - target: {fileID: 389646470882812728, guid: 03983614050ca62409a5078e45468b65,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 389646470882812728, guid: 03983614050ca62409a5078e45468b65,
         type: 3}
@@ -5325,12 +5325,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 913639163}
-  - {fileID: 1046982067}
-  - {fileID: 614553889}
   - {fileID: 505026085}
   - {fileID: 2123708691}
   - {fileID: 448081483}
   - {fileID: 998481040}
+  - {fileID: 614553889}
+  - {fileID: 1046982067}
   m_Father: {fileID: 983928361}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5720,7 +5720,7 @@ RectTransform:
   - {fileID: 603366028}
   - {fileID: 2141766385}
   m_Father: {fileID: 886969269}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1, y: 0.15}
   m_AnchorMax: {x: 0.9, y: 0.85}
@@ -6096,7 +6096,7 @@ PrefabInstance:
     - target: {fileID: 389646470882812728, guid: 03983614050ca62409a5078e45468b65,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 389646470882812728, guid: 03983614050ca62409a5078e45468b65,
         type: 3}
@@ -7232,8 +7232,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 43cae98311822344bb24fdc1e0a29a3f, type: 2}
-  m_sharedMaterial: {fileID: 20773099933838532, guid: 43cae98311822344bb24fdc1e0a29a3f,
+  m_fontAsset: {fileID: 11400000, guid: 97bca0627188d8b479051d66f1899df4, type: 2}
+  m_sharedMaterial: {fileID: 20773099933838532, guid: 97bca0627188d8b479051d66f1899df4,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -10223,7 +10223,7 @@ PrefabInstance:
     - target: {fileID: 5263806356150558172, guid: 03983614050ca62409a5078e45468b65,
         type: 3}
       propertyPath: LocalizationKey
-      value: Common/Cancel
+      value: Common/Camera/EntryPopup/NotInsertFood
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03983614050ca62409a5078e45468b65, type: 3}
@@ -11073,7 +11073,7 @@ RectTransform:
   m_Children:
   - {fileID: 1158288128}
   m_Father: {fileID: 886969269}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.1, y: 0.2}
   m_AnchorMax: {x: 0.9, y: 0.25}
@@ -11104,8 +11104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82723d9df8cfd0d48bfec2464b5be910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ToggleInteractable: 0
-  ToggleBlockRaycasts: 0
+  ToggleInteractable: 1
+  ToggleBlockRaycasts: 1
 --- !u!1 &2141766384
 GameObject:
   m_ObjectHideFlags: 0

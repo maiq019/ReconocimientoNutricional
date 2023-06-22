@@ -136,6 +136,8 @@ MonoBehaviour:
     - Key: Common/Camera/EntryPopup/ConfirmFoodInsert
       Value: Do you want to add {0} to the database?  You won't be able to delete
         it later.
+    - Key: Common/Camera/EntryPopup/NotInsertFood
+      Value: Don't add to database
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu

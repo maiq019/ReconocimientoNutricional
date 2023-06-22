@@ -139,6 +139,8 @@ MonoBehaviour:
     - Key: Common/Camera/EntryPopup/ConfirmFoodInsert
       Value: "\xBFQuieres a\xF1adir {0} a la base de datos?  No podr\xE1s eliminarlo
         luego."
+    - Key: Common/Camera/EntryPopup/NotInsertFood
+      Value: "No a\xF1adir a base de datos"
     - Key: Debug/Loading
       Value: Cargando...
     - Key: Debug/LoadingMainMenu
