@@ -133,6 +133,9 @@ MonoBehaviour:
       Value: 'Select food:'
     - Key: Common/Camera/EntryDone
       Value: The food has been registered.
+    - Key: Common/Camera/EntryPopup/ConfirmFoodInsert
+      Value: Do you want to add {0} to the database?  You won't be able to delete
+        it later.
     - Key: Debug/Loading
       Value: Loading...
     - Key: Debug/LoadingMainMenu

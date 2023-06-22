@@ -307,7 +307,15 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             EntryDisplayed = entry;
 
-            FoodName.SetValue("Foods/" + entry.foodName);
+            if (localizer["Foods/"+entry.foodName].Equals("Foods/"+entry.foodName))
+            {
+                FoodName.SetValue(entry.foodName);
+            }
+            else
+            {
+                FoodName.SetValue("Foods/" + entry.foodName);
+            }
+            
             CaloriesValue.text = entry.calories + "Kcal";
             FatValue.text = entry.fat + "g";
             SatFatValue.text = entry.saturatedFat + "g";

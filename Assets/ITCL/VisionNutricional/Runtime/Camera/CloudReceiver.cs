@@ -159,6 +159,26 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// </summary>
         [SerializeField] private EasySubscribableButton RegisterEntryPopupSus;
 
+        /// <summary>
+        /// Reference to the insert new food confirmation popup hidable.
+        /// </summary>
+        [SerializeField] private HidableUiElement ConfirmFoodInsertHid;
+
+        /// <summary>
+        /// Reference to the food insert warning text localizer.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro ConfirmFoodInsertWarnLocalizer;
+        
+        /// <summary>
+        /// Reference to the insert new food confirm button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton ConfirmFoodInsertSus;
+        
+        /// <summary>
+        /// Reference to the insert food cancel button subscribable.
+        /// </summary>
+        [SerializeField] private EasySubscribableButton CancelFoodInsertSus;
+
         #endregion
 
         /// <summary>
@@ -208,12 +228,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             EntryErrorHid.Show(false);
             FoodSelectionHid.Show(false);
             
+            ConfirmFoodInsertHid.Show(false);
+            CancelFoodInsertSus += () => ConfirmFoodInsertHid.Show(false);
+            
             
             CamTextureToCloudVision.OnCloudResponse += CloudResponse;
             RectangleSus += RectangleClicked;
-            
-            FoodSelectionButton += () => FoodSelectionHid.Show();
-            
+
             CancelEntrySus += ()=> EntryPopupHid.Show(false);
             RegisterEntryPopupSus += RegisterEntry;
         }
@@ -251,6 +272,9 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 List<string> commons = labelsDescriptions.Intersect(DB.SelectAllFoodNames()).ToList();
                 if (commons.Count > 0)
                 {
+                    //If it found a food "deactivates" the food selector button
+                    FoodSelectionButton -= () => FoodSelectionHid.Show();
+                    
                     Logger.Debug(commons.Count > 1 ? "More than one match in the database" : "Only one match in the database");
 
                     foodFound = DB.SelectFoodByName(commons[0]);
@@ -283,24 +307,32 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 }
                 else //Didnt found correspondences in the database
                 {
+                    //If it didnt find a food "activates" the food selector button
+                    FoodSelectionButton += () => FoodSelectionHid.Show();
+                    
                     Logger.Debug("No matches on the database");
-                    ErrorMessageHide.Show();
                     ErrorMessageLocalizer.SetValue("Common/Camera/NoMatch");
+                    ErrorMessageHide.Show();
                     
-                    
-
+                    //Creates the selectable food names.
                     StartCoroutine(FillSelectableNamesCoroutine(labelsDescriptions));
                     
-                    //Gets the first object location
+                    //Enables the button to select a food name.
+                    FoodSelectionButton -= () => FoodSelectionHid.Show();
+                    
+                    //Gets the first object location and locates it in the capture.
                     List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
                     vertexList = localizedObjects[0].boundingPoly.normalizedVertices;
                     FoodFound = false;
                     DrawObject(vertexList, localizer["Common/Camera/SelectFood"]);
+                    
                 }
             }
             else
             {
                 Logger.Debug("Didn't find anything in the image");
+                ErrorMessageLocalizer.SetValue("Common/Camera/NoFood");
+                ErrorMessageHide.Show();
             }
         }
 
@@ -383,6 +415,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             else FoodName.SetValue("Common/Camera/SelectFood");
             FoodSelectionHid.Show(false);
             EntryErrorHid.Show(false);
+            ConfirmFoodInsertHid.Show(false);
             EntryPopupHid.Show();
         }
 
@@ -414,22 +447,31 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                     salt = salt
                 };
 
-                if (calories + fat + saturatedFat + carbHyd + sugar + protein + salt > 100)
+                if (fat + saturatedFat + carbHyd + sugar + protein + salt > 100)
                 {
                     EntryErrorLocalizer.SetValue("Common/Camera/EntryPopup/ValueError");
                     EntryErrorHid.Show();
                 }
                 else
                 {
-                    if (!FoodFound) DB.InsertFood(foodEntry);
+                    if (!FoodFound)
+                    {
+                        ConfirmFoodInsertWarnLocalizer.SetValue("Common/Camera/EntryPopup/ConfirmFoodInsert", false, FoundFoodName);
+                        ConfirmFoodInsertSus += () =>
+                        {
+                            DB.InsertFood(foodEntry);
+                            ConfirmFoodInsertHid.Show(false);
+                        };
+                        ConfirmFoodInsertHid.Show();
+                    }
                     
                     DB.InsertIntoHistoric(Session.Email, foodEntry);
                     
                     EntryPopupHid.Show(false);
                     
                     SuccessMessageLocalizer.SetValue("Common/Camera/EntryDone");
-                    SuccessMessageHide.Show();
-                    
+                    StartCoroutine(nameof(ShowSuccessMessage));
+
                 }
             }
             catch (FormatException)
@@ -441,6 +483,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             {
                 Logger.Error(e.ToString());
             }
+        }
+
+        private IEnumerator ShowSuccessMessage()
+        {
+            ErrorMessageHide.Show(false);
+            SuccessMessageHide.Show();
+            yield return new WaitForSeconds(3);
+            SuccessMessageHide.Show(false);
         }
     }
 }

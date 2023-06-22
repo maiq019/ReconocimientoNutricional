@@ -82,16 +82,7 @@ namespace ITCL.VisionNutricional.Runtime.Login
 
         private void OnEnable()
         {
-            EnterSus += DirtyLogin;
-            //EnterSus += Login;
-        }
-
-        private void DirtyLogin()
-        {
-            Session.Email = "user0@gmail.com";
-            Session.UserName = "admin";
-            Session.Passwd = "Aa000";
-            LoadMainMenu();
+            EnterSus += Login;
         }
 
         /// <summary>
@@ -113,9 +104,22 @@ namespace ITCL.VisionNutricional.Runtime.Login
             Email = EmailInput.text.Replace("\u200B", "");
             Passwd = PasswdInput.text.Replace("\u200B", "");
             
-            if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
-            else if (string.IsNullOrEmpty(Passwd)) PasswdErrorHid.Show();
-            else ConnectToLogIn();
+            //TODO bypass login
+            if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Passwd)) DirtyLogin();
+            else
+            {
+                if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
+                else if (string.IsNullOrEmpty(Passwd)) PasswdErrorHid.Show();
+                else ConnectToLogIn();
+            }
+        }
+        
+        private void DirtyLogin()
+        {
+            Session.Email = "admin@gmail.com";
+            Session.UserName = "admin";
+            Session.Passwd = "Aa000";
+            LoadMainMenu();
         }
 
         /// <summary>
