@@ -7,6 +7,7 @@ using ITCL.VisionNutricional.Runtime.Initialization;
 using ITCL.VisionNutricional.Runtime.Login;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
@@ -97,8 +98,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <summary>
         /// Reference to the food name localizer.
         /// </summary>
-        [SerializeField] private LocalizedTextMeshPro FoodName;
-
+        [SerializeField] private LocalizedTextMeshPro FoodNameLocalizer;
+        
         /// <summary>
         /// Reference to the calories value.
         /// </summary>
@@ -307,8 +308,17 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             EntryDisplayed = entry;
 
-            if (localizer["Foods/"+entry.foodName].Equals("Foods/"+entry.foodName)) FoodName.SetValue(entry.foodName);
-            else FoodName.SetValue("Foods/" + entry.foodName);
+            try
+            {
+                string localizerValue = localizer["Foods/" + entry.foodName];
+                if (!localizerValue.Equals("Foods/" + entry.foodName)) FoodNameLocalizer.SetValue("Foods/" + entry.foodName);
+            }
+            catch
+            {
+                FoodNameLocalizer.SetValue(entry.foodName);
+            }
+            //if (localizer["Foods/" + entry.foodName].Equals("Foods/"+entry.foodName)) FoodNameLocalizer.SetValue(entry.foodName);
+            //else FoodNameLocalizer.SetValue("Foods/" + entry.foodName);
 
             CaloriesValue.text = entry.calories + "Kcal";
             FatValue.text = entry.fat + "g";

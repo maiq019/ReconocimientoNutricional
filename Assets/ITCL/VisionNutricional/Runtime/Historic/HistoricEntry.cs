@@ -1,6 +1,7 @@
 using ITCL.VisionNutricional.Runtime.DataBase;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.DependencyInjection;
 using WhateverDevs.Core.Runtime.Ui;
@@ -28,9 +29,9 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         private DB.HistoricEntry DbEntry;
 
         /// <summary>
-        /// Reference to the food field.
+        /// Reference to the food name localizer.
         /// </summary>
-        [SerializeField] private LocalizedTextMeshPro Food;
+        [SerializeField] private LocalizedTextMeshPro FoodLocalizer;
 
         /// <summary>
         /// reference to the date field.
@@ -51,8 +52,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <param name="entry"></param>
         public void SetData(DB.HistoricEntry entry)
         {
-            if (localizer["Foods/" + entry.foodName].Equals("Foods/" + entry.foodName)) Food.SetValue(entry.foodName);
-            else Food.SetValue("Foods/" + entry.foodName);
+            if (localizer["Foods/" + entry.foodName].Equals("Foods/" + entry.foodName)) FoodLocalizer.SetValue(entry.foodName);
+            else FoodLocalizer.SetValue("Foods/" + entry.foodName);
             Date.text = entry.date;
         }
 

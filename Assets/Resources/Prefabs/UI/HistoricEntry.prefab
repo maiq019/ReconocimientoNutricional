@@ -152,7 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf91a33f887e3a4097a4a3d23d891be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Food: {fileID: 5086918356870046600}
+  ButtonSus: {fileID: 0}
+  FoodLocalizer: {fileID: 5086918356870046600}
+  FoodText: {fileID: 5086918356870046602}
   Date: {fileID: 5086918356555424095}
 --- !u!1 &5086918356229698341
 GameObject:
@@ -323,7 +325,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -459,7 +461,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
