@@ -137,8 +137,8 @@ MonoBehaviour:
     - Key: Common/Camera/EntryDone
       Value: La comida ha sido registrada.
     - Key: Common/Camera/EntryPopup/ConfirmFoodInsert
-      Value: "\xBFQuieres a\xF1adir {0} a la base de datos?  No podr\xE1s eliminarlo
-        luego."
+      Value: "{0} se a\xF1adir\xE1 a la base de datos, \xBFHa introducido los datos
+        correctamente?  NO se podr\xE1 modificar o eliminar m\xE1s adelante."
     - Key: Common/Camera/EntryPopup/NotInsertFood
       Value: "No a\xF1adir a base de datos"
     - Key: Debug/Loading

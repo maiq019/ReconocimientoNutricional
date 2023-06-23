@@ -4,12 +4,19 @@ using UnityEngine;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.DependencyInjection;
 using WhateverDevs.Core.Runtime.Ui;
+using WhateverDevs.Localization.Runtime;
 using WhateverDevs.Localization.Runtime.Ui;
+using Zenject;
 
 namespace ITCL.VisionNutricional.Runtime.Historic
 {
     public class HistoricEntry : WhateverBehaviour<HistoricEntry>
     {
+        /// <summary>
+        /// Reference to the localizer.
+        /// </summary>
+        [Inject] private ILocalizer localizer;
+        
         /// <summary>
         /// Reference to the button subscribable.
         /// </summary>
@@ -44,7 +51,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         /// <param name="entry"></param>
         public void SetData(DB.HistoricEntry entry)
         {
-            Food.SetValue("Foods/" + entry.foodName);
+            if (localizer["Foods/" + entry.foodName].Equals("Foods/" + entry.foodName)) Food.SetValue(entry.foodName);
+            else Food.SetValue("Foods/" + entry.foodName);
             Date.text = entry.date;
         }
 

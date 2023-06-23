@@ -10,7 +10,7 @@ namespace ITCL.VisionNutricional.Runtime.Initialization
     /// <summary>
     /// Static method for loading scenes with the loading screen.
     /// </summary>
-    public class Loader :Loggable<Loader>
+    public class Loader : Loggable<Loader>
     {
         /// <summary>
         /// Coroutine that manages the loading and unloading of the scenes and the loading screen.

@@ -9,8 +9,8 @@ using ITCL.VisionNutricional.Runtime.UI;
 using ModestTree;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
+using WhateverDevs.Core.Runtime.Common;
 using WhateverDevs.Core.Runtime.Ui;
 using WhateverDevs.Localization.Runtime;
 using WhateverDevs.Localization.Runtime.Ui;
@@ -75,14 +75,29 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         
         #region EntryPopup
         /// <summary>
-        /// Reference to the food name localizer.
+        /// Reference to the found food name hidable.
         /// </summary>
-        [SerializeField] private LocalizedTextMeshPro FoodName;
+        [SerializeField] private HidableUiElement FoodNameFoundHid;
+        
+        /// <summary>
+        /// Reference to the found food name localizer.
+        /// </summary>
+        [SerializeField] private LocalizedTextMeshPro FoodNameFound;
+        
+        /// <summary>
+        /// Reference to the food name selector hidable.
+        /// </summary>
+        [SerializeField] private HidableUiElement FoodNameSelectorHid;
 
+        /// <summary>
+        /// Reference to the selected food name input text.
+        /// </summary>
+        [SerializeField] private TMP_InputField FoodNameSelected;
+        
         /// <summary>
         /// Reference to the food selection button.
         /// </summary>
-        [SerializeField] private EasySubscribableButton FoodSelectionButton;
+        [SerializeField] private EasySubscribableButton FoodSelectorButton;
 
         /// <summary>
         /// Reference to the food name selector hidable.
@@ -142,7 +157,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         /// <summary>
         /// Reference to the hidable for the entry format error.
         /// </summary>
-        [FormerlySerializedAs("FormatErrorHid")] [SerializeField] public HidableUiElement EntryErrorHid;
+        [SerializeField] public HidableUiElement EntryErrorHid;
 
         /// <summary>
         /// Reference to the entry intro error localizer.
@@ -235,6 +250,13 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
             CancelEntrySus += ()=> EntryPopupHid.Show(false);
             RegisterEntryPopupSus += RegisterEntry;
+            
+            FoodSelectorButton += () =>
+            {
+                if (FoodSelectionHid.Shown) FoodSelectionHid.Show(false);
+                else FoodSelectionHid.Show();
+            };
+            CancelFoodInsertSus += () =>ConfirmFoodInsertHid.Show(false);
         }
 
         /// <summary>
@@ -270,13 +292,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 List<string> commons = labelsDescriptions.Intersect(DB.SelectAllFoodNames()).ToList();
                 if (commons.Count > 0)
                 {
-                    //If it found a food "deactivates" the food selector button
-                    FoodSelectionButton -= () => FoodSelectionHid.Show();
-                    
                     Logger.Debug(commons.Count > 1 ? "More than one match in the database" : "Only one match in the database");
+                    
+                    //If it found a food shows the food found name and hides the selector
+                    FoodNameFoundHid.Show();
+                    FoodNameSelectorHid.Show(false);
 
                     foodFound = DB.SelectFoodByName(commons[0]);
-                    FoodName.SetValue("Common/Camera/EntryPopup/FoodFound", false, foodFound.foodName);
+                    FoodNameFound.SetValue("Common/Camera/EntryPopup/FoodFound", false, foodFound.foodName);
                     CaloriesValue.text = foodFound.calories.ToString() != "-1" ? foodFound.calories.ToString() : "";
                     FatValue.text = foodFound.fat.ToString() != "-1" ? foodFound.fat.ToString() : "";
                     SatFatValue.text = foodFound.saturatedFat.ToString() != "-1" ? foodFound.saturatedFat.ToString() : "";
@@ -305,61 +328,41 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 }
                 else //Didnt found correspondences in the database
                 {
-                    //If it didnt find a food "activates" the food selector button
-                    FoodSelectionButton += () => FoodSelectionHid.Show();
-                    
                     Logger.Debug("No matches on the database");
                     ErrorMessageLocalizer.SetValue("Common/Camera/NoMatch");
                     ErrorMessageHide.Show();
                     
-                    //Creates the selectable food names.
-                    StartCoroutine(FillSelectableNamesCoroutine(labelsDescriptions));
+                    //If it didnt found a food shows the food selector and hides the found name.
+                    FoodNameFoundHid.Show(false);
+                    FoodNameSelectorHid.Show();
                     
-                    //Enables the button to select a food name.
-                    FoodSelectionButton -= () => FoodSelectionHid.Show();
+                    //Creates the selectable food names.
+                    List<string> possibleFoods = labelsDescriptions.ToList();
+                    possibleFoods.AddRange(DB.SelectAllFoodNames());
+                    StartCoroutine(FillSelectableNamesCoroutine(possibleFoods));
+
+                    //Empties the nutritional values
+                    CaloriesValue.text = "";
+                    FatValue.text = "";
+                    SatFatValue.text = "";
+                    CarbhydValue.text = "";
+                    SugarValue.text = "";
+                    ProteinValue.text = "";
+                    SaltValue.text = "";
                     
                     //Gets the first object location and locates it in the capture.
                     List<CamTextureToCloudVision.EntityAnnotation> localizedObjects = responses.responses[0].localizedObjectAnnotations.ToList();
                     vertexList = localizedObjects[0].boundingPoly.normalizedVertices;
                     FoodFound = false;
                     DrawObject(vertexList, localizer["Common/Camera/SelectFood"]);
-                    
                 }
             }
             else
             {
-                Logger.Debug("Didn't find anything in the image");
+                Logger.Debug("Didn't find a food in the image");
                 ErrorMessageLocalizer.SetValue("Common/Camera/NoFood");
                 ErrorMessageHide.Show();
             }
-        }
-
-        /// <summary>
-        /// Coroutine that creates and sets buttons to select the food found name.
-        /// </summary>
-        /// <param name="nameList"></param>
-        /// <returns></returns>
-        private IEnumerator FillSelectableNamesCoroutine(List<string> nameList)
-        {
-            foreach (string foodName in nameList)
-            {
-                SelectableFood selectable = SelectableButtonFactory.CreateUiGameObject(Content);
-                yield return new WaitForEndOfFrame();
-                selectable.SetFood(foodName);
-                        
-                selectable.ButtonSus.OnButtonClicked += () => SelectFoodName(foodName);
-            }
-        }
-
-        /// <summary>
-        /// Auxiliary function to set the selected food name.
-        /// </summary>
-        /// <param name="foodName"></param>
-        private void SelectFoodName(string foodName)
-        {
-            FoundFoodName = foodName;
-            FoodName.SetValue(FoundFoodName);
-            FoodSelectionHid.Show(false);
         }
 
         /// <summary>
@@ -371,10 +374,14 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         {
             RectangleHid.Show();
 
-            if (FoodFound) RectangleText.SetValue("Foods/" + foodName);
-            else RectangleText.SetValue(foodName);
+            if (FoodFound)
+            {
+                RectangleText.SetValue("Foods/" + foodName);
+                FoundFoodName = foodName;
+            }
+            else RectangleText.SetValue("Common/Camera/SelectFood");
             
-            FoundFoodName = foodName;
+            
                 
             float top = 1f;
             float bot = 0f;
@@ -406,15 +413,62 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             HorizontalBar botSide = HorizontalBarFactory.CreateUiGameObject(RectangleRectTransform);
             botSide.Set(RectangleWidth, RectangleOffsize, 1, 0, 1);
         }
-
+        
+        /// <summary>
+        /// Manages what happens when the rectangle food is clicked.
+        /// </summary>
         private void RectangleClicked()
         {
-            if (FoodFound) FoodName.SetValue("Foods/"+FoundFoodName);
-            else FoodName.SetValue("Common/Camera/SelectFood");
+            if (FoodFound) FoodNameFound.SetValue("Foods/" + FoundFoodName);
+            else FoodNameSelected.text = "";
+            
             FoodSelectionHid.Show(false);
             EntryErrorHid.Show(false);
             ConfirmFoodInsertHid.Show(false);
             EntryPopupHid.Show();
+        }
+        
+        /// <summary>
+        /// Coroutine that creates and sets buttons to select the food found name.
+        /// </summary>
+        /// <param name="nameList"></param>
+        /// <returns></returns>
+        private IEnumerator FillSelectableNamesCoroutine(List<string> nameList)
+        {
+            foreach (string foodName in nameList)
+            {
+                SelectableFood selectable = SelectableButtonFactory.CreateUiGameObject(Content);
+                yield return new WaitForEndOfFrame();
+                selectable.SetFood(foodName);
+                        
+                selectable.ButtonSus.OnButtonClicked += () => SelectFoodName(foodName);
+            }
+        }
+
+        /// <summary>
+        /// Auxiliary function to set the selected food name.
+        /// </summary>
+        /// <param name="foodName"></param>
+        [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
+        private void SelectFoodName(string foodName)
+        {
+            FoundFoodName = foodName;
+            FoodNameSelected.text = FoundFoodName;
+
+            if (DB.SelectAllFoodNames().Contains(FoundFoodName))
+            {
+                DB.Food selectedFood = DB.SelectFoodByName(FoundFoodName);
+                
+                CaloriesValue.text = selectedFood.calories.ToString() != "-1" ? selectedFood.calories.ToString() : "";
+                FatValue.text = selectedFood.fat.ToString() != "-1" ? selectedFood.fat.ToString() : "";
+                SatFatValue.text = selectedFood.saturatedFat.ToString() != "-1" ? selectedFood.saturatedFat.ToString() : "";
+                CarbhydValue.text = selectedFood.carbHyd.ToString() != "-1" ? selectedFood.carbHyd.ToString() : "";
+                SugarValue.text = selectedFood.sugar.ToString() != "-1" ? selectedFood.sugar.ToString() : "";
+                ProteinValue.text = selectedFood.protein.ToString() != "-1" ? selectedFood.protein.ToString() : "";
+                SaltValue.text = selectedFood.salt.ToString() != "-1" ? selectedFood.salt.ToString() : "";
+            }
+            
+            FoodSelectionHid.Show(false);
         }
 
         /// <summary>
@@ -425,6 +479,12 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             EntryErrorHid.Show(false);
             try
             {
+                if (!FoodFound && FoodNameSelected.text.IsNullEmptyOrWhiteSpace())
+                {
+                    EntryErrorLocalizer.SetValue("Common/Camera/EntryPopup/FormatError");
+                    EntryErrorHid.Show();
+                    return;
+                }
                 float calories = float.Parse(CaloriesValue.text); //string.IsNullOrEmpty(CaloriesValue.text) ? 0 : float.Parse(CaloriesValue.text),
                 float fat = float.Parse(FatValue.text); //string.IsNullOrEmpty(FatValue.text) ? 0 : float.Parse(FatValue.text),
                 float saturatedFat = float.Parse(SatFatValue.text); //string.IsNullOrEmpty(SatFatValue.text) ? 0 : float.Parse(SatFatValue.text),
@@ -435,7 +495,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 
                 DB.Food foodEntry = new()
                 {
-                    foodName = FoundFoodName,
+                    foodName = FoodNameSelected.text,
                     calories = calories,
                     fat = fat,
                     saturatedFat = saturatedFat,
@@ -455,15 +515,10 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                    
                 if (!FoodFound)
                 {
-                    ConfirmFoodInsertWarnLocalizer.SetValue("Common/Camera/EntryPopup/ConfirmFoodInsert", false, FoundFoodName);
+                    ConfirmFoodInsertWarnLocalizer.SetValue("Common/Camera/EntryPopup/ConfirmFoodInsert", false, FoodNameSelected.text);
                     ConfirmFoodInsertSus += () =>
                     {
                         DB.InsertFood(foodEntry);
-                        ConfirmFoodInsertHid.Show(false);
-                        ConfirmEntryInsert(foodEntry);
-                    };
-                    CancelFoodInsertSus += () =>
-                    {
                         ConfirmFoodInsertHid.Show(false);
                         ConfirmEntryInsert(foodEntry);
                     };
