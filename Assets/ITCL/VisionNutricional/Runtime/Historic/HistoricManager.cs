@@ -308,17 +308,8 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             EntryDisplayed = entry;
 
-            try
-            {
-                string localizerValue = localizer["Foods/" + entry.foodName];
-                if (!localizerValue.Equals("Foods/" + entry.foodName)) FoodNameLocalizer.SetValue("Foods/" + entry.foodName);
-            }
-            catch
-            {
-                FoodNameLocalizer.SetValue(entry.foodName);
-            }
-            //if (localizer["Foods/" + entry.foodName].Equals("Foods/"+entry.foodName)) FoodNameLocalizer.SetValue(entry.foodName);
-            //else FoodNameLocalizer.SetValue("Foods/" + entry.foodName);
+            if (localizer["Foods/" + entry.foodName].Equals("Foods/"+entry.foodName)) FoodNameLocalizer.SetValue(entry.foodName);
+            else FoodNameLocalizer.SetValue("Foods/" + entry.foodName);
 
             CaloriesValue.text = entry.calories + "Kcal";
             FatValue.text = entry.fat + "g";

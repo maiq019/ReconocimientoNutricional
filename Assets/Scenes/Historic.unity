@@ -5061,7 +5061,6 @@ GameObject:
   m_Component:
   - component: {fileID: 777310094}
   - component: {fileID: 777310093}
-  - component: {fileID: 777310092}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5069,14 +5068,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &777310092
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777310091}
-  m_Enabled: 1
 --- !u!20 &777310093
 Camera:
   m_ObjectHideFlags: 0
@@ -7236,7 +7227,7 @@ MonoBehaviour:
   SearchButtonSus: {fileID: 1191125729}
   SearchErrorHid: {fileID: 989428734}
   EntryPopupHid: {fileID: 1264082611}
-  FoodName: {fileID: 594715196}
+  FoodNameLocalizer: {fileID: 594715196}
   CaloriesValue: {fileID: 2093164774}
   FatValue: {fileID: 532892408}
   SatFatValue: {fileID: 921785187}
@@ -8335,9 +8326,9 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1264082609}
   m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &1270105303
 GameObject:

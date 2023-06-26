@@ -1501,7 +1501,7 @@ PrefabInstance:
     - target: {fileID: 3616402009585235917, guid: 780479e65828d2347aaecfa627467d80,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3616402009585235917, guid: 780479e65828d2347aaecfa627467d80,
         type: 3}
@@ -2059,7 +2059,6 @@ GameObject:
   m_Component:
   - component: {fileID: 304513471}
   - component: {fileID: 304513470}
-  - component: {fileID: 304513469}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2067,14 +2066,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &304513469
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 304513468}
-  m_Enabled: 1
 --- !u!20 &304513470
 Camera:
   m_ObjectHideFlags: 0
@@ -8032,50 +8023,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316981671}
   m_CullTransparentMesh: 1
---- !u!1 &1317276155
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1317276157}
-  - component: {fileID: 1317276156}
-  m_Layer: 0
-  m_Name: FakeResponse
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1317276156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317276155}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff777a610079f9440bcf992b3e0d0e7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1317276157
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317276155}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 686.47723, y: 1275.9778, z: 4.218858}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1385025322
 GameObject:
   m_ObjectHideFlags: 0
@@ -10027,7 +9974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b99a2f9b247cfc44a801dbbc000d975e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FakeCloudResponse: {fileID: 1317276156}
+  FakeCloudResponse: {fileID: 0}
   APIKey: AIzaSyBBZfFNEB6ZGKF5eYiNnGJmRuN1OpqxHSo
   Feature_Type: 5
   MaxResults: 20
@@ -10087,6 +10034,7 @@ MonoBehaviour:
   ConfirmFoodInsertSus: {fileID: 841516713}
   CancelFoodInsertSus: {fileID: 1975244092}
   ErrorMessageHide: {fileID: 2123708693}
+  ErrorMessage: {fileID: 2123708690}
   ErrorMessageLocalizer: {fileID: 1158288131}
   SuccessMessageHide: {fileID: 448081485}
   SuccessMessageLocalizer: {fileID: 386008546}

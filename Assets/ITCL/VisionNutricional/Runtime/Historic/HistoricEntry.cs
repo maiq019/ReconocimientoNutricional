@@ -1,7 +1,6 @@
 using ITCL.VisionNutricional.Runtime.DataBase;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using WhateverDevs.Core.Behaviours;
 using WhateverDevs.Core.Runtime.DependencyInjection;
 using WhateverDevs.Core.Runtime.Ui;

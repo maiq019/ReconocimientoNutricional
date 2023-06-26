@@ -104,14 +104,18 @@ namespace ITCL.VisionNutricional.Runtime.Login
             Email = EmailInput.text.Replace("\u200B", "");
             Passwd = PasswdInput.text.Replace("\u200B", "");
             
-            //TODO bypass login
+            if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
+            else if (string.IsNullOrEmpty(Passwd)) PasswdErrorHid.Show();
+            else ConnectToLogIn();
+            
+            /*//bypass login
             if (string.IsNullOrEmpty(Email) && string.IsNullOrEmpty(Passwd)) DirtyLogin();
             else
             {
                 if (string.IsNullOrEmpty(Email)) EmailErrorHid.Show();
                 else if (string.IsNullOrEmpty(Passwd)) PasswdErrorHid.Show();
                 else ConnectToLogIn();
-            }
+            }*/
         }
         
         private void DirtyLogin()

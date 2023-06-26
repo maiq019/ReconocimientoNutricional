@@ -916,8 +916,10 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                 
                 try
                 {
+                    dbCommand.ExecuteReader();
+                    /*
                     IDataReader dataReader = dbCommand.ExecuteReader();
-                
+                    
                     while (dataReader.Read())
                     {
                         entry.userEmail = dataReader.GetString(0);
@@ -932,6 +934,7 @@ namespace ITCL.VisionNutricional.Runtime.DataBase
                         entry.date = dataReader .GetString(9);
                     }
                     dataReader.Close();
+                    */
                 }
                 catch (Exception e)
                 {

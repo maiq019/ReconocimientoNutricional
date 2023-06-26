@@ -195,7 +195,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SerializeField] private EasySubscribableButton CancelFoodInsertSus;
 
         #endregion
-
+        
         /// <summary>
         /// Reference to the capture error message hidable.
         /// </summary>
@@ -259,6 +259,11 @@ namespace ITCL.VisionNutricional.Runtime.Camera
             CancelFoodInsertSus += () =>ConfirmFoodInsertHid.Show(false);
         }
 
+        private void OnDisable()
+        {
+            CamTextureToCloudVision.OnCloudResponse -= CloudResponse;
+        }
+
         /// <summary>
         /// Responsible for the interpretation of the cloud api response.
         /// </summary>
@@ -266,8 +271,8 @@ namespace ITCL.VisionNutricional.Runtime.Camera
         [SuppressMessage("ReSharper", "SpecifyACultureInStringConversionExplicitly")]
         private void CloudResponse(CamTextureToCloudVision.AnnotateImageResponses responses)
         {
-            ErrorMessageHide.Show(false);
             SuccessMessageHide.Show(false);
+            ErrorMessageHide.Show(false);
             List<CamTextureToCloudVision.Vertex> vertexList = new();
             
             //Checks for lack of responses.
@@ -485,6 +490,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                     EntryErrorHid.Show();
                     return;
                 }
+                
                 float calories = float.Parse(CaloriesValue.text); //string.IsNullOrEmpty(CaloriesValue.text) ? 0 : float.Parse(CaloriesValue.text),
                 float fat = float.Parse(FatValue.text); //string.IsNullOrEmpty(FatValue.text) ? 0 : float.Parse(FatValue.text),
                 float saturatedFat = float.Parse(SatFatValue.text); //string.IsNullOrEmpty(SatFatValue.text) ? 0 : float.Parse(SatFatValue.text),
@@ -495,7 +501,7 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 
                 DB.Food foodEntry = new()
                 {
-                    foodName = FoodNameSelected.text,
+                    foodName = FoundFoodName,
                     calories = calories,
                     fat = fat,
                     saturatedFat = saturatedFat,
@@ -548,12 +554,19 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         private void ConfirmEntryInsert(DB.Food foodEntry)
         {
-            DB.InsertIntoHistoric(Session.Email, foodEntry);
-                    
-            EntryPopupHid.Show(false);
-                    
-            SuccessMessageLocalizer.SetValue("Common/Camera/EntryDone");
-            StartCoroutine(nameof(ShowSuccessMessage));
+            try
+            {
+                DB.InsertIntoHistoric(Session.Email, foodEntry);
+
+                EntryPopupHid.Show(false);
+
+                SuccessMessageLocalizer.SetValue("Common/Camera/EntryDone");
+                StartCoroutine(nameof(ShowSuccessMessage));
+            }
+            catch(Exception e)
+            {
+                Logger.Error("Entry insertion error" + e);
+            }
         }
     }
 }
