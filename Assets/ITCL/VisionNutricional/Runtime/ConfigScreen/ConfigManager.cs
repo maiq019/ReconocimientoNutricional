@@ -118,6 +118,11 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
         [SerializeField] private EasySubscribableButton ApplyUserButtonSus;
         
         #endregion
+        
+        /// <summary>
+        /// Flag to not load the previous scene twice.
+        /// </summary>
+        private bool IsBackLoading;
 
         /// <summary>
         /// Subscribes to the OnButtonClicked of the corresponding button.
@@ -134,8 +139,25 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
             UserName.SetValue("Common/Config/UserName0", false, Session.UserName);
             EditUserButtonSus += ShowUpdateUser;
             LogoutButtonSus += Logout;
+        }
 
-            
+        /// <summary>
+        /// Desubscribes from the OnButtonClicked of the corresponding button.
+        /// </summary>
+        private void OnDisable()
+        {
+            ApplyUserButtonSus -= UpdateUser;
+            ConfigBackButtonSus -= Back;
+            EditUserButtonSus -= ShowUpdateUser;
+        }
+
+        /// <summary>
+        /// Loads the previous scene with the android back button.
+        /// </summary>
+        private void Update()
+        {
+            if (!Input.GetKeyDown(KeyCode.Escape) || IsBackLoading) return;
+            Back();
         }
         
         /// <summary>
@@ -166,7 +188,7 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
         /// </summary>
         private void LoadPreviousScene()
         { 
-            ConfigBackButtonSus -= LoadPreviousScene;
+            ConfigBackButtonSus -= Back;
             CoroutineRunner.RunRoutine(
                 Loader.LoadSceneCoroutine(sceneManager, Session.PreviousScene, localizer["Common/Title"], ""));
         }
@@ -201,40 +223,37 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
 
             if (!string.IsNullOrEmpty(UserNameInput.text)) newUserName = UserNameInput.text;
 
-            if (!string.IsNullOrEmpty(PasswordInput.text))
+            if (!string.IsNullOrEmpty(PasswordInput.text) && !string.IsNullOrEmpty(RepeatPasswordInput.text))
             {
                 if (CheckPassword()) newPassword = PasswordInput.text;
                 else return;
             }
 
-            if (newUserName.Equals(Session.UserName) && newPassword.Equals(Session.Passwd)) HideUpdateUser();
-            else
+            if (newUserName.Equals(Session.UserName) && newPassword.Equals(Session.Passwd)) return;
+            switch (newUserName.Equals(Session.UserName))
             {
-                switch (newUserName.Equals(Session.UserName))
-                {
-                    case false when !newPassword.Equals(Session.Passwd):
-                        UpdateUserInfoLocalizer.SetValue("Common/Config/UserPasswdUpdated");
-                        break;
-                    case false:
-                        UpdateUserInfoLocalizer.SetValue("Common/Config/UserUpdated");
-                        break;
-                    default:
-                        UpdateUserInfoLocalizer.SetValue("Common/Config/PasswdUpdated");
-                        break;
-                }
-                
-                UpdateUserErrorHid.Show(false);
-                UpdateUserInfoHid.Show();
-                    
-                DB.UpdateOneUser(Session.Email, Session.Passwd, newUserName, newPassword);
-                Session.UserName = newUserName;
-                Session.Passwd = newPassword;
-                UserName.SetValue("Common/Config/UserName0", false, Session.UserName);
-                UserNamePlaceholder.text = Session.UserName;
-                UserNameInput.text = "";
-                PasswordInput.text = "";
-                RepeatPasswordInput.text = "";
+                case false when !newPassword.Equals(Session.Passwd):
+                    UpdateUserInfoLocalizer.SetValue("Common/Config/UserPasswdUpdated");
+                    break;
+                case false:
+                    UpdateUserInfoLocalizer.SetValue("Common/Config/UserUpdated");
+                    break;
+                default:
+                    UpdateUserInfoLocalizer.SetValue("Common/Config/PasswdUpdated");
+                    break;
             }
+                
+            UpdateUserErrorHid.Show(false);
+            UpdateUserInfoHid.Show();
+                    
+            DB.UpdateOneUser(Session.Email, Session.Passwd, newUserName, newPassword);
+            Session.UserName = newUserName;
+            Session.Passwd = newPassword;
+            UserName.SetValue("Common/Config/UserName0", false, Session.UserName);
+            UserNamePlaceholder.text = Session.UserName;
+            UserNameInput.text = "";
+            PasswordInput.text = "";
+            RepeatPasswordInput.text = "";
         }
 
         private bool CheckPassword()
@@ -282,7 +301,11 @@ namespace ITCL.VisionNutricional.Runtime.ConfigScreen
         private void Back()
         {
             if (EditUserScreenHid.Shown) HideUpdateUser();
-            else LoadPreviousScene();
+            else
+            {
+                IsBackLoading = true;
+                LoadPreviousScene();
+            }
         }
     }
 }

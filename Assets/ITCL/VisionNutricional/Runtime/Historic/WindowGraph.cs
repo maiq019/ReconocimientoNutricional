@@ -264,7 +264,9 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             float calories = Mathf.Round(valueList[0] * 100.0f) * 0.01f;
             CaloriesBar.pivot = new Vector2(0, 0.5f);
-            float barLength = calories * GraphContainerWidth / (EntryCount * 300);
+            float barLength;
+            if (EntryCount > 0) barLength = calories * GraphContainerWidth / (EntryCount * 300);
+            else barLength = 0;
             CaloriesBar.sizeDelta = new Vector2(barLength, 150);
             
             if (barLength > 300)
@@ -295,7 +297,9 @@ namespace ITCL.VisionNutricional.Runtime.Historic
         {
             barValue = Mathf.Round(barValue * 100.0f) * 0.01f;
             bar.pivot = new Vector2(0, 0.5f);
-            float barLength = barValue * GraphContainerWidth / (EntryCount * 500);
+            float barLength;
+            if (EntryCount > 0) barLength = barValue * GraphContainerWidth / (EntryCount * 500);
+            else barLength = 0;
             bar.sizeDelta = new Vector2(barLength, 150);
             
             if (barLength > 300)

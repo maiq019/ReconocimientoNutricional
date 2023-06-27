@@ -184,9 +184,11 @@ namespace ITCL.VisionNutricional.Runtime.Historic
             GraphButtonSus += () => EntryPopupHid.Show(false);
         }
 
+        /// <summary>
+        /// Loads the main menu with the android back button.
+        /// </summary>
         private void Update()
         {
-            //Loads the main menu with the android back button.
             if (!Input.GetKeyDown(KeyCode.Escape) || IsMenuLoading) return;
             IsMenuLoading = true;
             LoadMainMenu();

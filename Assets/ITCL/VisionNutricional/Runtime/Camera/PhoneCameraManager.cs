@@ -175,15 +175,15 @@ namespace ITCL.VisionNutricional.Runtime.Camera
 
         private void OnDisable()
         {
+            SendButtonSus -= () => CloudApi.SendImageToCloudVision(ScreenshotScript.screenshot);
             BackCam.Stop();
         }
 
         /// <summary>
-        /// Manages the rotation of the device relevant for the camera display.
+        /// Loads the main menu with the android back button.
         /// </summary>
         private void Update()
         {
-            //Loads the main menu with the android back button.
             if (!Input.GetKeyDown(KeyCode.Escape) || IsMenuLoading) return;
             BackButtonPress();
         }
