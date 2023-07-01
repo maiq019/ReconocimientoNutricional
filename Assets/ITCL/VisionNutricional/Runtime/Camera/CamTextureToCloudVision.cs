@@ -19,8 +19,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public class CamTextureToCloudVision : WhateverBehaviour<CamTextureToCloudVision>
     {
-        [SerializeField]
-        private FakeCloudResponse FakeCloudResponse;
         public delegate void CloudResponse(AnnotateImageResponses responses);
 
         public static event CloudResponse OnCloudResponse;
@@ -302,11 +300,6 @@ namespace ITCL.VisionNutricional.Runtime.Camera
                 Logger.Debug("Responses translated");
                 OnCloudResponse?.Invoke(responses);
             }
-        }
-
-        protected internal void SendImageToCloudVisionTest()
-        {
-            OnCloudResponse?.Invoke(FakeCloudResponse.SandwichResponse());
         }
 
         /// <summary>
