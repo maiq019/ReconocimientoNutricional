@@ -4,7 +4,7 @@ Proyecto de fin de grado de Ingeniería Informática en la Universidad Politécn
 Desarrollado en colaboración con ITCL.
 Aplicación móvil android desarrollada en Unity para el registro de alimentos consumidos y su información nutricional básica.
 
-[![Cabecera-ubu-inform-tica.png](https://i.postimg.cc/VLysQJrh/Cabecera-ubu-inform-tica.png)](https://postimg.cc/PN4n1rMb)
+[![Cabecera-ubu-inform-tica.png](https://i.postimg.cc/jdwDbVS8/Cabecera-ubu-inform-tica.png)](https://postimg.cc/ppvWf688)
 
 [![itcl-logo.png](https://i.postimg.cc/YCHsHHxk/itcl-logo.png)](https://postimg.cc/dL5B2gXS)
 
