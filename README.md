@@ -6,7 +6,7 @@ Aplicación móvil android desarrollada en Unity para el registro de alimentos c
 
 [![Cabecera-ubu-inform-tica.png](https://i.postimg.cc/VLysQJrh/Cabecera-ubu-inform-tica.png)](https://postimg.cc/PN4n1rMb)
 
-[![itcl-logo.png](https://i.postimg.cc/W1h5G1S2/itcl-logo.png)](https://postimg.cc/nXfKZZ65)
+[![itcl-logo.png](https://i.postimg.cc/YCHsHHxk/itcl-logo.png)](https://postimg.cc/dL5B2gXS)
 
 ## Key features:
  - Registro del consumo de alimentos y sus valores nutricionales. 
