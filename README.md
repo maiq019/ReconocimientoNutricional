@@ -13,6 +13,6 @@ Aplicación móvil android desarrollada en Unity para el registro de alimentos c
 
 Link a Drive para descargar el archivo .apk: https://drive.google.com/drive/folders/1UXMO2LKbNj5wMNl9QhNUs9rwbO7KL6eN?usp=sharing
 
-Link a vídeo demostrativo de la app en YouTube: https://youtu.be/0Oa6_Mx7vsM
+Link a vídeo demostrativo de la app en YouTube: [https://youtu.be/0Oa6_Mx7vsM](https://youtu.be/o55Pae48PVo)
 
 Link a memoria en Overleaf: https://www.overleaf.com/read/htbbmytmmrvd
